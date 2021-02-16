@@ -17,6 +17,7 @@ const routes = server => {
   server.get("/setup-indexes", setupIndexes);
   server.post("/stripe/intent", postStripeIntent);
   server.get("/test/file-upload", (req, res) => {
+    req.headers["Access-Control-Allow-Origin"] = "*";
     req.headers["host"] = "yoga.rehouser.co.nz";
     req.headers["connection"] = "close";
     req.headers["accept"] = "*/*";
