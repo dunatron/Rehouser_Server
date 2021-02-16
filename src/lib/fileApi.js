@@ -37,6 +37,7 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
   let resultObj = {};
 
   // ctx.request.headers["mode"] = "no-cors";
+  // ctx.request.headers["Access-Control-Allow-Origin"] = "test.com";
   console.log("SHOW ME THE FILE CTX headers => ", ctx.request.headers);
   // ctx.request.mode = "no-cors";
   // ctx.req.set("Content-Type", "text/html");

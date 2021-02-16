@@ -7,9 +7,9 @@ async function singleUpload(parent, { file, data }, ctx, info) {
   });
   const uploadedFile = await processUpload({
     upload: file,
-    ctx,
-    info,
-    data,
+    ctx: ctx,
+    info: info,
+    data: data,
   });
 
   return uploadedFile;
