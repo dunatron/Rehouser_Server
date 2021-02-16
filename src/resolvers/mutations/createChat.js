@@ -1,5 +1,3 @@
-
-
 async function createChat(parent, args, ctx, info) {
   const { data } = args;
   // creates a new chat room

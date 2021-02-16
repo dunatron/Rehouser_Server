@@ -1,5 +1,5 @@
-# source: https://rehouser-db-prod-925c297bf3.herokuapp.com/rehouser-prisma/prod
-# timestamp: Wed Oct 21 2020 18:48:24 GMT+1300 (New Zealand Daylight Time)
+# source: https://us1.prisma.sh/heath-dunlop-37e897/rehouser-service/dev
+# timestamp: Fri Oct 09 2020 15:08:33 GMT+1300 (New Zealand Daylight Time)
 
 type Accommodation implements Node {
   id: ID!
@@ -8908,7 +8908,7 @@ type Inspection implements Node {
   inspector: User
   date: DateTime
   completedTime: DateTime
-  completed: Boolean!
+  completed: Boolean
   notes: String
   inspectionForm: InspectionForm
   submittedForms(where: InspectionFormWhereInput, orderBy: InspectionFormOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [InspectionForm!]
@@ -9495,7 +9495,7 @@ type InspectionPreviousValues {
   createdAt: DateTime!
   date: DateTime
   completedTime: DateTime
-  completed: Boolean!
+  completed: Boolean
   notes: String
 }
 
@@ -13968,7 +13968,6 @@ enum Permission {
   ADMIN
   USER
   PERMISSIONUPDATE
-  WIZARD
 }
 
 enum Pet {
@@ -15338,7 +15337,6 @@ type Property implements Node {
   leaseLengthInMonths: Int
   onTheMarket: Boolean!
   owners(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
-  agents(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   creator: User!
   images(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [File!]
   proofOfOwnership: File
@@ -15370,7 +15368,6 @@ type Property implements Node {
   files: PropertyFiles
   inspectionFrequency: InspectionFrequency
   inspections(where: InspectionWhereInput, orderBy: InspectionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Inspection!]
-  rehouserManaged: Boolean
 }
 
 type PropertyAdvertisement implements Node {
@@ -15840,7 +15837,6 @@ input PropertyCreateInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyCreateindoorFeaturesInput
   outdoorFeatures: PropertyCreateoutdoorFeaturesInput
   heatSources: PropertyCreateheatSourcesInput
@@ -15851,7 +15847,6 @@ input PropertyCreateInput {
   insulationForm: InsulationFormCreateOneInput
   insulationStatementFile: FileCreateOneWithoutPropertyInsulationFileInput
   owners: UserCreateManyWithoutPropertiesInput
-  agents: UserCreateManyWithoutManagedPropertiesInput
   creator: UserCreateOneWithoutCreatedPropertiesInput!
   images: FileCreateManyWithoutPropertyImagesInput
   proofOfOwnership: FileCreateOneWithoutPropertyOwnershipProofInput
@@ -15863,11 +15858,6 @@ input PropertyCreateInput {
   rehouserAssist: PropertyAssistCreateOneWithoutPropertyInput
   files: PropertyFilesCreateOneWithoutPropertyInput
   inspections: InspectionCreateManyWithoutPropertyInput
-}
-
-input PropertyCreateManyWithoutAgentsInput {
-  create: [PropertyCreateWithoutAgentsInput!]
-  connect: [PropertyWhereUniqueInput!]
 }
 
 input PropertyCreateManyWithoutCreatorInput {
@@ -15998,7 +15988,6 @@ input PropertyCreateWithoutAccommodationInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyCreateindoorFeaturesInput
   outdoorFeatures: PropertyCreateoutdoorFeaturesInput
   heatSources: PropertyCreateheatSourcesInput
@@ -16008,7 +15997,6 @@ input PropertyCreateWithoutAccommodationInput {
   insulationForm: InsulationFormCreateOneInput
   insulationStatementFile: FileCreateOneWithoutPropertyInsulationFileInput
   owners: UserCreateManyWithoutPropertiesInput
-  agents: UserCreateManyWithoutManagedPropertiesInput
   creator: UserCreateOneWithoutCreatedPropertiesInput!
   images: FileCreateManyWithoutPropertyImagesInput
   proofOfOwnership: FileCreateOneWithoutPropertyOwnershipProofInput
@@ -16067,76 +16055,6 @@ input PropertyCreateWithoutActivityInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
-  indoorFeatures: PropertyCreateindoorFeaturesInput
-  outdoorFeatures: PropertyCreateoutdoorFeaturesInput
-  heatSources: PropertyCreateheatSourcesInput
-  pets: PropertyCreatepetsInput
-  chattels: PropertyCreatechattelsInput
-  bankDetails: BankDetailCreateOneWithoutPropertyInput
-  accommodation: AccommodationCreateManyWithoutPropertyInput
-  insulationForm: InsulationFormCreateOneInput
-  insulationStatementFile: FileCreateOneWithoutPropertyInsulationFileInput
-  owners: UserCreateManyWithoutPropertiesInput
-  agents: UserCreateManyWithoutManagedPropertiesInput
-  creator: UserCreateOneWithoutCreatedPropertiesInput!
-  images: FileCreateManyWithoutPropertyImagesInput
-  proofOfOwnership: FileCreateOneWithoutPropertyOwnershipProofInput
-  rentalApplications: RentalApplicationCreateManyWithoutPropertyInput
-  leases: PropertyLeaseCreateManyWithoutPropertyInput
-  appraisals: RentalAppraisalCreateManyWithoutPropertyInput
-  viewings: ViewingCreateManyWithoutPropertyInput
-  rehouserAssist: PropertyAssistCreateOneWithoutPropertyInput
-  files: PropertyFilesCreateOneWithoutPropertyInput
-  inspections: InspectionCreateManyWithoutPropertyInput
-}
-
-input PropertyCreateWithoutAgentsInput {
-  id: ID
-  placeId: String!
-  location: String!
-  locationLat: Float!
-  locationLng: Float!
-  titleType: PropertyTitleType!
-  type: PropertyType
-  fixedLength: TenancyFixedLength
-  headline: String
-  rooms: Int!
-  maximumOccupants: Int
-  rent: Float!
-  tenancyType: TenancyType
-  bondType: BondType
-  lowestRoomPrice: Float
-  highestRoomPrice: Float
-  useAdvancedRent: Boolean
-  bathrooms: Int
-  garageSpaces: Int!
-  carportSpaces: Int!
-  offStreetSpaces: Int!
-  insulationProof: InsulationProof
-  moveInDate: DateTime
-  expiryDate: DateTime
-  leaseLengthInMonths: Int
-  onTheMarket: Boolean!
-  acceptedTerms: Boolean
-  isLeased: Boolean
-  lastLeaseId: String
-  leaseExpiryDate: DateTime
-  rehouserStamp: Boolean
-  petsAllowed: Boolean
-  manholeLocation: String
-  gardenToMaintain: Boolean
-  gardenResponsible: PartyResponsible
-  maintenanceResponsible: PartyResponsible
-  landlordProtectionCover: Boolean
-  freeGlassCover: Boolean
-  workingAlarms: Boolean
-  inHallway3mOfEachBedroom: Boolean
-  tenYearPhotoelectricAlarms: Boolean
-  alarmsEachLevel: Boolean
-  rehouserHandlesBills: Boolean
-  inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyCreateindoorFeaturesInput
   outdoorFeatures: PropertyCreateoutdoorFeaturesInput
   heatSources: PropertyCreateheatSourcesInput
@@ -16152,7 +16070,6 @@ input PropertyCreateWithoutAgentsInput {
   proofOfOwnership: FileCreateOneWithoutPropertyOwnershipProofInput
   rentalApplications: RentalApplicationCreateManyWithoutPropertyInput
   leases: PropertyLeaseCreateManyWithoutPropertyInput
-  activity: ActivityCreateManyWithoutPropertyInput
   appraisals: RentalAppraisalCreateManyWithoutPropertyInput
   viewings: ViewingCreateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistCreateOneWithoutPropertyInput
@@ -16205,7 +16122,6 @@ input PropertyCreateWithoutAppraisalsInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyCreateindoorFeaturesInput
   outdoorFeatures: PropertyCreateoutdoorFeaturesInput
   heatSources: PropertyCreateheatSourcesInput
@@ -16216,7 +16132,6 @@ input PropertyCreateWithoutAppraisalsInput {
   insulationForm: InsulationFormCreateOneInput
   insulationStatementFile: FileCreateOneWithoutPropertyInsulationFileInput
   owners: UserCreateManyWithoutPropertiesInput
-  agents: UserCreateManyWithoutManagedPropertiesInput
   creator: UserCreateOneWithoutCreatedPropertiesInput!
   images: FileCreateManyWithoutPropertyImagesInput
   proofOfOwnership: FileCreateOneWithoutPropertyOwnershipProofInput
@@ -16274,7 +16189,6 @@ input PropertyCreateWithoutBankDetailsInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyCreateindoorFeaturesInput
   outdoorFeatures: PropertyCreateoutdoorFeaturesInput
   heatSources: PropertyCreateheatSourcesInput
@@ -16284,7 +16198,6 @@ input PropertyCreateWithoutBankDetailsInput {
   insulationForm: InsulationFormCreateOneInput
   insulationStatementFile: FileCreateOneWithoutPropertyInsulationFileInput
   owners: UserCreateManyWithoutPropertiesInput
-  agents: UserCreateManyWithoutManagedPropertiesInput
   creator: UserCreateOneWithoutCreatedPropertiesInput!
   images: FileCreateManyWithoutPropertyImagesInput
   proofOfOwnership: FileCreateOneWithoutPropertyOwnershipProofInput
@@ -16343,7 +16256,6 @@ input PropertyCreateWithoutCreatorInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyCreateindoorFeaturesInput
   outdoorFeatures: PropertyCreateoutdoorFeaturesInput
   heatSources: PropertyCreateheatSourcesInput
@@ -16354,7 +16266,6 @@ input PropertyCreateWithoutCreatorInput {
   insulationForm: InsulationFormCreateOneInput
   insulationStatementFile: FileCreateOneWithoutPropertyInsulationFileInput
   owners: UserCreateManyWithoutPropertiesInput
-  agents: UserCreateManyWithoutManagedPropertiesInput
   images: FileCreateManyWithoutPropertyImagesInput
   proofOfOwnership: FileCreateOneWithoutPropertyOwnershipProofInput
   rentalApplications: RentalApplicationCreateManyWithoutPropertyInput
@@ -16412,7 +16323,6 @@ input PropertyCreateWithoutFilesInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyCreateindoorFeaturesInput
   outdoorFeatures: PropertyCreateoutdoorFeaturesInput
   heatSources: PropertyCreateheatSourcesInput
@@ -16423,7 +16333,6 @@ input PropertyCreateWithoutFilesInput {
   insulationForm: InsulationFormCreateOneInput
   insulationStatementFile: FileCreateOneWithoutPropertyInsulationFileInput
   owners: UserCreateManyWithoutPropertiesInput
-  agents: UserCreateManyWithoutManagedPropertiesInput
   creator: UserCreateOneWithoutCreatedPropertiesInput!
   images: FileCreateManyWithoutPropertyImagesInput
   proofOfOwnership: FileCreateOneWithoutPropertyOwnershipProofInput
@@ -16481,7 +16390,6 @@ input PropertyCreateWithoutImagesInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyCreateindoorFeaturesInput
   outdoorFeatures: PropertyCreateoutdoorFeaturesInput
   heatSources: PropertyCreateheatSourcesInput
@@ -16492,7 +16400,6 @@ input PropertyCreateWithoutImagesInput {
   insulationForm: InsulationFormCreateOneInput
   insulationStatementFile: FileCreateOneWithoutPropertyInsulationFileInput
   owners: UserCreateManyWithoutPropertiesInput
-  agents: UserCreateManyWithoutManagedPropertiesInput
   creator: UserCreateOneWithoutCreatedPropertiesInput!
   proofOfOwnership: FileCreateOneWithoutPropertyOwnershipProofInput
   rentalApplications: RentalApplicationCreateManyWithoutPropertyInput
@@ -16550,7 +16457,6 @@ input PropertyCreateWithoutInspectionsInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyCreateindoorFeaturesInput
   outdoorFeatures: PropertyCreateoutdoorFeaturesInput
   heatSources: PropertyCreateheatSourcesInput
@@ -16561,7 +16467,6 @@ input PropertyCreateWithoutInspectionsInput {
   insulationForm: InsulationFormCreateOneInput
   insulationStatementFile: FileCreateOneWithoutPropertyInsulationFileInput
   owners: UserCreateManyWithoutPropertiesInput
-  agents: UserCreateManyWithoutManagedPropertiesInput
   creator: UserCreateOneWithoutCreatedPropertiesInput!
   images: FileCreateManyWithoutPropertyImagesInput
   proofOfOwnership: FileCreateOneWithoutPropertyOwnershipProofInput
@@ -16619,7 +16524,6 @@ input PropertyCreateWithoutInsulationStatementFileInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyCreateindoorFeaturesInput
   outdoorFeatures: PropertyCreateoutdoorFeaturesInput
   heatSources: PropertyCreateheatSourcesInput
@@ -16629,7 +16533,6 @@ input PropertyCreateWithoutInsulationStatementFileInput {
   accommodation: AccommodationCreateManyWithoutPropertyInput
   insulationForm: InsulationFormCreateOneInput
   owners: UserCreateManyWithoutPropertiesInput
-  agents: UserCreateManyWithoutManagedPropertiesInput
   creator: UserCreateOneWithoutCreatedPropertiesInput!
   images: FileCreateManyWithoutPropertyImagesInput
   proofOfOwnership: FileCreateOneWithoutPropertyOwnershipProofInput
@@ -16688,7 +16591,6 @@ input PropertyCreateWithoutLeasesInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyCreateindoorFeaturesInput
   outdoorFeatures: PropertyCreateoutdoorFeaturesInput
   heatSources: PropertyCreateheatSourcesInput
@@ -16699,7 +16601,6 @@ input PropertyCreateWithoutLeasesInput {
   insulationForm: InsulationFormCreateOneInput
   insulationStatementFile: FileCreateOneWithoutPropertyInsulationFileInput
   owners: UserCreateManyWithoutPropertiesInput
-  agents: UserCreateManyWithoutManagedPropertiesInput
   creator: UserCreateOneWithoutCreatedPropertiesInput!
   images: FileCreateManyWithoutPropertyImagesInput
   proofOfOwnership: FileCreateOneWithoutPropertyOwnershipProofInput
@@ -16757,7 +16658,6 @@ input PropertyCreateWithoutOwnersInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyCreateindoorFeaturesInput
   outdoorFeatures: PropertyCreateoutdoorFeaturesInput
   heatSources: PropertyCreateheatSourcesInput
@@ -16767,7 +16667,6 @@ input PropertyCreateWithoutOwnersInput {
   accommodation: AccommodationCreateManyWithoutPropertyInput
   insulationForm: InsulationFormCreateOneInput
   insulationStatementFile: FileCreateOneWithoutPropertyInsulationFileInput
-  agents: UserCreateManyWithoutManagedPropertiesInput
   creator: UserCreateOneWithoutCreatedPropertiesInput!
   images: FileCreateManyWithoutPropertyImagesInput
   proofOfOwnership: FileCreateOneWithoutPropertyOwnershipProofInput
@@ -16826,7 +16725,6 @@ input PropertyCreateWithoutProofOfOwnershipInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyCreateindoorFeaturesInput
   outdoorFeatures: PropertyCreateoutdoorFeaturesInput
   heatSources: PropertyCreateheatSourcesInput
@@ -16837,7 +16735,6 @@ input PropertyCreateWithoutProofOfOwnershipInput {
   insulationForm: InsulationFormCreateOneInput
   insulationStatementFile: FileCreateOneWithoutPropertyInsulationFileInput
   owners: UserCreateManyWithoutPropertiesInput
-  agents: UserCreateManyWithoutManagedPropertiesInput
   creator: UserCreateOneWithoutCreatedPropertiesInput!
   images: FileCreateManyWithoutPropertyImagesInput
   rentalApplications: RentalApplicationCreateManyWithoutPropertyInput
@@ -16895,7 +16792,6 @@ input PropertyCreateWithoutRehouserAssistInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyCreateindoorFeaturesInput
   outdoorFeatures: PropertyCreateoutdoorFeaturesInput
   heatSources: PropertyCreateheatSourcesInput
@@ -16906,7 +16802,6 @@ input PropertyCreateWithoutRehouserAssistInput {
   insulationForm: InsulationFormCreateOneInput
   insulationStatementFile: FileCreateOneWithoutPropertyInsulationFileInput
   owners: UserCreateManyWithoutPropertiesInput
-  agents: UserCreateManyWithoutManagedPropertiesInput
   creator: UserCreateOneWithoutCreatedPropertiesInput!
   images: FileCreateManyWithoutPropertyImagesInput
   proofOfOwnership: FileCreateOneWithoutPropertyOwnershipProofInput
@@ -16964,7 +16859,6 @@ input PropertyCreateWithoutRentalApplicationsInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyCreateindoorFeaturesInput
   outdoorFeatures: PropertyCreateoutdoorFeaturesInput
   heatSources: PropertyCreateheatSourcesInput
@@ -16975,7 +16869,6 @@ input PropertyCreateWithoutRentalApplicationsInput {
   insulationForm: InsulationFormCreateOneInput
   insulationStatementFile: FileCreateOneWithoutPropertyInsulationFileInput
   owners: UserCreateManyWithoutPropertiesInput
-  agents: UserCreateManyWithoutManagedPropertiesInput
   creator: UserCreateOneWithoutCreatedPropertiesInput!
   images: FileCreateManyWithoutPropertyImagesInput
   proofOfOwnership: FileCreateOneWithoutPropertyOwnershipProofInput
@@ -17033,7 +16926,6 @@ input PropertyCreateWithoutViewingsInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyCreateindoorFeaturesInput
   outdoorFeatures: PropertyCreateoutdoorFeaturesInput
   heatSources: PropertyCreateheatSourcesInput
@@ -17044,7 +16936,6 @@ input PropertyCreateWithoutViewingsInput {
   insulationForm: InsulationFormCreateOneInput
   insulationStatementFile: FileCreateOneWithoutPropertyInsulationFileInput
   owners: UserCreateManyWithoutPropertiesInput
-  agents: UserCreateManyWithoutManagedPropertiesInput
   creator: UserCreateOneWithoutCreatedPropertiesInput!
   images: FileCreateManyWithoutPropertyImagesInput
   proofOfOwnership: FileCreateOneWithoutPropertyOwnershipProofInput
@@ -19301,6 +19192,7 @@ input PropertyLeaseWhereInput {
 
 input PropertyLeaseWhereUniqueInput {
   id: ID
+  placeId: String
 }
 
 enum PropertyOrderByInput {
@@ -19396,8 +19288,6 @@ enum PropertyOrderByInput {
   rehouserHandlesBills_DESC
   inspectionFrequency_ASC
   inspectionFrequency_DESC
-  rehouserManaged_ASC
-  rehouserManaged_DESC
 }
 
 type PropertyPreviousValues {
@@ -19452,7 +19342,6 @@ type PropertyPreviousValues {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
 }
 
 input PropertyScalarWhereInput {
@@ -20224,10 +20113,6 @@ input PropertyScalarWhereInput {
 
   """All values that are not contained in given list."""
   inspectionFrequency_not_in: [InspectionFrequency!]
-  rehouserManaged: Boolean
-
-  """All values that are not equal to given value."""
-  rehouserManaged_not: Boolean
 }
 
 type PropertySubscriptionPayload {
@@ -20343,7 +20228,6 @@ input PropertyUpdateInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyUpdateindoorFeaturesInput
   outdoorFeatures: PropertyUpdateoutdoorFeaturesInput
   heatSources: PropertyUpdateheatSourcesInput
@@ -20354,7 +20238,6 @@ input PropertyUpdateInput {
   insulationForm: InsulationFormUpdateOneInput
   insulationStatementFile: FileUpdateOneWithoutPropertyInsulationFileInput
   owners: UserUpdateManyWithoutPropertiesInput
-  agents: UserUpdateManyWithoutManagedPropertiesInput
   creator: UserUpdateOneRequiredWithoutCreatedPropertiesInput
   images: FileUpdateManyWithoutPropertyImagesInput
   proofOfOwnership: FileUpdateOneWithoutPropertyOwnershipProofInput
@@ -20412,7 +20295,6 @@ input PropertyUpdateManyDataInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyUpdateindoorFeaturesInput
   outdoorFeatures: PropertyUpdateoutdoorFeaturesInput
   heatSources: PropertyUpdateheatSourcesInput
@@ -20464,24 +20346,11 @@ input PropertyUpdateManyMutationInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyUpdateindoorFeaturesInput
   outdoorFeatures: PropertyUpdateoutdoorFeaturesInput
   heatSources: PropertyUpdateheatSourcesInput
   pets: PropertyUpdatepetsInput
   chattels: PropertyUpdatechattelsInput
-}
-
-input PropertyUpdateManyWithoutAgentsInput {
-  create: [PropertyCreateWithoutAgentsInput!]
-  connect: [PropertyWhereUniqueInput!]
-  set: [PropertyWhereUniqueInput!]
-  disconnect: [PropertyWhereUniqueInput!]
-  delete: [PropertyWhereUniqueInput!]
-  update: [PropertyUpdateWithWhereUniqueWithoutAgentsInput!]
-  updateMany: [PropertyUpdateManyWithWhereNestedInput!]
-  deleteMany: [PropertyScalarWhereInput!]
-  upsert: [PropertyUpsertWithWhereUniqueWithoutAgentsInput!]
 }
 
 input PropertyUpdateManyWithoutCreatorInput {
@@ -20674,7 +20543,6 @@ input PropertyUpdateWithoutAccommodationDataInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyUpdateindoorFeaturesInput
   outdoorFeatures: PropertyUpdateoutdoorFeaturesInput
   heatSources: PropertyUpdateheatSourcesInput
@@ -20684,7 +20552,6 @@ input PropertyUpdateWithoutAccommodationDataInput {
   insulationForm: InsulationFormUpdateOneInput
   insulationStatementFile: FileUpdateOneWithoutPropertyInsulationFileInput
   owners: UserUpdateManyWithoutPropertiesInput
-  agents: UserUpdateManyWithoutManagedPropertiesInput
   creator: UserUpdateOneRequiredWithoutCreatedPropertiesInput
   images: FileUpdateManyWithoutPropertyImagesInput
   proofOfOwnership: FileUpdateOneWithoutPropertyOwnershipProofInput
@@ -20742,75 +20609,6 @@ input PropertyUpdateWithoutActivityDataInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
-  indoorFeatures: PropertyUpdateindoorFeaturesInput
-  outdoorFeatures: PropertyUpdateoutdoorFeaturesInput
-  heatSources: PropertyUpdateheatSourcesInput
-  pets: PropertyUpdatepetsInput
-  chattels: PropertyUpdatechattelsInput
-  bankDetails: BankDetailUpdateOneWithoutPropertyInput
-  accommodation: AccommodationUpdateManyWithoutPropertyInput
-  insulationForm: InsulationFormUpdateOneInput
-  insulationStatementFile: FileUpdateOneWithoutPropertyInsulationFileInput
-  owners: UserUpdateManyWithoutPropertiesInput
-  agents: UserUpdateManyWithoutManagedPropertiesInput
-  creator: UserUpdateOneRequiredWithoutCreatedPropertiesInput
-  images: FileUpdateManyWithoutPropertyImagesInput
-  proofOfOwnership: FileUpdateOneWithoutPropertyOwnershipProofInput
-  rentalApplications: RentalApplicationUpdateManyWithoutPropertyInput
-  leases: PropertyLeaseUpdateManyWithoutPropertyInput
-  appraisals: RentalAppraisalUpdateManyWithoutPropertyInput
-  viewings: ViewingUpdateManyWithoutPropertyInput
-  rehouserAssist: PropertyAssistUpdateOneWithoutPropertyInput
-  files: PropertyFilesUpdateOneWithoutPropertyInput
-  inspections: InspectionUpdateManyWithoutPropertyInput
-}
-
-input PropertyUpdateWithoutAgentsDataInput {
-  placeId: String
-  location: String
-  locationLat: Float
-  locationLng: Float
-  titleType: PropertyTitleType
-  type: PropertyType
-  fixedLength: TenancyFixedLength
-  headline: String
-  rooms: Int
-  maximumOccupants: Int
-  rent: Float
-  tenancyType: TenancyType
-  bondType: BondType
-  lowestRoomPrice: Float
-  highestRoomPrice: Float
-  useAdvancedRent: Boolean
-  bathrooms: Int
-  garageSpaces: Int
-  carportSpaces: Int
-  offStreetSpaces: Int
-  insulationProof: InsulationProof
-  moveInDate: DateTime
-  expiryDate: DateTime
-  leaseLengthInMonths: Int
-  onTheMarket: Boolean
-  acceptedTerms: Boolean
-  isLeased: Boolean
-  lastLeaseId: String
-  leaseExpiryDate: DateTime
-  rehouserStamp: Boolean
-  petsAllowed: Boolean
-  manholeLocation: String
-  gardenToMaintain: Boolean
-  gardenResponsible: PartyResponsible
-  maintenanceResponsible: PartyResponsible
-  landlordProtectionCover: Boolean
-  freeGlassCover: Boolean
-  workingAlarms: Boolean
-  inHallway3mOfEachBedroom: Boolean
-  tenYearPhotoelectricAlarms: Boolean
-  alarmsEachLevel: Boolean
-  rehouserHandlesBills: Boolean
-  inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyUpdateindoorFeaturesInput
   outdoorFeatures: PropertyUpdateoutdoorFeaturesInput
   heatSources: PropertyUpdateheatSourcesInput
@@ -20826,7 +20624,6 @@ input PropertyUpdateWithoutAgentsDataInput {
   proofOfOwnership: FileUpdateOneWithoutPropertyOwnershipProofInput
   rentalApplications: RentalApplicationUpdateManyWithoutPropertyInput
   leases: PropertyLeaseUpdateManyWithoutPropertyInput
-  activity: ActivityUpdateManyWithoutPropertyInput
   appraisals: RentalAppraisalUpdateManyWithoutPropertyInput
   viewings: ViewingUpdateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistUpdateOneWithoutPropertyInput
@@ -20878,7 +20675,6 @@ input PropertyUpdateWithoutAppraisalsDataInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyUpdateindoorFeaturesInput
   outdoorFeatures: PropertyUpdateoutdoorFeaturesInput
   heatSources: PropertyUpdateheatSourcesInput
@@ -20889,7 +20685,6 @@ input PropertyUpdateWithoutAppraisalsDataInput {
   insulationForm: InsulationFormUpdateOneInput
   insulationStatementFile: FileUpdateOneWithoutPropertyInsulationFileInput
   owners: UserUpdateManyWithoutPropertiesInput
-  agents: UserUpdateManyWithoutManagedPropertiesInput
   creator: UserUpdateOneRequiredWithoutCreatedPropertiesInput
   images: FileUpdateManyWithoutPropertyImagesInput
   proofOfOwnership: FileUpdateOneWithoutPropertyOwnershipProofInput
@@ -20946,7 +20741,6 @@ input PropertyUpdateWithoutBankDetailsDataInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyUpdateindoorFeaturesInput
   outdoorFeatures: PropertyUpdateoutdoorFeaturesInput
   heatSources: PropertyUpdateheatSourcesInput
@@ -20956,7 +20750,6 @@ input PropertyUpdateWithoutBankDetailsDataInput {
   insulationForm: InsulationFormUpdateOneInput
   insulationStatementFile: FileUpdateOneWithoutPropertyInsulationFileInput
   owners: UserUpdateManyWithoutPropertiesInput
-  agents: UserUpdateManyWithoutManagedPropertiesInput
   creator: UserUpdateOneRequiredWithoutCreatedPropertiesInput
   images: FileUpdateManyWithoutPropertyImagesInput
   proofOfOwnership: FileUpdateOneWithoutPropertyOwnershipProofInput
@@ -21014,7 +20807,6 @@ input PropertyUpdateWithoutCreatorDataInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyUpdateindoorFeaturesInput
   outdoorFeatures: PropertyUpdateoutdoorFeaturesInput
   heatSources: PropertyUpdateheatSourcesInput
@@ -21025,7 +20817,6 @@ input PropertyUpdateWithoutCreatorDataInput {
   insulationForm: InsulationFormUpdateOneInput
   insulationStatementFile: FileUpdateOneWithoutPropertyInsulationFileInput
   owners: UserUpdateManyWithoutPropertiesInput
-  agents: UserUpdateManyWithoutManagedPropertiesInput
   images: FileUpdateManyWithoutPropertyImagesInput
   proofOfOwnership: FileUpdateOneWithoutPropertyOwnershipProofInput
   rentalApplications: RentalApplicationUpdateManyWithoutPropertyInput
@@ -21082,7 +20873,6 @@ input PropertyUpdateWithoutFilesDataInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyUpdateindoorFeaturesInput
   outdoorFeatures: PropertyUpdateoutdoorFeaturesInput
   heatSources: PropertyUpdateheatSourcesInput
@@ -21093,7 +20883,6 @@ input PropertyUpdateWithoutFilesDataInput {
   insulationForm: InsulationFormUpdateOneInput
   insulationStatementFile: FileUpdateOneWithoutPropertyInsulationFileInput
   owners: UserUpdateManyWithoutPropertiesInput
-  agents: UserUpdateManyWithoutManagedPropertiesInput
   creator: UserUpdateOneRequiredWithoutCreatedPropertiesInput
   images: FileUpdateManyWithoutPropertyImagesInput
   proofOfOwnership: FileUpdateOneWithoutPropertyOwnershipProofInput
@@ -21150,7 +20939,6 @@ input PropertyUpdateWithoutImagesDataInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyUpdateindoorFeaturesInput
   outdoorFeatures: PropertyUpdateoutdoorFeaturesInput
   heatSources: PropertyUpdateheatSourcesInput
@@ -21161,7 +20949,6 @@ input PropertyUpdateWithoutImagesDataInput {
   insulationForm: InsulationFormUpdateOneInput
   insulationStatementFile: FileUpdateOneWithoutPropertyInsulationFileInput
   owners: UserUpdateManyWithoutPropertiesInput
-  agents: UserUpdateManyWithoutManagedPropertiesInput
   creator: UserUpdateOneRequiredWithoutCreatedPropertiesInput
   proofOfOwnership: FileUpdateOneWithoutPropertyOwnershipProofInput
   rentalApplications: RentalApplicationUpdateManyWithoutPropertyInput
@@ -21218,7 +21005,6 @@ input PropertyUpdateWithoutInspectionsDataInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyUpdateindoorFeaturesInput
   outdoorFeatures: PropertyUpdateoutdoorFeaturesInput
   heatSources: PropertyUpdateheatSourcesInput
@@ -21229,7 +21015,6 @@ input PropertyUpdateWithoutInspectionsDataInput {
   insulationForm: InsulationFormUpdateOneInput
   insulationStatementFile: FileUpdateOneWithoutPropertyInsulationFileInput
   owners: UserUpdateManyWithoutPropertiesInput
-  agents: UserUpdateManyWithoutManagedPropertiesInput
   creator: UserUpdateOneRequiredWithoutCreatedPropertiesInput
   images: FileUpdateManyWithoutPropertyImagesInput
   proofOfOwnership: FileUpdateOneWithoutPropertyOwnershipProofInput
@@ -21286,7 +21071,6 @@ input PropertyUpdateWithoutInsulationStatementFileDataInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyUpdateindoorFeaturesInput
   outdoorFeatures: PropertyUpdateoutdoorFeaturesInput
   heatSources: PropertyUpdateheatSourcesInput
@@ -21296,7 +21080,6 @@ input PropertyUpdateWithoutInsulationStatementFileDataInput {
   accommodation: AccommodationUpdateManyWithoutPropertyInput
   insulationForm: InsulationFormUpdateOneInput
   owners: UserUpdateManyWithoutPropertiesInput
-  agents: UserUpdateManyWithoutManagedPropertiesInput
   creator: UserUpdateOneRequiredWithoutCreatedPropertiesInput
   images: FileUpdateManyWithoutPropertyImagesInput
   proofOfOwnership: FileUpdateOneWithoutPropertyOwnershipProofInput
@@ -21354,7 +21137,6 @@ input PropertyUpdateWithoutLeasesDataInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyUpdateindoorFeaturesInput
   outdoorFeatures: PropertyUpdateoutdoorFeaturesInput
   heatSources: PropertyUpdateheatSourcesInput
@@ -21365,7 +21147,6 @@ input PropertyUpdateWithoutLeasesDataInput {
   insulationForm: InsulationFormUpdateOneInput
   insulationStatementFile: FileUpdateOneWithoutPropertyInsulationFileInput
   owners: UserUpdateManyWithoutPropertiesInput
-  agents: UserUpdateManyWithoutManagedPropertiesInput
   creator: UserUpdateOneRequiredWithoutCreatedPropertiesInput
   images: FileUpdateManyWithoutPropertyImagesInput
   proofOfOwnership: FileUpdateOneWithoutPropertyOwnershipProofInput
@@ -21422,7 +21203,6 @@ input PropertyUpdateWithoutOwnersDataInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyUpdateindoorFeaturesInput
   outdoorFeatures: PropertyUpdateoutdoorFeaturesInput
   heatSources: PropertyUpdateheatSourcesInput
@@ -21432,7 +21212,6 @@ input PropertyUpdateWithoutOwnersDataInput {
   accommodation: AccommodationUpdateManyWithoutPropertyInput
   insulationForm: InsulationFormUpdateOneInput
   insulationStatementFile: FileUpdateOneWithoutPropertyInsulationFileInput
-  agents: UserUpdateManyWithoutManagedPropertiesInput
   creator: UserUpdateOneRequiredWithoutCreatedPropertiesInput
   images: FileUpdateManyWithoutPropertyImagesInput
   proofOfOwnership: FileUpdateOneWithoutPropertyOwnershipProofInput
@@ -21490,7 +21269,6 @@ input PropertyUpdateWithoutProofOfOwnershipDataInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyUpdateindoorFeaturesInput
   outdoorFeatures: PropertyUpdateoutdoorFeaturesInput
   heatSources: PropertyUpdateheatSourcesInput
@@ -21501,7 +21279,6 @@ input PropertyUpdateWithoutProofOfOwnershipDataInput {
   insulationForm: InsulationFormUpdateOneInput
   insulationStatementFile: FileUpdateOneWithoutPropertyInsulationFileInput
   owners: UserUpdateManyWithoutPropertiesInput
-  agents: UserUpdateManyWithoutManagedPropertiesInput
   creator: UserUpdateOneRequiredWithoutCreatedPropertiesInput
   images: FileUpdateManyWithoutPropertyImagesInput
   rentalApplications: RentalApplicationUpdateManyWithoutPropertyInput
@@ -21558,7 +21335,6 @@ input PropertyUpdateWithoutRehouserAssistDataInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyUpdateindoorFeaturesInput
   outdoorFeatures: PropertyUpdateoutdoorFeaturesInput
   heatSources: PropertyUpdateheatSourcesInput
@@ -21569,7 +21345,6 @@ input PropertyUpdateWithoutRehouserAssistDataInput {
   insulationForm: InsulationFormUpdateOneInput
   insulationStatementFile: FileUpdateOneWithoutPropertyInsulationFileInput
   owners: UserUpdateManyWithoutPropertiesInput
-  agents: UserUpdateManyWithoutManagedPropertiesInput
   creator: UserUpdateOneRequiredWithoutCreatedPropertiesInput
   images: FileUpdateManyWithoutPropertyImagesInput
   proofOfOwnership: FileUpdateOneWithoutPropertyOwnershipProofInput
@@ -21626,7 +21401,6 @@ input PropertyUpdateWithoutRentalApplicationsDataInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyUpdateindoorFeaturesInput
   outdoorFeatures: PropertyUpdateoutdoorFeaturesInput
   heatSources: PropertyUpdateheatSourcesInput
@@ -21637,7 +21411,6 @@ input PropertyUpdateWithoutRentalApplicationsDataInput {
   insulationForm: InsulationFormUpdateOneInput
   insulationStatementFile: FileUpdateOneWithoutPropertyInsulationFileInput
   owners: UserUpdateManyWithoutPropertiesInput
-  agents: UserUpdateManyWithoutManagedPropertiesInput
   creator: UserUpdateOneRequiredWithoutCreatedPropertiesInput
   images: FileUpdateManyWithoutPropertyImagesInput
   proofOfOwnership: FileUpdateOneWithoutPropertyOwnershipProofInput
@@ -21694,7 +21467,6 @@ input PropertyUpdateWithoutViewingsDataInput {
   alarmsEachLevel: Boolean
   rehouserHandlesBills: Boolean
   inspectionFrequency: InspectionFrequency
-  rehouserManaged: Boolean
   indoorFeatures: PropertyUpdateindoorFeaturesInput
   outdoorFeatures: PropertyUpdateoutdoorFeaturesInput
   heatSources: PropertyUpdateheatSourcesInput
@@ -21705,7 +21477,6 @@ input PropertyUpdateWithoutViewingsDataInput {
   insulationForm: InsulationFormUpdateOneInput
   insulationStatementFile: FileUpdateOneWithoutPropertyInsulationFileInput
   owners: UserUpdateManyWithoutPropertiesInput
-  agents: UserUpdateManyWithoutManagedPropertiesInput
   creator: UserUpdateOneRequiredWithoutCreatedPropertiesInput
   images: FileUpdateManyWithoutPropertyImagesInput
   proofOfOwnership: FileUpdateOneWithoutPropertyOwnershipProofInput
@@ -21716,11 +21487,6 @@ input PropertyUpdateWithoutViewingsDataInput {
   rehouserAssist: PropertyAssistUpdateOneWithoutPropertyInput
   files: PropertyFilesUpdateOneWithoutPropertyInput
   inspections: InspectionUpdateManyWithoutPropertyInput
-}
-
-input PropertyUpdateWithWhereUniqueWithoutAgentsInput {
-  where: PropertyWhereUniqueInput!
-  data: PropertyUpdateWithoutAgentsDataInput!
 }
 
 input PropertyUpdateWithWhereUniqueWithoutCreatorInput {
@@ -21796,12 +21562,6 @@ input PropertyUpsertWithoutRentalApplicationsInput {
 input PropertyUpsertWithoutViewingsInput {
   update: PropertyUpdateWithoutViewingsDataInput!
   create: PropertyCreateWithoutViewingsInput!
-}
-
-input PropertyUpsertWithWhereUniqueWithoutAgentsInput {
-  where: PropertyWhereUniqueInput!
-  update: PropertyUpdateWithoutAgentsDataInput!
-  create: PropertyCreateWithoutAgentsInput!
 }
 
 input PropertyUpsertWithWhereUniqueWithoutCreatorInput {
@@ -22585,10 +22345,6 @@ input PropertyWhereInput {
 
   """All values that are not contained in given list."""
   inspectionFrequency_not_in: [InspectionFrequency!]
-  rehouserManaged: Boolean
-
-  """All values that are not equal to given value."""
-  rehouserManaged_not: Boolean
   bankDetails: BankDetailWhereInput
   accommodation_every: AccommodationWhereInput
   accommodation_some: AccommodationWhereInput
@@ -22598,9 +22354,6 @@ input PropertyWhereInput {
   owners_every: UserWhereInput
   owners_some: UserWhereInput
   owners_none: UserWhereInput
-  agents_every: UserWhereInput
-  agents_some: UserWhereInput
-  agents_none: UserWhereInput
   creator: UserWhereInput
   images_every: FileWhereInput
   images_some: FileWhereInput
@@ -26193,7 +25946,6 @@ type User implements Node {
   confirmEmailTokenExpiry: Float
   permissions: [Permission!]!
   properties(where: PropertyWhereInput, orderBy: PropertyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Property!]
-  managedProperties(where: PropertyWhereInput, orderBy: PropertyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Property!]
   lesseeLeases(where: LesseeWhereInput, orderBy: LesseeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Lessee!]
   lessorLeases(where: LessorWhereInput, orderBy: LessorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Lessor!]
   createdProperties(where: PropertyWhereInput, orderBy: PropertyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Property!]
@@ -26277,7 +26029,6 @@ input UserCreateInput {
   friendRequests: FriendRequestCreateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestCreateManyWithoutRequestUserInput
   properties: PropertyCreateManyWithoutOwnersInput
-  managedProperties: PropertyCreateManyWithoutAgentsInput
   lesseeLeases: LesseeCreateManyWithoutUserInput
   lessorLeases: LessorCreateManyWithoutUserInput
   createdProperties: PropertyCreateManyWithoutCreatorInput
@@ -26313,11 +26064,6 @@ input UserCreateManyWithoutChatsInput {
 
 input UserCreateManyWithoutInvolvedActivityInput {
   create: [UserCreateWithoutInvolvedActivityInput!]
-  connect: [UserWhereUniqueInput!]
-}
-
-input UserCreateManyWithoutManagedPropertiesInput {
-  create: [UserCreateWithoutManagedPropertiesInput!]
   connect: [UserWhereUniqueInput!]
 }
 
@@ -26469,7 +26215,6 @@ input UserCreateWithoutActivityInput {
   friendRequests: FriendRequestCreateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestCreateManyWithoutRequestUserInput
   properties: PropertyCreateManyWithoutOwnersInput
-  managedProperties: PropertyCreateManyWithoutAgentsInput
   lesseeLeases: LesseeCreateManyWithoutUserInput
   lessorLeases: LessorCreateManyWithoutUserInput
   createdProperties: PropertyCreateManyWithoutCreatorInput
@@ -26526,7 +26271,6 @@ input UserCreateWithoutAdminSettingsInput {
   friendRequests: FriendRequestCreateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestCreateManyWithoutRequestUserInput
   properties: PropertyCreateManyWithoutOwnersInput
-  managedProperties: PropertyCreateManyWithoutAgentsInput
   lesseeLeases: LesseeCreateManyWithoutUserInput
   lessorLeases: LessorCreateManyWithoutUserInput
   createdProperties: PropertyCreateManyWithoutCreatorInput
@@ -26582,7 +26326,6 @@ input UserCreateWithoutAwaitingFriendsInput {
   friends: UserCreateManyInput
   friendRequests: FriendRequestCreateManyWithoutAcceptingUserInput
   properties: PropertyCreateManyWithoutOwnersInput
-  managedProperties: PropertyCreateManyWithoutAgentsInput
   lesseeLeases: LesseeCreateManyWithoutUserInput
   lessorLeases: LessorCreateManyWithoutUserInput
   createdProperties: PropertyCreateManyWithoutCreatorInput
@@ -26640,7 +26383,6 @@ input UserCreateWithoutBankDetailsInput {
   friendRequests: FriendRequestCreateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestCreateManyWithoutRequestUserInput
   properties: PropertyCreateManyWithoutOwnersInput
-  managedProperties: PropertyCreateManyWithoutAgentsInput
   lesseeLeases: LesseeCreateManyWithoutUserInput
   lessorLeases: LessorCreateManyWithoutUserInput
   createdProperties: PropertyCreateManyWithoutCreatorInput
@@ -26697,7 +26439,6 @@ input UserCreateWithoutChatsInput {
   friendRequests: FriendRequestCreateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestCreateManyWithoutRequestUserInput
   properties: PropertyCreateManyWithoutOwnersInput
-  managedProperties: PropertyCreateManyWithoutAgentsInput
   lesseeLeases: LesseeCreateManyWithoutUserInput
   lessorLeases: LessorCreateManyWithoutUserInput
   createdProperties: PropertyCreateManyWithoutCreatorInput
@@ -26754,7 +26495,6 @@ input UserCreateWithoutCreatedPropertiesInput {
   friendRequests: FriendRequestCreateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestCreateManyWithoutRequestUserInput
   properties: PropertyCreateManyWithoutOwnersInput
-  managedProperties: PropertyCreateManyWithoutAgentsInput
   lesseeLeases: LesseeCreateManyWithoutUserInput
   lessorLeases: LessorCreateManyWithoutUserInput
   photoIdentification: FileCreateOneWithoutUserPhotoIdInput
@@ -26811,7 +26551,6 @@ input UserCreateWithoutCreditCardsInput {
   friendRequests: FriendRequestCreateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestCreateManyWithoutRequestUserInput
   properties: PropertyCreateManyWithoutOwnersInput
-  managedProperties: PropertyCreateManyWithoutAgentsInput
   lesseeLeases: LesseeCreateManyWithoutUserInput
   lessorLeases: LessorCreateManyWithoutUserInput
   createdProperties: PropertyCreateManyWithoutCreatorInput
@@ -26868,7 +26607,6 @@ input UserCreateWithoutCurrentAddressInput {
   friendRequests: FriendRequestCreateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestCreateManyWithoutRequestUserInput
   properties: PropertyCreateManyWithoutOwnersInput
-  managedProperties: PropertyCreateManyWithoutAgentsInput
   lesseeLeases: LesseeCreateManyWithoutUserInput
   lessorLeases: LessorCreateManyWithoutUserInput
   createdProperties: PropertyCreateManyWithoutCreatorInput
@@ -26924,7 +26662,6 @@ input UserCreateWithoutFriendRequestsInput {
   friends: UserCreateManyInput
   awaitingFriends: FriendRequestCreateManyWithoutRequestUserInput
   properties: PropertyCreateManyWithoutOwnersInput
-  managedProperties: PropertyCreateManyWithoutAgentsInput
   lesseeLeases: LesseeCreateManyWithoutUserInput
   lessorLeases: LessorCreateManyWithoutUserInput
   createdProperties: PropertyCreateManyWithoutCreatorInput
@@ -26982,7 +26719,6 @@ input UserCreateWithoutInspectionsInput {
   friendRequests: FriendRequestCreateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestCreateManyWithoutRequestUserInput
   properties: PropertyCreateManyWithoutOwnersInput
-  managedProperties: PropertyCreateManyWithoutAgentsInput
   lesseeLeases: LesseeCreateManyWithoutUserInput
   lessorLeases: LessorCreateManyWithoutUserInput
   createdProperties: PropertyCreateManyWithoutCreatorInput
@@ -27039,7 +26775,6 @@ input UserCreateWithoutInvolvedActivityInput {
   friendRequests: FriendRequestCreateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestCreateManyWithoutRequestUserInput
   properties: PropertyCreateManyWithoutOwnersInput
-  managedProperties: PropertyCreateManyWithoutAgentsInput
   lesseeLeases: LesseeCreateManyWithoutUserInput
   lessorLeases: LessorCreateManyWithoutUserInput
   createdProperties: PropertyCreateManyWithoutCreatorInput
@@ -27096,7 +26831,6 @@ input UserCreateWithoutLesseeLeasesInput {
   friendRequests: FriendRequestCreateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestCreateManyWithoutRequestUserInput
   properties: PropertyCreateManyWithoutOwnersInput
-  managedProperties: PropertyCreateManyWithoutAgentsInput
   lessorLeases: LessorCreateManyWithoutUserInput
   createdProperties: PropertyCreateManyWithoutCreatorInput
   photoIdentification: FileCreateOneWithoutUserPhotoIdInput
@@ -27153,65 +26887,7 @@ input UserCreateWithoutLessorLeasesInput {
   friendRequests: FriendRequestCreateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestCreateManyWithoutRequestUserInput
   properties: PropertyCreateManyWithoutOwnersInput
-  managedProperties: PropertyCreateManyWithoutAgentsInput
   lesseeLeases: LesseeCreateManyWithoutUserInput
-  createdProperties: PropertyCreateManyWithoutCreatorInput
-  photoIdentification: FileCreateOneWithoutUserPhotoIdInput
-  profilePhoto: FileCreateOneWithoutUserProfilePhotoInput
-  referees: RefereeCreateManyWithoutUserInput
-  creditCards: CreditCardCreateManyWithoutCardOwnerInput
-  primaryCreditCard: CreditCardCreateOneInput
-  chats: ChatCreateManyWithoutParticipantsInput
-  sentMessages: MessageCreateManyWithoutSenderInput
-  recievedMessages: MessageCreateManyWithoutRecipientInput
-  signature: FileCreateOneWithoutUserSignatureInput
-  activity: ActivityCreateManyWithoutUserInput
-  involvedActivity: ActivityCreateManyWithoutInvolvedInput
-  rentalAppraisals: RentalAppraisalCreateManyWithoutRequestedByInput
-  currentAddress: AddressCreateOneWithoutUserInput
-  proofOfAddress: FileCreateOneWithoutUserProofOfAddressInput
-  adminSettings: AdminSettingCreateOneWithoutUserInput!
-  viewings: ViewingCreateManyWithoutHostsInput
-  bankDetails: BankDetailCreateOneWithoutUserInput
-  inspections: InspectionCreateManyWithoutInspectorInput
-}
-
-input UserCreateWithoutManagedPropertiesInput {
-  id: ID
-  dob: DateTime
-  firstName: String!
-  lastName: String!
-  phone: String!
-  email: String!
-  emailValidated: Boolean
-  password: String!
-  resetToken: String
-  resetTokenExpiry: Float
-  confirmEmailToken: String
-  confirmEmailTokenExpiry: Float
-  identificationNumber: String
-  emergencyContactName: String
-  emergencyContactNumber: String
-  emergencyContactEmail: String
-  referee1Relationhip: String
-  referee1Name: String
-  referee1Phone: String
-  referee1Email: String
-  referee2Relationhip: String
-  referee2Name: String
-  referee2Phone: String
-  referee2Email: String
-  rehouserStamp: Boolean
-  acceptedSignupTerms: Boolean!
-  acceptedTermsOfEngagement: Boolean
-  bondLodgementNumber: String
-  permissions: UserCreatepermissionsInput
-  friends: UserCreateManyInput
-  friendRequests: FriendRequestCreateManyWithoutAcceptingUserInput
-  awaitingFriends: FriendRequestCreateManyWithoutRequestUserInput
-  properties: PropertyCreateManyWithoutOwnersInput
-  lesseeLeases: LesseeCreateManyWithoutUserInput
-  lessorLeases: LessorCreateManyWithoutUserInput
   createdProperties: PropertyCreateManyWithoutCreatorInput
   photoIdentification: FileCreateOneWithoutUserPhotoIdInput
   profilePhoto: FileCreateOneWithoutUserProfilePhotoInput
@@ -27267,7 +26943,6 @@ input UserCreateWithoutPhotoIdentificationInput {
   friendRequests: FriendRequestCreateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestCreateManyWithoutRequestUserInput
   properties: PropertyCreateManyWithoutOwnersInput
-  managedProperties: PropertyCreateManyWithoutAgentsInput
   lesseeLeases: LesseeCreateManyWithoutUserInput
   lessorLeases: LessorCreateManyWithoutUserInput
   createdProperties: PropertyCreateManyWithoutCreatorInput
@@ -27324,7 +26999,6 @@ input UserCreateWithoutProfilePhotoInput {
   friendRequests: FriendRequestCreateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestCreateManyWithoutRequestUserInput
   properties: PropertyCreateManyWithoutOwnersInput
-  managedProperties: PropertyCreateManyWithoutAgentsInput
   lesseeLeases: LesseeCreateManyWithoutUserInput
   lessorLeases: LessorCreateManyWithoutUserInput
   createdProperties: PropertyCreateManyWithoutCreatorInput
@@ -27381,7 +27055,6 @@ input UserCreateWithoutProofOfAddressInput {
   friendRequests: FriendRequestCreateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestCreateManyWithoutRequestUserInput
   properties: PropertyCreateManyWithoutOwnersInput
-  managedProperties: PropertyCreateManyWithoutAgentsInput
   lesseeLeases: LesseeCreateManyWithoutUserInput
   lessorLeases: LessorCreateManyWithoutUserInput
   createdProperties: PropertyCreateManyWithoutCreatorInput
@@ -27437,7 +27110,6 @@ input UserCreateWithoutPropertiesInput {
   friends: UserCreateManyInput
   friendRequests: FriendRequestCreateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestCreateManyWithoutRequestUserInput
-  managedProperties: PropertyCreateManyWithoutAgentsInput
   lesseeLeases: LesseeCreateManyWithoutUserInput
   lessorLeases: LessorCreateManyWithoutUserInput
   createdProperties: PropertyCreateManyWithoutCreatorInput
@@ -27495,7 +27167,6 @@ input UserCreateWithoutRecievedMessagesInput {
   friendRequests: FriendRequestCreateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestCreateManyWithoutRequestUserInput
   properties: PropertyCreateManyWithoutOwnersInput
-  managedProperties: PropertyCreateManyWithoutAgentsInput
   lesseeLeases: LesseeCreateManyWithoutUserInput
   lessorLeases: LessorCreateManyWithoutUserInput
   createdProperties: PropertyCreateManyWithoutCreatorInput
@@ -27552,7 +27223,6 @@ input UserCreateWithoutRefereesInput {
   friendRequests: FriendRequestCreateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestCreateManyWithoutRequestUserInput
   properties: PropertyCreateManyWithoutOwnersInput
-  managedProperties: PropertyCreateManyWithoutAgentsInput
   lesseeLeases: LesseeCreateManyWithoutUserInput
   lessorLeases: LessorCreateManyWithoutUserInput
   createdProperties: PropertyCreateManyWithoutCreatorInput
@@ -27609,7 +27279,6 @@ input UserCreateWithoutRentalAppraisalsInput {
   friendRequests: FriendRequestCreateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestCreateManyWithoutRequestUserInput
   properties: PropertyCreateManyWithoutOwnersInput
-  managedProperties: PropertyCreateManyWithoutAgentsInput
   lesseeLeases: LesseeCreateManyWithoutUserInput
   lessorLeases: LessorCreateManyWithoutUserInput
   createdProperties: PropertyCreateManyWithoutCreatorInput
@@ -27666,7 +27335,6 @@ input UserCreateWithoutSentMessagesInput {
   friendRequests: FriendRequestCreateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestCreateManyWithoutRequestUserInput
   properties: PropertyCreateManyWithoutOwnersInput
-  managedProperties: PropertyCreateManyWithoutAgentsInput
   lesseeLeases: LesseeCreateManyWithoutUserInput
   lessorLeases: LessorCreateManyWithoutUserInput
   createdProperties: PropertyCreateManyWithoutCreatorInput
@@ -27723,7 +27391,6 @@ input UserCreateWithoutSignatureInput {
   friendRequests: FriendRequestCreateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestCreateManyWithoutRequestUserInput
   properties: PropertyCreateManyWithoutOwnersInput
-  managedProperties: PropertyCreateManyWithoutAgentsInput
   lesseeLeases: LesseeCreateManyWithoutUserInput
   lessorLeases: LessorCreateManyWithoutUserInput
   createdProperties: PropertyCreateManyWithoutCreatorInput
@@ -27780,7 +27447,6 @@ input UserCreateWithoutViewingsInput {
   friendRequests: FriendRequestCreateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestCreateManyWithoutRequestUserInput
   properties: PropertyCreateManyWithoutOwnersInput
-  managedProperties: PropertyCreateManyWithoutAgentsInput
   lesseeLeases: LesseeCreateManyWithoutUserInput
   lessorLeases: LessorCreateManyWithoutUserInput
   createdProperties: PropertyCreateManyWithoutCreatorInput
@@ -28956,7 +28622,6 @@ input UserUpdateDataInput {
   friendRequests: FriendRequestUpdateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestUpdateManyWithoutRequestUserInput
   properties: PropertyUpdateManyWithoutOwnersInput
-  managedProperties: PropertyUpdateManyWithoutAgentsInput
   lesseeLeases: LesseeUpdateManyWithoutUserInput
   lessorLeases: LessorUpdateManyWithoutUserInput
   createdProperties: PropertyUpdateManyWithoutCreatorInput
@@ -29013,7 +28678,6 @@ input UserUpdateInput {
   friendRequests: FriendRequestUpdateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestUpdateManyWithoutRequestUserInput
   properties: PropertyUpdateManyWithoutOwnersInput
-  managedProperties: PropertyUpdateManyWithoutAgentsInput
   lesseeLeases: LesseeUpdateManyWithoutUserInput
   lessorLeases: LessorUpdateManyWithoutUserInput
   createdProperties: PropertyUpdateManyWithoutCreatorInput
@@ -29133,18 +28797,6 @@ input UserUpdateManyWithoutInvolvedActivityInput {
   updateMany: [UserUpdateManyWithWhereNestedInput!]
   deleteMany: [UserScalarWhereInput!]
   upsert: [UserUpsertWithWhereUniqueWithoutInvolvedActivityInput!]
-}
-
-input UserUpdateManyWithoutManagedPropertiesInput {
-  create: [UserCreateWithoutManagedPropertiesInput!]
-  connect: [UserWhereUniqueInput!]
-  set: [UserWhereUniqueInput!]
-  disconnect: [UserWhereUniqueInput!]
-  delete: [UserWhereUniqueInput!]
-  update: [UserUpdateWithWhereUniqueWithoutManagedPropertiesInput!]
-  updateMany: [UserUpdateManyWithWhereNestedInput!]
-  deleteMany: [UserScalarWhereInput!]
-  upsert: [UserUpsertWithWhereUniqueWithoutManagedPropertiesInput!]
 }
 
 input UserUpdateManyWithoutPropertiesInput {
@@ -29381,7 +29033,6 @@ input UserUpdateWithoutActivityDataInput {
   friendRequests: FriendRequestUpdateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestUpdateManyWithoutRequestUserInput
   properties: PropertyUpdateManyWithoutOwnersInput
-  managedProperties: PropertyUpdateManyWithoutAgentsInput
   lesseeLeases: LesseeUpdateManyWithoutUserInput
   lessorLeases: LessorUpdateManyWithoutUserInput
   createdProperties: PropertyUpdateManyWithoutCreatorInput
@@ -29437,7 +29088,6 @@ input UserUpdateWithoutAdminSettingsDataInput {
   friendRequests: FriendRequestUpdateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestUpdateManyWithoutRequestUserInput
   properties: PropertyUpdateManyWithoutOwnersInput
-  managedProperties: PropertyUpdateManyWithoutAgentsInput
   lesseeLeases: LesseeUpdateManyWithoutUserInput
   lessorLeases: LessorUpdateManyWithoutUserInput
   createdProperties: PropertyUpdateManyWithoutCreatorInput
@@ -29492,7 +29142,6 @@ input UserUpdateWithoutAwaitingFriendsDataInput {
   friends: UserUpdateManyInput
   friendRequests: FriendRequestUpdateManyWithoutAcceptingUserInput
   properties: PropertyUpdateManyWithoutOwnersInput
-  managedProperties: PropertyUpdateManyWithoutAgentsInput
   lesseeLeases: LesseeUpdateManyWithoutUserInput
   lessorLeases: LessorUpdateManyWithoutUserInput
   createdProperties: PropertyUpdateManyWithoutCreatorInput
@@ -29549,7 +29198,6 @@ input UserUpdateWithoutBankDetailsDataInput {
   friendRequests: FriendRequestUpdateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestUpdateManyWithoutRequestUserInput
   properties: PropertyUpdateManyWithoutOwnersInput
-  managedProperties: PropertyUpdateManyWithoutAgentsInput
   lesseeLeases: LesseeUpdateManyWithoutUserInput
   lessorLeases: LessorUpdateManyWithoutUserInput
   createdProperties: PropertyUpdateManyWithoutCreatorInput
@@ -29605,7 +29253,6 @@ input UserUpdateWithoutChatsDataInput {
   friendRequests: FriendRequestUpdateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestUpdateManyWithoutRequestUserInput
   properties: PropertyUpdateManyWithoutOwnersInput
-  managedProperties: PropertyUpdateManyWithoutAgentsInput
   lesseeLeases: LesseeUpdateManyWithoutUserInput
   lessorLeases: LessorUpdateManyWithoutUserInput
   createdProperties: PropertyUpdateManyWithoutCreatorInput
@@ -29661,7 +29308,6 @@ input UserUpdateWithoutCreatedPropertiesDataInput {
   friendRequests: FriendRequestUpdateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestUpdateManyWithoutRequestUserInput
   properties: PropertyUpdateManyWithoutOwnersInput
-  managedProperties: PropertyUpdateManyWithoutAgentsInput
   lesseeLeases: LesseeUpdateManyWithoutUserInput
   lessorLeases: LessorUpdateManyWithoutUserInput
   photoIdentification: FileUpdateOneWithoutUserPhotoIdInput
@@ -29717,7 +29363,6 @@ input UserUpdateWithoutCreditCardsDataInput {
   friendRequests: FriendRequestUpdateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestUpdateManyWithoutRequestUserInput
   properties: PropertyUpdateManyWithoutOwnersInput
-  managedProperties: PropertyUpdateManyWithoutAgentsInput
   lesseeLeases: LesseeUpdateManyWithoutUserInput
   lessorLeases: LessorUpdateManyWithoutUserInput
   createdProperties: PropertyUpdateManyWithoutCreatorInput
@@ -29773,7 +29418,6 @@ input UserUpdateWithoutCurrentAddressDataInput {
   friendRequests: FriendRequestUpdateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestUpdateManyWithoutRequestUserInput
   properties: PropertyUpdateManyWithoutOwnersInput
-  managedProperties: PropertyUpdateManyWithoutAgentsInput
   lesseeLeases: LesseeUpdateManyWithoutUserInput
   lessorLeases: LessorUpdateManyWithoutUserInput
   createdProperties: PropertyUpdateManyWithoutCreatorInput
@@ -29828,7 +29472,6 @@ input UserUpdateWithoutFriendRequestsDataInput {
   friends: UserUpdateManyInput
   awaitingFriends: FriendRequestUpdateManyWithoutRequestUserInput
   properties: PropertyUpdateManyWithoutOwnersInput
-  managedProperties: PropertyUpdateManyWithoutAgentsInput
   lesseeLeases: LesseeUpdateManyWithoutUserInput
   lessorLeases: LessorUpdateManyWithoutUserInput
   createdProperties: PropertyUpdateManyWithoutCreatorInput
@@ -29885,7 +29528,6 @@ input UserUpdateWithoutInspectionsDataInput {
   friendRequests: FriendRequestUpdateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestUpdateManyWithoutRequestUserInput
   properties: PropertyUpdateManyWithoutOwnersInput
-  managedProperties: PropertyUpdateManyWithoutAgentsInput
   lesseeLeases: LesseeUpdateManyWithoutUserInput
   lessorLeases: LessorUpdateManyWithoutUserInput
   createdProperties: PropertyUpdateManyWithoutCreatorInput
@@ -29941,7 +29583,6 @@ input UserUpdateWithoutInvolvedActivityDataInput {
   friendRequests: FriendRequestUpdateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestUpdateManyWithoutRequestUserInput
   properties: PropertyUpdateManyWithoutOwnersInput
-  managedProperties: PropertyUpdateManyWithoutAgentsInput
   lesseeLeases: LesseeUpdateManyWithoutUserInput
   lessorLeases: LessorUpdateManyWithoutUserInput
   createdProperties: PropertyUpdateManyWithoutCreatorInput
@@ -29997,7 +29638,6 @@ input UserUpdateWithoutLesseeLeasesDataInput {
   friendRequests: FriendRequestUpdateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestUpdateManyWithoutRequestUserInput
   properties: PropertyUpdateManyWithoutOwnersInput
-  managedProperties: PropertyUpdateManyWithoutAgentsInput
   lessorLeases: LessorUpdateManyWithoutUserInput
   createdProperties: PropertyUpdateManyWithoutCreatorInput
   photoIdentification: FileUpdateOneWithoutUserPhotoIdInput
@@ -30053,64 +29693,7 @@ input UserUpdateWithoutLessorLeasesDataInput {
   friendRequests: FriendRequestUpdateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestUpdateManyWithoutRequestUserInput
   properties: PropertyUpdateManyWithoutOwnersInput
-  managedProperties: PropertyUpdateManyWithoutAgentsInput
   lesseeLeases: LesseeUpdateManyWithoutUserInput
-  createdProperties: PropertyUpdateManyWithoutCreatorInput
-  photoIdentification: FileUpdateOneWithoutUserPhotoIdInput
-  profilePhoto: FileUpdateOneWithoutUserProfilePhotoInput
-  referees: RefereeUpdateManyWithoutUserInput
-  creditCards: CreditCardUpdateManyWithoutCardOwnerInput
-  primaryCreditCard: CreditCardUpdateOneInput
-  chats: ChatUpdateManyWithoutParticipantsInput
-  sentMessages: MessageUpdateManyWithoutSenderInput
-  recievedMessages: MessageUpdateManyWithoutRecipientInput
-  signature: FileUpdateOneWithoutUserSignatureInput
-  activity: ActivityUpdateManyWithoutUserInput
-  involvedActivity: ActivityUpdateManyWithoutInvolvedInput
-  rentalAppraisals: RentalAppraisalUpdateManyWithoutRequestedByInput
-  currentAddress: AddressUpdateOneWithoutUserInput
-  proofOfAddress: FileUpdateOneWithoutUserProofOfAddressInput
-  adminSettings: AdminSettingUpdateOneRequiredWithoutUserInput
-  viewings: ViewingUpdateManyWithoutHostsInput
-  bankDetails: BankDetailUpdateOneWithoutUserInput
-  inspections: InspectionUpdateManyWithoutInspectorInput
-}
-
-input UserUpdateWithoutManagedPropertiesDataInput {
-  dob: DateTime
-  firstName: String
-  lastName: String
-  phone: String
-  email: String
-  emailValidated: Boolean
-  password: String
-  resetToken: String
-  resetTokenExpiry: Float
-  confirmEmailToken: String
-  confirmEmailTokenExpiry: Float
-  identificationNumber: String
-  emergencyContactName: String
-  emergencyContactNumber: String
-  emergencyContactEmail: String
-  referee1Relationhip: String
-  referee1Name: String
-  referee1Phone: String
-  referee1Email: String
-  referee2Relationhip: String
-  referee2Name: String
-  referee2Phone: String
-  referee2Email: String
-  rehouserStamp: Boolean
-  acceptedSignupTerms: Boolean
-  acceptedTermsOfEngagement: Boolean
-  bondLodgementNumber: String
-  permissions: UserUpdatepermissionsInput
-  friends: UserUpdateManyInput
-  friendRequests: FriendRequestUpdateManyWithoutAcceptingUserInput
-  awaitingFriends: FriendRequestUpdateManyWithoutRequestUserInput
-  properties: PropertyUpdateManyWithoutOwnersInput
-  lesseeLeases: LesseeUpdateManyWithoutUserInput
-  lessorLeases: LessorUpdateManyWithoutUserInput
   createdProperties: PropertyUpdateManyWithoutCreatorInput
   photoIdentification: FileUpdateOneWithoutUserPhotoIdInput
   profilePhoto: FileUpdateOneWithoutUserProfilePhotoInput
@@ -30165,7 +29748,6 @@ input UserUpdateWithoutPhotoIdentificationDataInput {
   friendRequests: FriendRequestUpdateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestUpdateManyWithoutRequestUserInput
   properties: PropertyUpdateManyWithoutOwnersInput
-  managedProperties: PropertyUpdateManyWithoutAgentsInput
   lesseeLeases: LesseeUpdateManyWithoutUserInput
   lessorLeases: LessorUpdateManyWithoutUserInput
   createdProperties: PropertyUpdateManyWithoutCreatorInput
@@ -30221,7 +29803,6 @@ input UserUpdateWithoutProfilePhotoDataInput {
   friendRequests: FriendRequestUpdateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestUpdateManyWithoutRequestUserInput
   properties: PropertyUpdateManyWithoutOwnersInput
-  managedProperties: PropertyUpdateManyWithoutAgentsInput
   lesseeLeases: LesseeUpdateManyWithoutUserInput
   lessorLeases: LessorUpdateManyWithoutUserInput
   createdProperties: PropertyUpdateManyWithoutCreatorInput
@@ -30277,7 +29858,6 @@ input UserUpdateWithoutProofOfAddressDataInput {
   friendRequests: FriendRequestUpdateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestUpdateManyWithoutRequestUserInput
   properties: PropertyUpdateManyWithoutOwnersInput
-  managedProperties: PropertyUpdateManyWithoutAgentsInput
   lesseeLeases: LesseeUpdateManyWithoutUserInput
   lessorLeases: LessorUpdateManyWithoutUserInput
   createdProperties: PropertyUpdateManyWithoutCreatorInput
@@ -30332,7 +29912,6 @@ input UserUpdateWithoutPropertiesDataInput {
   friends: UserUpdateManyInput
   friendRequests: FriendRequestUpdateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestUpdateManyWithoutRequestUserInput
-  managedProperties: PropertyUpdateManyWithoutAgentsInput
   lesseeLeases: LesseeUpdateManyWithoutUserInput
   lessorLeases: LessorUpdateManyWithoutUserInput
   createdProperties: PropertyUpdateManyWithoutCreatorInput
@@ -30389,7 +29968,6 @@ input UserUpdateWithoutRecievedMessagesDataInput {
   friendRequests: FriendRequestUpdateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestUpdateManyWithoutRequestUserInput
   properties: PropertyUpdateManyWithoutOwnersInput
-  managedProperties: PropertyUpdateManyWithoutAgentsInput
   lesseeLeases: LesseeUpdateManyWithoutUserInput
   lessorLeases: LessorUpdateManyWithoutUserInput
   createdProperties: PropertyUpdateManyWithoutCreatorInput
@@ -30445,7 +30023,6 @@ input UserUpdateWithoutRefereesDataInput {
   friendRequests: FriendRequestUpdateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestUpdateManyWithoutRequestUserInput
   properties: PropertyUpdateManyWithoutOwnersInput
-  managedProperties: PropertyUpdateManyWithoutAgentsInput
   lesseeLeases: LesseeUpdateManyWithoutUserInput
   lessorLeases: LessorUpdateManyWithoutUserInput
   createdProperties: PropertyUpdateManyWithoutCreatorInput
@@ -30501,7 +30078,6 @@ input UserUpdateWithoutRentalAppraisalsDataInput {
   friendRequests: FriendRequestUpdateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestUpdateManyWithoutRequestUserInput
   properties: PropertyUpdateManyWithoutOwnersInput
-  managedProperties: PropertyUpdateManyWithoutAgentsInput
   lesseeLeases: LesseeUpdateManyWithoutUserInput
   lessorLeases: LessorUpdateManyWithoutUserInput
   createdProperties: PropertyUpdateManyWithoutCreatorInput
@@ -30557,7 +30133,6 @@ input UserUpdateWithoutSentMessagesDataInput {
   friendRequests: FriendRequestUpdateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestUpdateManyWithoutRequestUserInput
   properties: PropertyUpdateManyWithoutOwnersInput
-  managedProperties: PropertyUpdateManyWithoutAgentsInput
   lesseeLeases: LesseeUpdateManyWithoutUserInput
   lessorLeases: LessorUpdateManyWithoutUserInput
   createdProperties: PropertyUpdateManyWithoutCreatorInput
@@ -30613,7 +30188,6 @@ input UserUpdateWithoutSignatureDataInput {
   friendRequests: FriendRequestUpdateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestUpdateManyWithoutRequestUserInput
   properties: PropertyUpdateManyWithoutOwnersInput
-  managedProperties: PropertyUpdateManyWithoutAgentsInput
   lesseeLeases: LesseeUpdateManyWithoutUserInput
   lessorLeases: LessorUpdateManyWithoutUserInput
   createdProperties: PropertyUpdateManyWithoutCreatorInput
@@ -30669,7 +30243,6 @@ input UserUpdateWithoutViewingsDataInput {
   friendRequests: FriendRequestUpdateManyWithoutAcceptingUserInput
   awaitingFriends: FriendRequestUpdateManyWithoutRequestUserInput
   properties: PropertyUpdateManyWithoutOwnersInput
-  managedProperties: PropertyUpdateManyWithoutAgentsInput
   lesseeLeases: LesseeUpdateManyWithoutUserInput
   lessorLeases: LessorUpdateManyWithoutUserInput
   createdProperties: PropertyUpdateManyWithoutCreatorInput
@@ -30705,11 +30278,6 @@ input UserUpdateWithWhereUniqueWithoutChatsInput {
 input UserUpdateWithWhereUniqueWithoutInvolvedActivityInput {
   where: UserWhereUniqueInput!
   data: UserUpdateWithoutInvolvedActivityDataInput!
-}
-
-input UserUpdateWithWhereUniqueWithoutManagedPropertiesInput {
-  where: UserWhereUniqueInput!
-  data: UserUpdateWithoutManagedPropertiesDataInput!
 }
 
 input UserUpdateWithWhereUniqueWithoutPropertiesInput {
@@ -30838,12 +30406,6 @@ input UserUpsertWithWhereUniqueWithoutInvolvedActivityInput {
   where: UserWhereUniqueInput!
   update: UserUpdateWithoutInvolvedActivityDataInput!
   create: UserCreateWithoutInvolvedActivityInput!
-}
-
-input UserUpsertWithWhereUniqueWithoutManagedPropertiesInput {
-  where: UserWhereUniqueInput!
-  update: UserUpdateWithoutManagedPropertiesDataInput!
-  create: UserCreateWithoutManagedPropertiesInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutPropertiesInput {
@@ -31845,9 +31407,6 @@ input UserWhereInput {
   properties_every: PropertyWhereInput
   properties_some: PropertyWhereInput
   properties_none: PropertyWhereInput
-  managedProperties_every: PropertyWhereInput
-  managedProperties_some: PropertyWhereInput
-  managedProperties_none: PropertyWhereInput
   lesseeLeases_every: LesseeWhereInput
   lesseeLeases_some: LesseeWhereInput
   lesseeLeases_none: LesseeWhereInput

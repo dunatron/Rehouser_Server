@@ -1,12 +1,7 @@
 const { transport, makeANiceEmail } = require("../mail");
 const { CEO_DETAILS } = require("../../const");
 
-const requestAppraisalEmail = async function({
-  toEmail,
-  user,
-  location,
-  appraisal
-}) {
+const requestAppraisalEmail = async function({ toEmail, ctx, user, location }) {
   return transport.sendMail({
     from: process.env.MAIL_USER,
     to: toEmail,
@@ -27,13 +22,9 @@ We may need to visit the property to increase the accuracy of this. I will be in
 
 <div style="line-height: 18px;">
 We will contact you via email when this appraisal has been completed. It can also be found on the system here \n
-<a href="${process.env.FRONTEND_URL}/landlord/appraisals/${appraisal.id}">Your Appraisal for ${location}</a> \n
+<a href="${process.env.EMAIL_PREFIX}/landlord/properties/add?appraisalId=${appraisal.id}">add Property</a> \n
 </div>
 
-<div style="line-height: 18px;">
-A list of your Appraisals on the platform can be fround here \n
-<a href="${process.env.FRONTEND_URL}/landlord/appraisals">${process.env.FRONTEND_URL}/landlord/appraisals ${location}</a> \n
-</div>
     \n\n`,
       user
     )

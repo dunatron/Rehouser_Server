@@ -7,11 +7,12 @@ const { JWT_TOKEN_MAX_AGE, rehouserCookieOpt } = require("../../const");
 const signupEmail = require("../../lib/emails/signupEmail");
 const emailCEO = require("../../lib/emails/emailCEO");
 const signin = require("./signin");
+const resendConfirmEmail = require("./resendConfirmEmail");
 const { promisify } = require("util");
 const { randomBytes } = require("crypto");
 
 const { addUserSearchNode } = require("../../lib/algolia/userSearchApi");
-// const logUser = require("../../lib/logUser");
+const createChat = require("./createChat");
 
 async function signup(parent, args, ctx, info) {
   args.email = args.email.toLowerCase();
@@ -19,8 +20,8 @@ async function signup(parent, args, ctx, info) {
   // little busines logic here. if they have this email and pass match just logem in
   const userMaybeFromDb = await ctx.db.query.user({
     where: {
-      email: args.email,
-    },
+      email: args.email
+    }
   });
 
   // NEEDS TO HAPPEN AFTER CHECK FOR SIGNIN AS IT POTENTIALLY HANDLES IT
@@ -28,7 +29,7 @@ async function signup(parent, args, ctx, info) {
   if (!userMaybeFromDb) {
     await validateRecaptcha({
       ctx,
-      captchaToken: args.captchaToken,
+      captchaToken: args.captchaToken
     });
   }
 
@@ -56,8 +57,8 @@ async function signup(parent, args, ctx, info) {
         permissions: { set: ["USER"] },
         adminSettings: { create: {} },
         confirmEmailToken: confirmEmailToken,
-        confirmEmailTokenExpiry: confirmEmailTokenExpiry,
-      },
+        confirmEmailTokenExpiry: confirmEmailTokenExpiry
+      }
     },
     info
   );
@@ -65,17 +66,17 @@ async function signup(parent, args, ctx, info) {
   // We should use Algolia for users too
   addUserSearchNode({
     userId: user.id,
-    db: ctx.db,
+    db: ctx.db
   });
 
   const { token, refreshToken } = await createTokens(user, password);
   const cookieOptions = rehouserCookieOpt();
 
   ctx.response.cookie("token", token, {
-    ...cookieOptions,
+    ...cookieOptions
   });
   ctx.response.cookie("refresh-token", refreshToken, {
-    ...cookieOptions,
+    ...cookieOptions
   });
   // Finalllllly we return the user to the browser
   createActivity({
@@ -87,38 +88,70 @@ async function signup(parent, args, ctx, info) {
       jsonObj: user,
       user: {
         connect: {
-          id: user.id,
-        },
+          id: user.id
+        }
       },
       involved: {
         connect: [
           {
-            email: user.email,
-          },
-        ],
-      },
-    },
+            email: user.email
+          }
+        ]
+      }
+    }
   });
   // send the new signupEmail
   signupEmail({
     toEmail: user.email,
     user: user,
-    confirmEmailToken: confirmEmailToken,
+    confirmEmailToken: confirmEmailToken
   });
 
   emailCEO({
     ctx: ctx,
     subject: `New signup ${user.email}`,
-    body: `a new user has signed up to our platform ${user.email} - firstName: ${user.firstName} - lastName: ${user.lastName} - Phone: ${user.phone}`,
+    body: `a new user has signed up to our platform ${user.email} - firstName: ${user.firstName} - lastName: ${user.lastName} - Phone: ${user.phone}`
   });
+
+  // create a chat between the new user and our admin
+  createChat(
+    parent,
+    {
+      data: {
+        type: "GROUP",
+        name: "Chat-to-Admin",
+        participants: {
+          connect: [
+            {
+              id: user.id
+            },
+            {
+              email: "admin@rehouser.co.nz"
+            }
+          ]
+        },
+        messages: {
+          create: {
+            isMine: false,
+            content: "Welcome to rehouser",
+            sender: {
+              connect: {
+                email: "admin@rehouser.co.nz"
+              }
+            }
+          }
+        }
+      }
+    },
+    ctx,
+    info
+  );
 
   const userInfoWithToken = {
     ...user,
     token: token,
-    refreshToken: refreshToken,
+    refreshToken: refreshToken
   };
-  // logUser("User Signed up", userInfoWithToken);
-
   return userInfoWithToken;
 }
 

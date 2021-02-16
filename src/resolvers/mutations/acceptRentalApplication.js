@@ -7,10 +7,6 @@ const {
   newLeaseLessorEmail,
 } = require("../../lib/emails/newLeaseEmail");
 
-const {
-  _assertCanManageProperty,
-} = require("../../lib/_assertCanManageProperty");
-
 /**
  * This will accept a rental application changing it's status to ACCEPTED if the user performing the action
  * is an owner of the property.
@@ -22,25 +18,10 @@ const {
  */
 async function acceptRentalApplication(parent, { applicationId }, ctx, info) {
   const loggedInUser = ctx.request.userId;
-  let isRehouserManaged = false;
   // need to be logged in
   if (!loggedInUser) {
     throw new Error("You must be logged in!");
   }
-
-  const loggedUserWithData = await ctx.db.query.user(
-    {
-      where: {
-        id: loggedInUser,
-      },
-    },
-    `{
-    id
-    permissions
-  }`
-  );
-
-  const isAdmin = loggedUserWithData.permissions.includes("ADMIN");
 
   // get application
   const application = await ctx.db.query.rentalApplication(
@@ -91,28 +72,16 @@ async function acceptRentalApplication(parent, { applicationId }, ctx, info) {
         owners {
           id
           email
-        }
-        agents {
-          id
-          email
-        }
+        } 
         landlordProtectionCover
         freeGlassCover
         workingAlarms
         inHallway3mOfEachBedroom
         tenYearPhotoelectricAlarms
         alarmsEachLevel
-        rehouserManaged
       }
     }`
   );
-
-  isRehouserManaged = application.property.rehouserManaged;
-
-  await _assertCanManageProperty({
-    property: application.property,
-    ctx: ctx,
-  });
 
   if (application.leaseId)
     throw new Error(
@@ -120,18 +89,14 @@ async function acceptRentalApplication(parent, { applicationId }, ctx, info) {
     );
 
   const { applicants, property } = application;
-  const { owners, agents } = property;
+  const { owners } = property;
   const ownerIds = property.owners.map((owner) => owner.id);
-  const agentIds = property.agents.map((agent) => agent.id);
   const lesseeUsers = applicants.map((applicant) => applicant.user);
 
-  if (!agentIds.includes(loggedInUser)) {
-    throw new Error(
-      `You must be an agent to accept rental applications as it will make you a lessor`
-    );
+  // check that loggedInUser is one of the owners for the property
+  if (!ownerIds.includes(loggedInUser)) {
+    throw new Error("You are not one of the owners!");
   }
-
-  // work out the expiry date
 
   // create the new lease and await for the PropertyLease entity to return
   const lease = await createPropertyLease(
@@ -148,19 +113,12 @@ async function acceptRentalApplication(parent, { applicationId }, ctx, info) {
         location: property.location,
         locationLat: property.locationLat,
         locationLng: property.locationLng,
-        lessors: isRehouserManaged
-          ? {
-              create: agents.map((owner) => ({
-                signed: false,
-                user: { connect: { id: owner.id } },
-              })),
-            }
-          : {
-              create: owners.map((owner) => ({
-                signed: false,
-                user: { connect: { id: owner.id } },
-              })),
-            },
+        lessors: {
+          create: owners.map((owner) => ({
+            signed: false,
+            user: { connect: { id: owner.id } },
+          })),
+        },
         lessees: {
           create: lesseeUsers.map((user) => ({
             signed: false,
@@ -200,12 +158,13 @@ async function acceptRentalApplication(parent, { applicationId }, ctx, info) {
         freeGlassCover: property.freeGlassCover,
       },
     },
-    ctx
+    ctx,
+    info
   );
 
   // set the stage to complete by making a mutation
   // also connect the loose prop of leaseId so we can direct people to the lease to sign
-  const updatedRentalApplication = await ctx.db.mutation.updateRentalApplication(
+  ctx.db.mutation.updateRentalApplication(
     {
       where: {
         id: applicationId,
@@ -218,26 +177,16 @@ async function acceptRentalApplication(parent, { applicationId }, ctx, info) {
     info
   );
 
+  const leaseLink = `<a href="${process.env.FRONTEND_URL}/my/lease?id=${lease.id}">To the Lease</a>`;
+
   // send emails to the potential tenants about the accepted application and the new lease to sign
   lesseeUsers.forEach((user, i) => {
-    newLeaseLesseeEmail({
-      ctx: ctx,
-      toEmail: user.email,
-      lease: lease,
-      user: user,
-    });
+    newLeaseLesseeEmail({ ctx: ctx, toEmail: user.email, lease: lease });
   });
   // send emails to the owners about the new lease that needs to be signed!
   owners.forEach((user, i) => {
-    newLeaseLessorEmail({
-      ctx: ctx,
-      toEmail: user.email,
-      lease: lease,
-      user: user,
-    });
+    newLeaseLessorEmail({ ctx: ctx, toEmail: user.email, lease: lease });
   });
-
-  return updatedRentalApplication;
 
   return lease;
 }

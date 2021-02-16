@@ -1,11 +1,8 @@
 const { forwardTo } = require("prisma-binding");
 const { hasPermission } = require("../lib/utils");
 // Business logic Querys
-const crashMe = require("./querys/crashMe");
-const asyncCrashMe = require("./querys/asyncCrashMe");
 const me = require("./querys/me");
 const users = require("./querys/users");
-const user = require("./querys/user");
 const file = require("./querys/file");
 const files = require("./querys/files");
 const myLeases = require("./querys/myLeases.js");
@@ -34,11 +31,8 @@ const inspection = require("./querys/inspection");
 const propertyFiles = require("./querys/propertyFiles");
 
 const Query = {
-  crashMe,
-  asyncCrashMe,
   me,
   users,
-  user,
   file,
   files,
   properties,

@@ -21,7 +21,6 @@ const createPreRentalDocument = require("./mutations/createPreRentalDocument");
 const applyToRentalGroup = require("./mutations/applyToRentalGroup");
 const updateProperty = require("./mutations/updateProperty");
 const createProperty = require("./mutations/createProperty");
-const createFile = require("./mutations/createFile");
 const deleteFile = require("./mutations/deleteFile");
 const uploadFile = require("./mutations/uploadFile");
 const uploadFiles = require("./mutations/uplodaFiles");
@@ -51,7 +50,6 @@ const createContactForm = require("./mutations/createContactForm");
 const updatePropertyFiles = require("./mutations/updatePropertyFiles");
 const updateRentalAppraisal = require("./mutations/updateRentalAppraisal");
 const completeInspection = require("./mutations/completeInspection");
-const inviteUser = require("./mutations/inviteUser");
 
 // a collection of our business logic mutations
 const mutations = {
@@ -59,11 +57,8 @@ const mutations = {
   singleUpload,
   uploadPhotoId,
   uploadProfilePhoto,
-  createFile,
   uploadFile,
   uploadFiles,
-  deleteFile,
-  renameFile,
   createRentalApplication,
   updateRentalApplication,
   completeRentalApplication,
@@ -76,6 +71,9 @@ const mutations = {
   acceptFriendRequest,
   updateProperty,
   createProperty,
+  uploadFile,
+  deleteFile,
+  renameFile,
   signup,
   signin,
   confirmEmail,
@@ -106,8 +104,7 @@ const mutations = {
   createContactForm,
   updatePropertyFiles,
   updateRentalAppraisal,
-  completeInspection,
-  inviteUser
+  completeInspection
 };
 
 module.exports = mutations;

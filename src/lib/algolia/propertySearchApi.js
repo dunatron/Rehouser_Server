@@ -6,21 +6,21 @@ const client = algoliasearch(
   process.env.ALGOLIA_APPLICATION_ID,
   process.env.ALGOLIA_API_KEY,
   {
-    timeout: 4000
+    timeout: 4000,
   }
 );
 
-const index = client.initIndex(`${process.env.SEARCH_STAGE}_PropertySearch`);
-const propertyQueryString = `{id, type, rooms, rent, bathrooms, accommodation{id ,roomSize, rent, expenses, description},lowestRoomPrice, highestRoomPrice, moveInDate, onTheMarket, isLeased, location, locationLat, locationLng, images{url}, carportSpaces, garageSpaces, offStreetSpaces, outdoorFeatures, indoorFeatures  }`;
+const index = client.initIndex(`${process.env.STAGE}_PropertySearch`);
 
 const addPropertySearchNode = async function({ propertyId, db }) {
+  console.log("ADDING PROPERTY SEARCH NODE");
   const property = await db.query.property(
     {
       where: {
-        id: propertyId
-      }
+        id: propertyId,
+      },
     },
-    propertyQueryString
+    `{id, type, rooms, rent, bathrooms, accommodation{id ,roomSize, rent, expenses, description},lowestRoomPrice, highestRoomPrice, moveInDate, onTheMarket, isLeased, location, locationLat, locationLng, images{url}, carportSpaces, garageSpaces, offStreetSpaces, outdoorFeatures, indoorFeatures  }`
   );
   const propertiesObjectArr = [];
   const moveInTimeStamp = moment(property.moveInDate).unix();
@@ -42,20 +42,20 @@ const addPropertySearchNode = async function({ propertyId, db }) {
     location: property.location,
     _geoloc: {
       lat: property.locationLat,
-      lng: property.locationLng
+      lng: property.locationLng,
     },
     locationLat: property.locationLat,
     locationLng: property.locationLng,
-    imageUrls: property.images.map(image => image.url),
+    imageUrls: property.images.map((image) => image.url),
     carportSpaces: property.carportSpaces,
     garageSpaces: property.garageSpaces,
     offStreetSpaces: property.offStreetSpaces,
     outdoorFeatures: property.outdoorFeatures, // If you add an array in the list of attributes to index, we extract and index all strings in the array.
-    indoorFeatures: property.indoorFeatures // https://www.algolia.com/doc/faq/index-configuration/do-you-support-indexing-of-arrays/
+    indoorFeatures: property.indoorFeatures, // https://www.algolia.com/doc/faq/index-configuration/do-you-support-indexing-of-arrays/
   };
 
   propertiesObjectArr.push(propertyObject);
-  index.addObjects(propertiesObjectArr).catch(e => {
+  index.addObjects(propertiesObjectArr).catch((e) => {
     console.log("Error adding property to algolia: ", e);
   });
 
@@ -69,40 +69,42 @@ const ALLOWED_SEARCH_NODE_UPDATE_KEYS = ["rent", "rooms", "moveInDate"];
  * ToDo: create a new searchUpdates object and push in data from updates only if the key is in one of
  * a specified array of allowed keys, also transform certain keys values, or rather, if we update date, mkae a timestamp and update that too
  */
-const updatePropertySearchNode = async function({ property, propertyId, ctx }) {
-  // db update runs before this so we just get the images and update the urls for algolia
-
-  if (!property && !propertyId) {
-    throw new Error(
-      "You must supply the property or propertyId to updatePropertySearchNode"
-    );
+const updatePropertySearchNode = async function({ updates, propertyId, ctx }) {
+  var imageUrls;
+  // var imagesAltered = updates.data.images ? true : false;
+  var imagesAltered = false;
+  if (updates.data.images) {
+    if (updates.data.images.disconnect) {
+      imagesAltered = true;
+    }
+    if (updates.data.images.connect) {
+      imagesAltered = true;
+    }
+    if (updates.data.images.connect) {
+      imagesAltered = true;
+    }
   }
 
-  const data = property
-    ? property
-    : await ctx.db.query.property(
-        {
-          where: {
-            id: propertyId
-          }
+  // db update runs before this so we just get the images and update the urls for algolia
+  if (imagesAltered) {
+    delete updates.data.images;
+    const propertyImages = await ctx.db.query.property(
+      {
+        where: {
+          id: propertyId,
         },
-        propertyQueryString
-      );
+      },
+      `{ id images {id url}}`
+    );
+    imageUrls = propertyImages.images.map((img) => img.url);
+  }
 
   const objects = [
     {
-      ...data,
-      objectID: data.id,
-      ...(data.moveInDate && {
-        move_in_date_timestamp: moment(data.moveInDate).unix()
-      }),
-      ...(data.moveInDate && {
-        move_in_date_timestamp: moment(data.moveInDate).unix()
-      }),
-      ...(data.images && {
-        imageUrls: data.images.map(image => image.url)
-      })
-    }
+      ...updates.data,
+      objectID: propertyId,
+      ...(imagesAltered && { imageUrls: imageUrls }),
+    },
   ];
 
   index.partialUpdateObjects(objects, (err, content) => {
@@ -113,5 +115,5 @@ const updatePropertySearchNode = async function({ property, propertyId, ctx }) {
 
 module.exports = {
   addPropertySearchNode,
-  updatePropertySearchNode
+  updatePropertySearchNode,
 };

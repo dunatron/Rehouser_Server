@@ -1,5 +1,6 @@
 const { CEO_DETAILS, CTO_DETAILS } = require("../const");
 
+
 const userPassword = "test";
 
 const userEmail3 = "bob@test.com";
@@ -13,7 +14,7 @@ const userEmail10 = "ida@test.com";
 const userEmail11 = "lee@test.com";
 
 const setWizardPermissions = {
-  set: ["ADMIN", "USER", "PERMISSIONUPDATE", "WIZARD"]
+  set: ["ADMIN", "USER", "PERMISSIONUPDATE"]
 };
 
 const setAdminPermissions = {
@@ -36,15 +37,23 @@ const createAdminSettings = {
 const userFrag = {
   email: userEmail3, // @unique String
   password: userPassword,
+  firstName: "Bob",
+  lastName: "Doe",
+  phone: "0212439998",
+  // profilePhoto: File
+  identificationNumber: "DH812768",
+  emergencyContactName: "Jon Doe",
+  emergencyContactNumber: "55555555",
+  emergencyContactEmail: "jondoe@test.com",
+  referee1Name: "Swain",
+  referee1Phone: "1233333",
+  referee1Email: "swain@test.com",
+  referee2Name: "Garen",
+  referee2Phone: "6799000",
+  referee2Email: "garen@test.com",
   acceptedSignupTerms: true,
-  phone: "5555555",
   adminSettings: {
-    create: {
-      appraisalCreatedSub: false,
-      propertyCreatedSub: false,
-      rentalApplicationCreatedSub: false,
-      leaseCreatedSub: false
-    }
+    create: {}
   },
   permissions: setUserPermissions
 };
@@ -69,7 +78,6 @@ const userList = [
   {
     ...userFrag,
     ...wizardFrag,
-    id: CEO_DETAILS.id,
     email: "admin@rehouser.co.nz",
     firstName: "Heath R",
     lastName: "McDounough",
@@ -79,7 +87,6 @@ const userList = [
   {
     ...userFrag,
     ...wizardFrag,
-    id: CTO_DETAILS.id,
     email: "heathd@rehouser.co.nz",
     firstName: "Heath R",
     lastName: "Dunlop",
@@ -163,7 +170,6 @@ const userList = [
 const prodSeedList = [
   {
     ...wizardFrag,
-    id: CEO_DETAILS.id,
     email: CEO_DETAILS.email,
     firstName: CEO_DETAILS.firstname,
     lastName: CEO_DETAILS.lastname,
@@ -172,20 +178,19 @@ const prodSeedList = [
   },
   {
     ...wizardFrag,
-    id: CTO_DETAILS.id,
     email: CTO_DETAILS.email,
     firstName: CTO_DETAILS.firstname,
     lastName: CTO_DETAILS.lastname,
     phone: CTO_DETAILS.phone,
     permissions: setWizardPermissions
   },
-  // {
-  //   ...adminFrag,
-  //   email: "siaujiun@gmail.com",
-  //   firstName: "Siau Jiun",
-  //   lastName: "Lim",
-  //   permissions: setAdminPermissions
-  // },
+  {
+    ...adminFrag,
+    email: "siaujiun@gmail.com",
+    firstName: "Siau Jiun",
+    lastName: "Lim",
+    permissions: setAdminPermissions
+  },
   {
     ...adminFrag,
     email: "anelsonmisa@gmail.com",

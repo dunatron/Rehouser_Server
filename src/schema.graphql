@@ -11,20 +11,11 @@ input CloudinaryParams {
   folder: String
   resource_type: String
   type: String
-  access_mode: String
   tags: Json
-}
-
-input InviteUserParams {
-  email: String!
-  subUrl: String
-  message: String
 }
 
 type User {
   id: ID!
-  createdAt: DateTime
-  updatedAt: DateTime
   firstName: String!
   lastName: String!
   phone: String!
@@ -55,7 +46,6 @@ type User {
   chats: [Chat!]
   permissions: [Permission]
   token: String
-  refreshToken: String
   rehouserStamp: Boolean
   signature: File
   activity: [Activity!]!
@@ -101,7 +91,6 @@ type Mutation {
   updatePermissions(permissions: [Permission], userId: ID!): User
   # singleUpload(file: Upload!): File!
   #
-  createFile(data: FileCreateInput!): File
   singleUpload(file: Upload!, data: CloudinaryParams): File! # give this ago that way we can create links to other models perhaps e.g preTenancyProofOfAddress
   # actually preTenancyProofOfAddress will just return the id as no form will have been created yet
   uploadPhotoId(file: Upload!, photoId: String!): User
@@ -140,12 +129,12 @@ type Mutation {
   ): RentalApplication!
   completeRentalApplication(applicationId: ID!): RentalApplication!
   createPreRentalDocument(rentalGroupApplicantId: ID!): Json!
-  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User!
+  updateUser(data: UserUpdateInput!, photoFile: Upload): User!
   updateRentalGroupApplicant(
     data: RentalGroupApplicantUpdateInput!
     where: RentalGroupApplicantWhereUniqueInput!
   ): RentalGroupApplicant
-  acceptRentalApplication(applicationId: ID!): RentalApplication
+  acceptRentalApplication(applicationId: ID!): PropertyLease
   declineRentalApplication(applicationId: ID!): SuccessMessage!
   createCreditCard(token: String!): CreditCard!
   createPropertyLease(data: PropertyLeaseCreateInput!): PropertyLease!
@@ -185,7 +174,6 @@ type Mutation {
     data: InspectionUpdateInput!
     where: InspectionWhereUniqueInput!
   ): Inspection
-  inviteUser(data: InviteUserParams!): SuccessMessage!
 }
 
 type Subscription {
@@ -208,20 +196,11 @@ type Subscription {
     where: PropertySubscriptionWhereInput
   ): PropertySubscriptionPayload
   userSub(where: UserSubscriptionWhereInput): UserSubscriptionPayload
-  inspectionSub(
-    where: InspectionSubscriptionWhereInput
-  ): InspectionSubscriptionPayload
-  rentalApplicationSub(
-    where: RentalApplicationSubscriptionWhereInput
-  ): RentalApplicationSubscriptionPayload
 }
 
 type Query {
-  crashMe: User
-  asyncCrashMe: User
   me: User
   users(where: UserWhereUniqueInput): [User]!
-  user(where: UserWhereUniqueInput!): User
   file(id: ID!): File
   files: [File!]!
   activities(
@@ -289,7 +268,7 @@ type Query {
     before: String
     first: Int
     last: Int
-  ): PropertyLeaseConnection!
+  ): [PropertyLease]!
   properties: [Property!]!
   property(where: PropertyWhereUniqueInput!): Property!
   ownerProperties: [Property!]!

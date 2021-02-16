@@ -45,7 +45,6 @@ const propertyFrag = {
   inHallway3mOfEachBedroom: true,
   tenYearPhotoelectricAlarms: true,
   alarmsEachLevel: true,
-  rehouserManaged: true,
   indoorFeatures: {
     set: ["FURNISHED"]
   },

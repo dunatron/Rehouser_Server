@@ -1,19 +1,11 @@
 const {
-  updatePropertySearchNode
+  updatePropertySearchNode,
 } = require("../../lib/algolia/propertySearchApi");
 const { createActivity } = require("../../lib/createActivity");
-const { _isOwnerOrAgent } = require("../../lib/_isOwnerOrAgent");
-
-const propertyQueryString = `{ id location images {id url} insulationForm {id} insulationStatementFile {id} agents {id} owners {id} }`;
 
 async function updateProperty(parent, args, ctx, info) {
   // first take a copy of the updates
   const loggedInUserId = ctx.request.userId;
-
-  if (!ctx.request.userPermissions) {
-    throw new Error("trying to attach permissions to the request");
-  }
-
   // need to be logged in
   if (!loggedInUserId) {
     throw new Error("You must be logged in!");
@@ -24,14 +16,12 @@ async function updateProperty(parent, args, ctx, info) {
   // remove the ID from the updates
   delete updates.id;
 
-  const item = await ctx.db.query.property({ where }, propertyQueryString);
+  const item = await ctx.db.query.property(
+    { where },
+    `{ id location images {id url} insulationForm {id} insulationStatementFile {id} }`
+  );
 
-  const isOwnerOrAgent = _isOwnerOrAgent({ property: item, ctx });
-
-  if (!isOwnerOrAgent) {
-    throw new Error(
-      `You must be an owner, Agent or Wizard to update this property: ${item.location} `
-    );
+  if (updates.files) {
   }
 
   if (!item.insulationForm && updates.data.onTheMarket) {
@@ -51,15 +41,15 @@ async function updateProperty(parent, args, ctx, info) {
       type: "UPDATED_PROPERTY",
       user: {
         connect: {
-          id: loggedInUserId
-        }
+          id: loggedInUserId,
+        },
       },
       property: {
         connect: {
-          id: args.id
-        }
-      }
-    }
+          id: args.id,
+        },
+      },
+    },
   });
   if (args.data.onTheMarket) {
     const live = args.data.onTheMarket;
@@ -76,15 +66,15 @@ async function updateProperty(parent, args, ctx, info) {
         type: live ? "PROPERTY_LIVE" : "PROPERTY_DRAFT",
         user: {
           connect: {
-            id: loggedInUserId
-          }
+            id: loggedInUserId,
+          },
         },
         property: {
           connect: {
-            id: args.id
-          }
-        }
-      }
+            id: args.id,
+          },
+        },
+      },
     });
   }
 
@@ -93,17 +83,19 @@ async function updateProperty(parent, args, ctx, info) {
     {
       updates,
       where: {
-        id: args.id
-      }
+        id: args.id,
+      },
     },
     info
   );
 
-  // update the property in algolia
-  await updatePropertySearchNode({
-    // property: updatedProperty,
+  /**
+   * activate the ciode highligting below is not used sao just do the func and dont put it into a variable
+   */
+  const propertySearchNode = updatePropertySearchNode({
+    updates: updates,
     propertyId: args.id,
-    ctx
+    ctx,
   });
 
   return updatedProperty;

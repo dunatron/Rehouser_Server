@@ -4,8 +4,6 @@ const mustBeAuthed = require("../../lib/mustBeAuthed");
 const { createActivity } = require("../../lib/createActivity");
 const getBondAmount = require("../../lib/payments/getBondAmount");
 
-const {_assertCanManageProperty} = require("../../lib/_assertCanManageProperty")
-
 // cleanup
 const finaliseLeaseCleanup = require("../../lib/cleanup/finaliseLeaseCleanup");
 
@@ -17,21 +15,6 @@ async function finalisePropertyLease(parent, args, ctx, info) {
     ctx: ctx,
     errorMessage: "You must be logged in to finalise a lease"
   });
-
-  const loggedUserWithData = await ctx.db.query.user({
-    where: {
-      id: reqUserId
-    }
-  }, 
-  `{
-    id
-    permissions
-  }`
-  );
-
-  const isAdmin = loggedUserWithData.permissions.includes("ADMIN")
-
-
   const leaseId = args.leaseId;
   // 1. get the property lease via the id and all of the data we will need
   const lease = await ctx.db.query.propertyLease(
@@ -67,15 +50,6 @@ async function finalisePropertyLease(parent, args, ctx, info) {
       property {
         id
         location
-        rehouserManaged
-        owners {
-          id
-          email
-        }
-        agents {
-          id
-          email
-        }
       }
       wallet {
         id
@@ -83,14 +57,6 @@ async function finalisePropertyLease(parent, args, ctx, info) {
       }
     }`
   );
-
-
-  await _assertCanManageProperty({
-    property: lease.property, 
-    ctx: ctx
-  })
-
-  const isRehouserManaged = lease.property.rehouserManaged
 
   // easy accessors
   const lessorUsers = lease.lessors.map(lessor => lessor.user);
@@ -102,13 +68,12 @@ async function finalisePropertyLease(parent, args, ctx, info) {
 
   // must be a lessor to finalise lease
   const isALessor = lessorIds.includes(reqUserId);
-  if (!isALessor && !isAdmin) {
+  if (!isALessor) {
     throw new Error("You must be a lessor to finalise this lease");
   }
 
   // all lessors must have signed the lease(usually just one)
   const allLessorsSigned = !lessorSignatures.includes(false);
-
   if (!allLessorsSigned) {
     throw new Error("Not all lessors have signed this lease yet");
   }
@@ -166,7 +131,7 @@ async function finalisePropertyLease(parent, args, ctx, info) {
   // success emails to lessors
   lessorUsers.map((usr, indx) => {
     finalisePropertyLeaseEmail({
-      baseLink: "landlord",
+      baseLink: "tenant",
       ctx: ctx,
       lease: combinedLease,
       // payment: payment,
@@ -179,7 +144,7 @@ async function finalisePropertyLease(parent, args, ctx, info) {
   // success emails to lessees
   lesseeUsers.map((usr, indx) => {
     finalisePropertyLeaseEmail({
-      baseLink: "tenant",
+      baseLink: "landlord",
       ctx: ctx,
       lease: combinedLease,
       // payment: payment,
@@ -217,7 +182,7 @@ async function finalisePropertyLease(parent, args, ctx, info) {
     }
   });
 
-  return acceptedLease; // acccepted lease will return exactly what they ask for satisfy gql
+  return acceptedLease;
 }
 
 module.exports = finalisePropertyLease;

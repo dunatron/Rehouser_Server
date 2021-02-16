@@ -16,7 +16,7 @@ async function updatePropertyLease(parent, { data, where }, ctx, info) {
     },
     `{
       id
-      stage
+      finalised
       lessors {
         id
         signed
@@ -39,10 +39,8 @@ async function updatePropertyLease(parent, { data, where }, ctx, info) {
     }`
   );
 
-  if (lease.stage === "SIGNED") {
-    throw new Error(
-      "This lease has been signed by all parties and confirmed by an Agent or Owner and cannot be altered"
-    );
+  if (lease.finalised) {
+    throw new Error("This lease has been finalised and cannot be altered");
   }
 
   // easy accessors
@@ -63,23 +61,24 @@ async function updatePropertyLease(parent, { data, where }, ctx, info) {
     {
       data: {
         ...data,
+        // lessees: lesseeUsers.map((item, idx) => ({}))
         lessees: {
-          update: lease.lessees.map((item, idx) => ({
+          update: lesseeUsers.map((item, idx) => ({
             where: {
-              id: item.id
-            },
-            data: {
-              signed: false
+              id: item.id,
+              data: {
+                signed: false
+              }
             }
           }))
         },
         lessors: {
-          update: lease.lessors.map((item, idx) => ({
+          update: lessorUsers.map((item, idx) => ({
             where: {
-              id: item.id
-            },
-            data: {
-              signed: false
+              id: item.id,
+              data: {
+                signed: false
+              }
             }
           }))
         }

@@ -1,10 +1,6 @@
 const { randomBytes } = require("crypto");
 const { promisify } = require("util");
 const { transport, makeANiceEmail } = require("../../lib/mail");
-const congratulateEmailConfirmEmail = require("../../lib/emails/congratulateEmailConfirmEmail");
-const createChat = require("./createChat");
-const { CEO_DETAILS, CTO_DETAILS } = require("../../const");
-// const logUser = require("../../lib/logUser");
 
 /**
  *
@@ -29,8 +25,8 @@ async function confirmEmail(parent, args, ctx, info) {
   const loggedInUser = await ctx.db.query.user(
     {
       where: {
-        id: loggedInUserId
-      }
+        id: loggedInUserId,
+      },
     },
     info
   );
@@ -46,8 +42,8 @@ async function confirmEmail(parent, args, ctx, info) {
       where: {
         email: loggedInUser.email,
         confirmEmailToken: args.token,
-        confirmEmailTokenExpiry_gte: Date.now() - 3600000
-      }
+        confirmEmailTokenExpiry_gte: Date.now() - 3600000,
+      },
     },
     info
   );
@@ -56,75 +52,37 @@ async function confirmEmail(parent, args, ctx, info) {
     throw new Error("This token is either invalid or expired!");
   }
 
-  if (!user.email) {
-    throw new Error("LOL IT does not have an email!");
+  if (user.emailValidated) {
+    throw new Error("You have already validated this emails account");
   }
-
-  // if (user.emailValidated) {
-  //   throw new Error("You have already validated this emails account");
-  // }
 
   // confirm the token is leget
   // make mutation to say
-  const updatedUserRes = await ctx.db.mutation.updateUser(
+  const res = await ctx.db.mutation.updateUser(
     {
       where: { email: user.email },
       data: {
         emailValidated: true,
         confirmEmailToken: null,
-        confirmEmailTokenExpiry: null
-      }
+        confirmEmailTokenExpiry: null,
+      },
     },
     info
   );
-  // 3. Email them congratulations on confirming email
-
-  congratulateEmailConfirmEmail({
-    email: user.email,
-    user: user
+  // 3. Email them that reset token
+  const mailRes = await transport.sendMail({
+    from: "heath.dunlop.hd@gmail.com",
+    to: user.email,
+    subject: "Rehouser account validated",
+    html: makeANiceEmail(
+      `Congratulations on validating your email!
+      \n\n`,
+      user
+    ),
   });
 
-  //create a chat betwen user and admin
-  if (user.email !== "admin@rehouser.co.nz") {
-    const theChat = await createChat(
-      parent,
-      {
-        data: {
-          type: "GROUP",
-          name: "Rehouser Admin",
-          participants: {
-            connect: [
-              {
-                id: user.id
-              },
-              {
-                id: CEO_DETAILS.id
-              }
-            ]
-          },
-          messages: {
-            create: {
-              isMine: false,
-              content: "Welcome to rehouser",
-              sender: {
-                connect: {
-                  id: CEO_DETAILS.id
-                }
-              }
-            }
-          }
-        }
-      },
-      ctx,
-      info
-    );
-    console.log("CHAT CREATED FORM CONFIRM EMAIL => ", theChat);
-  }
-
-  // logUser("User confirmed email", updatedUserRes);
-
   // 4. Return the message
-  return updatedUserRes;
+  return res;
 }
 
 module.exports = confirmEmail;
