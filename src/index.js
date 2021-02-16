@@ -97,7 +97,7 @@ const allowedClientOrigins = [
   "https://rehouser.co.nz",
   "https://yoga.rehouser.co.nz",
   "http://app.uat.rehouser.co.nz",
-  /\.rehouser\.co.nz$/, //
+  // /\.rehouser\.co.nz$/, //
   process.env.FRONTEND_URL,
 ];
 
