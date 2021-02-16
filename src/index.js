@@ -89,7 +89,7 @@ routes(server);
 initialiseTasks();
 
 const allowedClientOrigins = [
-  "http://localhost:7777",
+  // "http://localhost:7777",
   "https://rehouser-next-prod.herokuapp.com",
   "http://app.rehouser.co.nz",
   "http://rehouser.co.nz",
@@ -97,7 +97,7 @@ const allowedClientOrigins = [
   "https://rehouser.co.nz",
   "https://yoga.rehouser.co.nz",
   "http://app.uat.rehouser.co.nz",
-  process.env.FRONTEND_URL,
+  // process.env.FRONTEND_URL,
 ];
 
 // NEW - Add CORS headers - see https://enable-cors.org/server_expressjs.html
@@ -127,12 +127,12 @@ server.use((req, res, next) => {
 const app = server.start(
   {
     port: process.env.PORT || 4444,
-    cors: {
-      credentials: true,
-      // origin: "*",
-      origin: allowedClientOrigins,
-      // methods: ["GET", "PUT", "POST"]
-    },
+    // cors: {
+    //   credentials: false,
+    //   // origin: "*",
+    //   origin: allowedClientOrigins,
+    //   // methods: ["GET", "PUT", "POST"]
+    // },
     // uploads: {
     //   maxFieldSize: 1000,
     //   maxFileSize: 500,

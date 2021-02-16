@@ -59,7 +59,7 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
           function(error, result) {
             if (result) {
               logger.log("info", `FILE UPLOAD SUCCESS`, {
-                message: err.message,
+                result: result,
               });
               resultObj = {
                 ...result,
