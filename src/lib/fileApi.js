@@ -2,7 +2,7 @@ const cloudinary = require("cloudinary").v2;
 const { extractFileKey } = require("./extractFileKey");
 const { _isAdmin } = require("./permissionsCheck");
 
-// const logger = require("../middleware/loggers/logger");
+const logger = require("../middleware/loggers/logger");
 
 //https://cloudinary.com/documentation/image_upload_api_reference#required_parameters
 
@@ -42,9 +42,9 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
   // ctx.req.set("Content-Type", "text/html");
   // console.log("headers after mutation => ", ctx.request.headers);
 
-  // logger.log("info", `file API HEADERS`, {
-  //   headers: ctx.request.headers,
-  // });
+  logger.log("info", `file API HEADERS`, {
+    headers: ctx.request.headers,
+  });
 
   const cloudinaryUpload = async ({ stream }) => {
     try {
@@ -58,6 +58,9 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
           },
           function(error, result) {
             if (result) {
+              logger.log("info", `FILE UPLOAD SUCCESS`, {
+                message: err.message,
+              });
               resultObj = {
                 ...result,
               };
@@ -66,10 +69,10 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
               // logger.log("error", `file APi reject err: `, {
               //   message: error
               // });
-              // logger.log("info", `Debug: fileApi`, {
-              //   tron: "error in the resolve for file",
-              //   error: error,
-              // });
+              logger.log("info", `Debug: fileApi`, {
+                tron: "error in the resolve for file",
+                error: error,
+              });
               reject(error);
               throw new Error(`cloudinary.uploader.upload_stream error`);
             }
@@ -78,9 +81,9 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
         stream.pipe(streamLoad);
       });
     } catch (err) {
-      // logger.log("info", `File Upload Error`, {
-      //   message: err.message,
-      // });
+      logger.log("info", `File Upload Error`, {
+        message: err.message,
+      });
       throw new Error(`caught error uploading to cloudinry`);
     }
   };
