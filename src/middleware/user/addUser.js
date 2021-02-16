@@ -20,6 +20,8 @@ const addUser = async (req, res, next) => {
   //   }
   // }
 
+  req.headers["Access-Control-Allow-Origin"] = "*";
+
   // req.headers["mode"] = "cors";
   // req.headers["host"] = "https://app.rehouser.co.nz";
   // req.headers["sec-fetch-site"] = "cors";
