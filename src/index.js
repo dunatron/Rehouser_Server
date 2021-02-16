@@ -107,7 +107,6 @@ const app = server.start(
       credentials: true,
       // origin: "*",
       origin: allowedClientOrigins,
-      preflightContinue: true,
       // methods: ["GET", "PUT", "POST"]
     },
     // uploads: {

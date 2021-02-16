@@ -41,23 +41,23 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
 
   console.log("SHOW ME THE FILE CTX headers => ", ctx.request.headers);
 
-  delete ctx.request.headers["access-control-allow-origin"];
+  // delete ctx.request.headers["access-control-allow-origin"];
 
-  delete ctx.request.headers["x-request-id"];
-  delete ctx.request.headers["x-forwarded-for"];
-  delete ctx.request.headers["x-forwarded-proto"];
-  delete ctx.request.headers["x-forwarded-port"];
-  delete ctx.request.headers["via"];
-  delete ctx.request.headers["connect-time"];
-  delete ctx.request.headers["x-request-start"];
-  delete ctx.request.headers["total-route-time"];
+  // delete ctx.request.headers["x-request-id"];
+  // delete ctx.request.headers["x-forwarded-for"];
+  // delete ctx.request.headers["x-forwarded-proto"];
+  // delete ctx.request.headers["x-forwarded-port"];
+  // delete ctx.request.headers["via"];
+  // delete ctx.request.headers["connect-time"];
+  // delete ctx.request.headers["x-request-start"];
+  // delete ctx.request.headers["total-route-time"];
 
-  delete ctx.request.headers["origin"];
-  delete ctx.request.headers["content-type"];
+  // delete ctx.request.headers["origin"];
+  // delete ctx.request.headers["content-type"];
 
-  ctx.request.headers["connection"] = "keep-alive";
+  // ctx.request.headers["connection"] = "keep-alive";
 
-  console.log("FILE HEADERSS AFTER ALTERATION => ", ctx.request.headers);
+  // console.log("FILE HEADERSS AFTER ALTERATION => ", ctx.request.headers);
 
   // below is all we need
   // host: 'localhost:4444',
@@ -82,50 +82,49 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
   const cloudinaryUpload = async ({ stream }) => {
     try {
       await new Promise((resolve, reject) => {
-        // const streamLoad = cloudinary.uploader.upload_stream(
-        //   {
-        //     type: data.type ? data.type : "upload",
-        //     access_mode: data.access_mode ? data.access_mode : "authenticated",
-        //     ...data,
-        //     folder: `${process.env.STAGE}/${data.folder}`,
-        //   },
-        //   function(error, result) {
-        //     if (result) {
-        //       logger.log("info", `FILE UPLOAD SUCCESS`, {
-        //         result: result,
-        //       });
-        //       resultObj = {
-        //         ...result,
-        //       };
-        //       resolve();
-        //     } else {
-        //       // logger.log("error", `file APi reject err: `, {
-        //       //   message: error
-        //       // });
-        //       logger.log("info", `Debug: fileApi`, {
-        //         tron: "error in the resolve for file",
-        //         error: error,
-        //       });
-        //       reject(error);
-        //       throw new Error(`cloudinary.uploader.upload_stream error`);
-        //     }
-        //   }
-        // );
-        // stream.pipe(streamLoad);
-        var upload_stream = cloudinary.uploader.upload_stream(
-          { tags: "basic_sample" },
-          function(err, image) {
-            if (err) {
-              reject(err);
+        const streamLoad = cloudinary.uploader.upload_stream(
+          {
+            type: data.type ? data.type : "upload",
+            access_mode: data.access_mode ? data.access_mode : "authenticated",
+            ...data,
+            folder: `${process.env.STAGE}/${data.folder}`,
+          },
+          function(error, result) {
+            if (result) {
+              logger.log("info", `FILE UPLOAD SUCCESS`, {
+                result: result,
+              });
+              resultObj = {
+                ...result,
+              };
+              resolve();
+            } else {
+              // logger.log("error", `file APi reject err: `, {
+              //   message: error
+              // });
+              logger.log("info", `Debug: fileApi`, {
+                tron: "error in the resolve for file",
+                error: error,
+              });
+              reject(error);
+              throw new Error(`cloudinary.uploader.upload_stream error`);
             }
-            resultObj = {
-              ...image,
-            };
-            resolve();
           }
         );
+        stream.pipe(streamLoad);
+        // var upload_stream = cloudinary.uploader.upload_stream(
+        //   { tags: "basic_sample" },
+        //   function(err, image) {
+        //     if (err) {
+        //       reject(err);
+        //     }
+        //     resultObj = {
+        //       ...image,
+        //     };
+        //     resolve();
+        //   }
+        // );
         // fs.createReadStream("./src/pizza.jpg").pipe(upload_stream);
-        stream.pipe(upload_stream);
       });
     } catch (err) {
       logger.log("info", `File Upload Error`, {
