@@ -9,7 +9,7 @@ const logger = require("../middleware/loggers/logger");
 const cloudinaryConfObj = {
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 };
 
 exports._isUploader = ({ file, ctx }) => {
@@ -30,7 +30,7 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
     createReadStream,
     filename,
     mimetype,
-    encoding
+    encoding,
   } = await upload;
 
   cloudinary.config(cloudinaryConfObj);
@@ -43,7 +43,7 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
   // console.log("headers after mutation => ", ctx.request.headers);
 
   logger.log("info", `file API HEADERS`, {
-    headers: ctx.request.headers
+    headers: ctx.request.headers,
   });
 
   const cloudinaryUpload = async ({ stream }) => {
@@ -54,22 +54,24 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
             type: data.type ? data.type : "upload",
             access_mode: data.access_mode ? data.access_mode : "authenticated",
             ...data,
-            folder: `${process.env.STAGE}/${data.folder}`
+            folder: `${process.env.STAGE}/${data.folder}`,
           },
           function(error, result) {
             if (result) {
               resultObj = {
-                ...result
+                ...result,
               };
               resolve();
             } else {
               // logger.log("error", `file APi reject err: `, {
               //   message: error
               // });
-              // logger.log("info", `Debug: fileApi`, {
-              //   tron: "error in the resolve for file"
-              // });
+              logger.log("info", `Debug: fileApi`, {
+                tron: "error in the resolve for file",
+                error: error,
+              });
               reject(error);
+              throw new Error(`cloudinary.uploader.upload_stream error`);
             }
           }
         );
@@ -77,13 +79,9 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
       });
     } catch (err) {
       logger.log("info", `File Upload Error`, {
-        message: err.message
+        message: err.message,
       });
-      throw new Error(
-        `Failed to upload item image ! Err:${
-          err.message
-        } headerson server: ${JSON.stringify(ctx.request.headers, null, 2)}`
-      );
+      throw new Error(`caught error uploading to cloudinry`);
     }
   };
 
@@ -94,7 +92,7 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
     filename,
     mimetype,
     encoding,
-    ...resultObj
+    ...resultObj,
   };
 
   // return file;
@@ -102,8 +100,8 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
     {
       data: {
         ...combinedFileData,
-        uploaderId: ctx.request.userId
-      }
+        uploaderId: ctx.request.userId,
+      },
     },
     info
   );
