@@ -11,6 +11,9 @@ const userMiddleware = require("./middleware/user/index");
 const routes = require("./routes/index");
 const logger = require("./middleware/loggers/logger");
 
+// could be quite useful
+// https://developers.cloudflare.com/workers/examples/modify-request-property
+
 process.on("uncaughtException", err => {
   logger.log("error", `Uncaught Exception: ${err.message}`, {
     message: err.message
@@ -89,6 +92,7 @@ const allowedClientOrigins = [
   "https://rehouser.co.nz",
   "https://yoga.rehouser.co.nz",
   "http://app.uat.rehouser.co.nz",
+  /\.rehouser\.co.nz$/,
   process.env.FRONTEND_URL
 ];
 
