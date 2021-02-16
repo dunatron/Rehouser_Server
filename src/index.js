@@ -9,7 +9,7 @@ const server = createServer();
 const stripeMiddleWare = require("./middleware/stripe/index");
 const userMiddleware = require("./middleware/user/index");
 const routes = require("./routes/index");
-// const logger = require("./middleware/loggers/logger");
+const logger = require("./middleware/loggers/logger");
 
 // could be quite useful
 // https://developers.cloudflare.com/workers/examples/modify-request-property
@@ -71,6 +71,16 @@ const expressLogger = function(req, res, next) {
 server.use(expressLogger);
 server.express.use(cookieParser());
 
+// const expressErrorMiddleware = async (err, req, res, next) => {
+//   logger.log("error", `expressErrorMiddleware`, {
+//     err: err,
+//     req: req,
+//     res: res,
+//   });
+//   next();
+// };
+
+// server.express.use(expressErrorMiddleware);
 userMiddleware(server);
 
 routes(server);
