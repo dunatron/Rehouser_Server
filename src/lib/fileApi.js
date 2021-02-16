@@ -26,12 +26,14 @@ exports._isUploaderOrAdmin = ({ file, ctx }) => {
 
 exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
   const {
-    stream,
+    // stream,
     createReadStream,
     filename,
     mimetype,
     encoding,
   } = await upload;
+
+  const stream = createReadStream();
 
   cloudinary.config(cloudinaryConfObj);
   let resultObj = {};
@@ -48,6 +50,9 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
   delete ctx.request.headers["connect-time"];
   delete ctx.request.headers["x-request-start"];
   delete ctx.request.headers["total-route-time"];
+
+  delete ctx.request.headers["origin"];
+  delete ctx.request.headers["content-type"];
 
   ctx.request.headers["connection"] = "keep-alive";
 

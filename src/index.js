@@ -107,12 +107,13 @@ const app = server.start(
       credentials: true,
       // origin: "*",
       origin: allowedClientOrigins,
+      preflightContinue: true,
       // methods: ["GET", "PUT", "POST"]
     },
     // uploads: {
     //   maxFieldSize: 1000,
     //   maxFileSize: 500,
-    //   maxFiles: 3
+    //   maxFiles: 3,
     // },
     debug: true,
     playground: "/playground",
