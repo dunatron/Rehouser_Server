@@ -13,6 +13,8 @@ const logger = require("./middleware/loggers/logger");
 
 // could be quite useful
 // https://developers.cloudflare.com/workers/examples/modify-request-property
+// perhaps this too
+// https://stackabuse.com/handling-cors-with-node-js/
 
 process.on("uncaughtException", err => {
   logger.log("error", `Uncaught Exception: ${err.message}`, {
