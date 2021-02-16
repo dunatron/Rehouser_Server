@@ -19,16 +19,16 @@ const logger = require("./middleware/loggers/logger");
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
 
-process.on("uncaughtException", err => {
+process.on("uncaughtException", (err) => {
   logger.log("error", `Uncaught Exception: ${err.message}`, {
-    message: err.message
+    message: err.message,
   });
   return err;
 });
 
 process.on("unhandledRejection", (reason, promise) => {
   logger.log("error", `unhandledRejection`, {
-    reason: reason
+    reason: reason,
   });
   return reason; // return the errors to try not crash express
 });
@@ -55,13 +55,13 @@ const expressLogger = function(req, res, next) {
     url: req.url,
     user: {
       id: req.userId,
-      permissions: req.userPermissions
+      permissions: req.userPermissions,
     },
     method: req.method,
     operationName: req.body.operationName,
     variables: req.body.variables,
     headers: req.headers,
-    userAgent: req.headers["user-agent"]
+    userAgent: req.headers["user-agent"],
     // query: req.body.query
   });
 
@@ -75,7 +75,7 @@ const expressErrorMiddleware = async (err, req, res, next) => {
   logger.log("error", `expressErrorMiddleware`, {
     err: err,
     req: req,
-    res: res
+    res: res,
   });
   next();
 };
@@ -97,19 +97,20 @@ const allowedClientOrigins = [
   "https://rehouser.co.nz",
   "https://yoga.rehouser.co.nz",
   "http://app.uat.rehouser.co.nz",
-  // /\.rehouser\.co.nz$/, //
-  process.env.FRONTEND_URL
+  /\.rehouser\.co.nz$/, //
+  process.env.FRONTEND_URL,
 ];
 
 // Start gql yoga/express server
 const app = server.start(
   {
     port: process.env.PORT || 4444,
-    // cors: {
-    //   credentials: true,
-    //   origin: allowedClientOrigins
-    //   // methods: ["GET", "PUT", "POST"]
-    // },
+    cors: {
+      credentials: true,
+      // origin: "*",
+      origin: allowedClientOrigins,
+      // methods: ["GET", "PUT", "POST"]
+    },
     // uploads: {
     //   maxFieldSize: 1000,
     //   maxFileSize: 500,
@@ -152,13 +153,13 @@ const app = server.start(
       //   //   });
       //   // });
       // },
-      keepAlive: 10000 // use 10000 like prisma or false
-    }
+      keepAlive: 10000, // use 10000 like prisma or false
+    },
   },
-  details => {
+  (details) => {
     logger.info("gql yoga/express server is up", {
       ...details,
-      port: details.port
+      port: details.port,
     });
   }
 );
