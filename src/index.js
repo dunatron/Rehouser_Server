@@ -97,9 +97,31 @@ const allowedClientOrigins = [
   "https://rehouser.co.nz",
   "https://yoga.rehouser.co.nz",
   "http://app.uat.rehouser.co.nz",
-  // /\.rehouser\.co.nz$/, //
   process.env.FRONTEND_URL,
 ];
+
+// NEW - Add CORS headers - see https://enable-cors.org/server_expressjs.html
+// server.use(function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "https://app.rehouser.co.nz");
+//   res.setHea;
+//   // res.header(
+//   //   "Access-Control-Allow-Headers",
+//   //   "Origin, X-Requested-With, Content-Type, Accept"
+//   // );
+//   next();
+// });
+
+server.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedClientOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+  //res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:8020');
+  res.header("Access-Control-Allow-Methods", "GET, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.header("Access-Control-Allow-Credentials", true);
+  return next();
+});
 
 // Start gql yoga/express server
 const app = server.start(
