@@ -15,6 +15,9 @@ const logger = require("./middleware/loggers/logger");
 // https://developers.cloudflare.com/workers/examples/modify-request-property
 // perhaps this too
 // https://stackabuse.com/handling-cors-with-node-js/
+// cors
+// https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers
+// https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
 
 process.on("uncaughtException", err => {
   logger.log("error", `Uncaught Exception: ${err.message}`, {

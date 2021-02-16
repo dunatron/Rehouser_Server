@@ -36,6 +36,7 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
   cloudinary.config(cloudinaryConfObj);
   let resultObj = {};
 
+  ctx.request.headers["mode"] = "no-cors";
   console.log("SHOW ME THE FILE CTX headers => ", ctx.request.headers);
   // ctx.request.mode = "no-cors";
   // ctx.req.set("Content-Type", "text/html");
