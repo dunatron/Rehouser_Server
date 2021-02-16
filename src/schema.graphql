@@ -23,7 +23,6 @@ input InviteUserParams {
 
 type User {
   id: ID!
-  foreignLinks: [ForeignLink]
   createdAt: DateTime
   updatedAt: DateTime
   firstName: String!
@@ -55,7 +54,6 @@ type User {
   awaitingFriends: [FriendRequest!]
   chats: [Chat!]
   permissions: [Permission]
-  photoIdType: PhotoIdType
   token: String
   refreshToken: String
   rehouserStamp: Boolean
@@ -125,10 +123,8 @@ type Mutation {
     where: RentalAppraisalWhereUniqueInput!
   ): RentalAppraisal
   createProperty(data: PropertyCreateInput!): Property
-  updateProperty(
-    data: PropertyUpdateInput!
-    where: PropertyWhereUniqueInput!
-  ): Property!
+  # updateProperty(id: ID!, onTheMarket: Boolean): Property!
+  updateProperty(id: ID!, data: PropertyUpdateInput!): Property!
   updateInsulationForm(
     data: InsulationFormUpdateInput!
     where: InsulationFormWhereUniqueInput!
@@ -177,8 +173,6 @@ type Mutation {
   ): Inspection
   createContactForm(
     firstName: String!
-    lastName: String
-    phone: String
     email: String!
     message: String!
     captchaToken: String!
@@ -192,19 +186,6 @@ type Mutation {
     where: InspectionWhereUniqueInput!
   ): Inspection
   inviteUser(data: InviteUserParams!): SuccessMessage!
-  addBankTransferToLease(
-    bankRef: String!
-    data: PaymentCreateInput!
-  ): PropertyLease!
-  updateContactSubmission(
-    data: ContactSubmissionUpdateInput!
-    where: ContactSubmissionWhereUniqueInput!
-  ): ContactSubmission
-  createForeignLink(data: ForeignLinkCreateInput!): ForeignLink!
-  updateForeignLink(
-    data: ForeignLinkUpdateInput!
-    where: ForeignLinkWhereUniqueInput!
-  ): ForeignLink
 }
 
 type Subscription {
@@ -369,15 +350,6 @@ type Query {
     first: Int
     last: Int
   ): ChargeConnection!
-  contactSubmissionsConnection(
-    where: ContactSubmissionWhereInput
-    orderBy: ContactSubmissionOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): ContactSubmissionConnection!
   findUsers(
     where: UserWhereInput
     orderBy: UserOrderByInput
@@ -416,16 +388,5 @@ type Query {
     first: Int
     last: Int
   ): InspectionConnection!
-  foreignLinksConnection(
-    where: ForeignLinkWhereInput
-    orderBy: ForeignLinkOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): ForeignLinkConnection!
   inspection(where: InspectionWhereUniqueInput!): Inspection
-  propertyLeases(where: PropertyLeaseWhereInput): [PropertyLease]!
-  charge(where: ChargeWhereUniqueInput!): Charge!
 }

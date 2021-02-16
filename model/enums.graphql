@@ -7,11 +7,6 @@ enum Permission {
   WIZARD
 }
 
-enum PhotoIdType {
-  DRIVER_LICENSE
-  PASSPORT
-}
-
 enum ApplicationStage {
   INITIALIZING
   PENDING
@@ -30,18 +25,6 @@ enum LeaseStage {
 enum PaymentType {
   STRIPE
   SYSTEM
-  MANUAL_BANK_TRANSFER
-}
-
-enum ChargeReason {
-  RENT
-  BOND
-  DAMAGES
-}
-
-enum PaymentReason {
-  RENT
-  BOND
 }
 
 enum VisibilityLevel {

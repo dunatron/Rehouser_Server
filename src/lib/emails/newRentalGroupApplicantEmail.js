@@ -5,7 +5,7 @@ const newRentalApplicationEmail = async function({
   rentalApplication,
   applicantId,
   ctx,
-  user
+  user,
 }) {
   const {
     id,
@@ -14,15 +14,11 @@ const newRentalApplicationEmail = async function({
     finalised,
     owner,
     property,
-    applicants
+    applicants,
   } = rentalApplication;
 
   return transport.sendMail({
-    // from: process.env.MAIL_USER,
-    from: {
-      name: "Rehouser Application Applicant",
-      address: process.env.MAIL_USER
-    },
+    from: process.env.MAIL_USER,
     to: toEmail,
     subject: `New Applicant: ${applicantId} for RentalApplication`,
     html: makeANiceEmail(
@@ -32,7 +28,7 @@ const newRentalApplicationEmail = async function({
       Good luck with your application
     \n\n`,
       user
-    )
+    ),
   });
 };
 

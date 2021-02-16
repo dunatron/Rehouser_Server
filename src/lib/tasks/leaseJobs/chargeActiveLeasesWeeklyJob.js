@@ -1,14 +1,6 @@
 var CronJob = require("cron").CronJob;
 
 const db = require("../../../db");
-const moment = require("moment");
-
-function makeNegative(number) {
-  if (number > 0) {
-    return (number = -number);
-  }
-  return number;
-}
 
 async function getActiveLeases() {
   const activeLeases = await db.query
@@ -105,7 +97,6 @@ async function chargeLeaseWalletWithRent(lease) {
             charges: {
               create: {
                 amount: lease.rent,
-                reason: "RENT",
                 description: "Weekly rent charge"
               }
             }
@@ -133,38 +124,11 @@ async function chargeLeaseWalletWithRent(lease) {
 //   });
 // });
 
-// Seconds: 0-59
-// Minutes: 0-59
-// Hours: 0-23
-// Day of Month: 1-31
-// Months: 0-11 (Jan-Dec)
-// Day of Week: 0-6 (Sun-Sat)
-// actually correct time to run
-// 0 seconds 10 minutes 1am every day of month for every months only on thursdays. I think
-// const chargeActiveLeasesWeeklyJob = new CronJob("00 10 01 * * 4", function() {
-//   getActiveLeases().then(leases => {
-//     leases.forEach((l, i) => chargeLeaseWalletWithRent(l));
-//     console.log("The active leases to check things on => ", leases);
-//   });
-// });
-
-const chargeActiveLeasesWeeklyJob = new CronJob({
-  // cronTime: "00 10 01 * * 4", // 0 seconds 10 minutes 1am every day of month for every months only on thursdays. I think
-  // cronTime: "* * * * * *", // every second
-  cronTime: "0 */30 * * * *", // every 30 minutes
-  onTick: function() {
-    const d = new Date();
-    console.log("Check every second:", d);
-    getActiveLeases().then(leases => {
-      leases.forEach((l, i) => chargeLeaseWalletWithRent(l));
-      console.log("The active leases to check things on => ", leases);
-    });
-  },
-  onComplete: function() {
-    console.log(
-      "All Active leases should have now been charged with 1 weeks worth of rent"
-    );
-  }
+const chargeActiveLeasesWeeklyJob = new CronJob("00 10 12 * * 4", function() {
+  getActiveLeases().then(leases => {
+    leases.forEach((l, i) => chargeLeaseWalletWithRent(l));
+    console.log("The active leases to check things on => ", leases);
+  });
 });
 
 module.exports = chargeActiveLeasesWeeklyJob;

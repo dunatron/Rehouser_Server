@@ -18,8 +18,7 @@ async function applyToRentalGroup(parent, { data }, ctx, info) {
   const rentalGroupApplicant = await ctx.db.mutation.createRentalGroupApplicant(
     {
       data: {
-        ...data,
-        completed: false
+        ...data
       }
     },
     `{id}`

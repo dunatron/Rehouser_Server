@@ -20,7 +20,7 @@ async function updateProperty(parent, args, ctx, info) {
   }
 
   const updates = { ...args };
-  const where = { ...args.where };
+  const where = { id: args.id };
   // remove the ID from the updates
   delete updates.id;
 
@@ -56,7 +56,7 @@ async function updateProperty(parent, args, ctx, info) {
       },
       property: {
         connect: {
-          id: args.where.id
+          id: args.id
         }
       }
     }
@@ -81,7 +81,7 @@ async function updateProperty(parent, args, ctx, info) {
         },
         property: {
           connect: {
-            id: args.where.id
+            id: args.id
           }
         }
       }
@@ -93,7 +93,7 @@ async function updateProperty(parent, args, ctx, info) {
     {
       updates,
       where: {
-        ...args.where
+        id: args.id
       }
     },
     info
@@ -102,7 +102,7 @@ async function updateProperty(parent, args, ctx, info) {
   // update the property in algolia
   await updatePropertySearchNode({
     // property: updatedProperty,
-    propertyId: args.where.id,
+    propertyId: args.id,
     ctx
   });
 

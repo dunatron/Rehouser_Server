@@ -77,11 +77,7 @@ async function createRentalAppraisal(parent, args, ctx, info) {
   emailCEO({
     ctx: ctx,
     subject: `New rental appraisal ${rentalAppraisal.id}`,
-    from: {
-      name: "RH Appraisal Requested",
-      address: process.env.MAIL_USER
-    },
-    body: `a new rental appraisal has been requested for ${data.location}. Go to the platform to check it out in the /admin/appraisals`
+    body: `a new rental appraisal has been requested. Go to the platform to check it out in the /admin/appraisals`
   });
 
   return rentalAppraisal;

@@ -98,8 +98,7 @@ const app = server.start(
     port: process.env.PORT || 4444,
     cors: {
       credentials: true,
-      origin: allowedClientOrigins,
-      methods: ["GET", "PUT", "POST"]
+      origin: allowedClientOrigins
     },
     // uploads: {
     //   maxFieldSize: 1000,
@@ -112,37 +111,37 @@ const app = server.start(
     subscriptions: {
       // path: "/subscriptions",
       path: "/",
-      // onConnect: (connectionParams, webSocket, context) => {
-      //   const { isLegacy, socket, request } = context;
-      //   // console.log("context on connect context => ", context);
-      //   // webSocket.on("error", (error) => {
-      //   //   logger.log("error", `potential ws err onConnect`, {
-      //   //     error: error,
-      //   //     // webSocket: webSocket,
-      //   //     // context: context
-      //   //     // query: req.body.query
-      //   //   });
-      //   // });
-      //   // logger.log("info", `subscriptions on connect`, {
-      //   //   connectionParams: connectionParams,
-      //   //   headers: request.headers,
-      //   //   // webSocket: webSocket,
-      //   //   // context: context
-      //   //   // query: req.body.query
-      //   // });
-      // },
-      // onDisconnect: (webSocket, context) => {
-      //   // console.log("context on disconnect context => ", context);
-      //   // console.log("context on disconnect webSocket => ", webSocket);
-      //   // logger.log("info", `subscriptions on disconnect`, {
-      //   //   context: context,
-      //   // });
-      //   // webSocket.on("error", (error) => {
-      //   //   logger.log("error", `potential ws err onDisconnect`, {
-      //   //     error: error,
-      //   //   });
-      //   // });
-      // },
+      onConnect: (connectionParams, webSocket, context) => {
+        const { isLegacy, socket, request } = context;
+        // console.log("context on connect context => ", context);
+        webSocket.on("error", error => {
+          logger.log("error", `potential ws err onConnect`, {
+            error: error
+            // webSocket: webSocket,
+            // context: context
+            // query: req.body.query
+          });
+        });
+        logger.log("info", `subscriptions on connect`, {
+          connectionParams: connectionParams,
+          headers: request.headers
+          // webSocket: webSocket,
+          // context: context
+          // query: req.body.query
+        });
+      },
+      onDisconnect: (webSocket, context) => {
+        // console.log("context on disconnect context => ", context);
+        // console.log("context on disconnect webSocket => ", webSocket);
+        logger.log("info", `subscriptions on disconnect`, {
+          context: context
+        });
+        webSocket.on("error", error => {
+          logger.log("error", `potential ws err onDisconnect`, {
+            error: error
+          });
+        });
+      },
       keepAlive: 10000 // use 10000 like prisma or false
     }
   },

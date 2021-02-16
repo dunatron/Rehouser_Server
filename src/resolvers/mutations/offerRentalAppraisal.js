@@ -3,7 +3,7 @@ const offerRentalAppraisalEmail = require("../../lib/emails/offerRentalAppraisal
 
 async function offerRentalAppraisal(parent, args, ctx, info) {
   const loggedInUserId = ctx.request.userId;
-  const { data, where } = args;
+  const { data } = args;
   const { property, requestedBy } = data;
 
   // need to be logged in
@@ -11,31 +11,20 @@ async function offerRentalAppraisal(parent, args, ctx, info) {
     throw new Error("You must be logged in!");
   }
 
-  const appraisal = await ctx.db.query.rentalAppraisal(
+  // need user for email
+  const user = await ctx.db.query.user(
     {
       where: {
-        ...where
+        id: loggedInUserId
       }
     },
-    `{ id requestedBy { id firstName lastName email } }`
+    `{id firstName lastName email}`
   );
 
-  // need to connect the appraiser
-  // appraisedApplications: [RentalAppraisal]
-  //   @relation(name: "UserAppraisalsAppraised")
-  // appraisedBy: User @relation(name: "UserAppraisalsAppraised")
   const updatedRentalAppraisal = await ctx.db.mutation.updateRentalAppraisal(
     {
       data: {
-        ...data,
-        appraisedBy: {
-          connect: {
-            id: loggedInUserId
-          }
-        }
-      },
-      where: {
-        ...where
+        ...data
       }
     },
     info
@@ -47,8 +36,8 @@ async function offerRentalAppraisal(parent, args, ctx, info) {
     offerRentalAppraisalEmail({
       ctx: ctx,
       appraisal: updatedRentalAppraisal,
-      toEmail: appraisal.requestedBy,
-      user: appraisal.requestedBy
+      toEmail: updatedRentalAppraisal.requestedBy.email,
+      user: user
     });
     // throw new Error("email should be sending");
   }

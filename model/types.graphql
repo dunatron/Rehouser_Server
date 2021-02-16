@@ -1,13 +1,8 @@
 type User {
   id: ID! @unique @id
   friends: [User!]!
-  notes: String
-  foreignLinks: [ForeignLink]
-    @relation(name: "UserForeignLinks", onDelete: CASCADE)
-  friendRequests: [FriendRequest!]!
-    @relation(name: "PendingFriendRequests", onDelete: CASCADE)
-  awaitingFriends: [FriendRequest!]!
-    @relation(name: "AwaitingFriendRequests", onDelete: CASCADE)
+  friendRequests: [FriendRequest!]! @relation(name: "PendingFriendRequests")
+  awaitingFriends: [FriendRequest!]! @relation(name: "AwaitingFriendRequests")
   updatedAt: DateTime! @updatedAt
   createdAt: DateTime! @createdAt
   dob: DateTime
@@ -15,102 +10,52 @@ type User {
   lastName: String!
   phone: String!
   email: String! @unique
-  emailValidated: Boolean @default(value: false)
+  emailValidated: Boolean
   password: String!
   resetToken: String
   resetTokenExpiry: Float
   confirmEmailToken: String
   confirmEmailTokenExpiry: Float
   permissions: [Permission] @scalarList(strategy: RELATION)
-  properties: [Property!]! @relation(name: "PropertyOwner", onDelete: SET_NULL)
-  managedProperties: [Property!]!
-    @relation(name: "PropertyAgents", onDelete: SET_NULL)
-  lesseeLeases: [Lessee!]!
-    @relation(name: "UserLesseeLeases", onDelete: SET_NULL)
-  lessorLeases: [Lessor!]!
-    @relation(name: "UserLessorLeases", onDelete: SET_NULL)
-  createdProperties: [Property!]!
-    @relation(name: "PropertyCreator", onDelete: SET_NULL)
-  photoIdentification: File
-    @relation(name: "UserPhotoId", link: TABLE, onDelete: CASCADE)
-  photoIdType: PhotoIdType
-  profilePhoto: File
-    @relation(name: "UserProfilePhoto", link: TABLE, onDelete: CASCADE)
+  properties: [Property!]! @relation(name: "PropertyOwner")
+  managedProperties: [Property!]! @relation(name: "PropertyAgents")
+  lesseeLeases: [Lessee!]! @relation(name: "UserLesseeLeases")
+  lessorLeases: [Lessor!]! @relation(name: "UserLessorLeases")
+  createdProperties: [Property!]! @relation(name: "PropertyCreator")
+  photoIdentification: File @relation(name: "UserPhotoId", link: TABLE)
+  profilePhoto: File @relation(name: "UserProfilePhoto", link: TABLE)
   identificationNumber: String
   emergencyContactName: String
   emergencyContactNumber: String
   emergencyContactEmail: String
-  referees: [Referee]
-    @relation(name: "UserReferees", link: TABLE, onDelete: CASCADE)
-  creditCards: [CreditCard!]!
-    @relation(name: "UserCreditCards", onDelete: CASCADE)
+  referees: [Referee] @relation(name: "UserReferees", link: TABLE)
+  referee1Relationhip: String
+  referee1Name: String
+  referee1Phone: String
+  referee1Email: String
+  referee2Relationhip: String
+  referee2Name: String
+  referee2Phone: String
+  referee2Email: String
+  creditCards: [CreditCard!]! @relation(name: "UserCreditCards")
   primaryCreditCard: CreditCard @relation(name: "UserPrimaryCreditCard")
-  chats: [Chat!]! @relation(name: "UserChats", onDelete: SET_NULL)
-  sentMessages: [Message!]!
-    @relation(name: "UserSentMessages", onDelete: SET_NULL)
-  recievedMessages: [Message!]!
-    @relation(name: "UserRecievedMessages", onDelete: SET_NULL)
+  chats: [Chat!]! @relation(name: "UserChats")
+  sentMessages: [Message!]! @relation(name: "UserSentMessages")
+  recievedMessages: [Message!]! @relation(name: "UserRecievedMessages")
   rehouserStamp: Boolean
   signature: File @relation(name: "UserSignature", link: TABLE)
-  activity: [Activity!]! @relation(name: "UserActivity", onDelete: SET_NULL)
-  involvedActivity: [Activity!]!
-    @relation(name: "InvolvedActivity", onDelete: SET_NULL)
+  activity: [Activity!]! @relation(name: "UserActivity")
+  involvedActivity: [Activity!]! @relation(name: "InvolvedActivity")
   rentalAppraisals: [RentalAppraisal] @relation(name: "UserRentalAppraisals")
-  appraisedApplications: [RentalAppraisal]
-    @relation(name: "UserAppraisalsAppraised")
-  currentAddress: Address
-    @relation(name: "CurrentUserAddress", link: TABLE, onDelete: CASCADE)
-  proofOfAddress: File
-    @relation(name: "UserProofOfAddress", link: TABLE, onDelete: CASCADE)
+  currentAddress: Address @relation(name: "CurrentUserAddress", link: TABLE)
+  proofOfAddress: File @relation(name: "UserProofOfAddress", link: TABLE)
   acceptedSignupTerms: Boolean!
-  adminSettings: AdminSetting!
-    @relation(name: "UserAdminSettings", link: TABLE, onDelete: CASCADE)
-  viewings: [Viewing!]! @relation(name: "HostViewings", onDelete: SET_NULL)
+  adminSettings: AdminSetting! @relation(name: "UserAdminSettings", link: TABLE)
+  viewings: [Viewing!]! @relation(name: "HostViewings")
   acceptedTermsOfEngagement: Boolean
-  bankDetails: BankDetail
-    @relation(name: "UserBankDetails", link: TABLE, onDelete: CASCADE)
-  inspections: [Inspection]
-    @relation(name: "InspectionInspector", link: TABLE, onDelete: SET_NULL)
+  bankDetails: BankDetail @relation(name: "UserBankDetails", link: TABLE)
+  inspections: [Inspection] @relation(name: "InspectionInspector", link: TABLE)
   bondLodgementNumber: String
-}
-
-type ForeignLink {
-  user: User @relation(name: "UserForeignLinks")
-  createdAt: DateTime! @createdAt
-  updatedAt: DateTime! @updatedAt
-  property: Property @relation(name: "PropertyForeignLinks")
-  name: String
-  id: ID! @unique @id
-  url: String!
-  notes: String
-}
-
-type ContactSubmission {
-  id: ID! @unique @id
-  createdAt: DateTime! @createdAt
-  updatedAt: DateTime! @updatedAt
-  firstName: String!
-  lastName: String
-  phone: String
-  email: String!
-  seen: Boolean @default(value: false)
-  notes: String
-  message: String!
-  replies: [ContactSubmissionReply]
-    @relation(name: "ContactSubmissionReplies", link: TABLE, onDelete: CASCADE)
-}
-
-type ContactSubmissionReply {
-  id: ID! @unique @id
-  from: String
-  to: String
-  subject: String
-  text: String
-  inReplyToMessage: String
-  contactSubmission: ContactSubmission!
-    @relation(name: "ContactSubmissionReplies")
-  createdAt: DateTime! @createdAt
-  updatedAt: DateTime! @updatedAt
 }
 
 type Referee {
@@ -134,10 +79,10 @@ type Address {
 type AdminSetting {
   id: ID! @unique @id
   user: User @relation(name: "UserAdminSettings")
-  appraisalCreatedSub: Boolean @default(value: false)
-  propertyCreatedSub: Boolean @default(value: false)
-  rentalApplicationCreatedSub: Boolean @default(value: false)
-  leaseCreatedSub: Boolean @default(value: false)
+  appraisalCreatedSub: Boolean
+  propertyCreatedSub: Boolean
+  rentalApplicationCreatedSub: Boolean
+  leaseCreatedSub: Boolean
 }
 
 type BankDetail {
@@ -172,7 +117,7 @@ type Message {
   chat: Chat! @relation(name: "ChatMessages")
   sender: User @relation(name: "UserSentMessages")
   recipient: User @relation(name: "UserRecievedMessages")
-  isMine: Boolean! @default(value: false)
+  isMine: Boolean!
 }
 
 type Seen {
@@ -280,8 +225,6 @@ type Property implements PropertyInfo {
   titleType: PropertyTitleType!
   updatedAt: DateTime! @updatedAt
   createdAt: DateTime! @createdAt
-  foreignLinks: [ForeignLink]
-    @relation(name: "PropertyForeignLinks", onDelete: CASCADE)
   bankDetails: BankDetail @relation(name: "PropertyBankDetails", link: TABLE)
   type: PropertyType
   fixedLength: TenancyFixedLength
@@ -290,10 +233,10 @@ type Property implements PropertyInfo {
   maximumOccupants: Int
   rent: Float!
   tenancyType: TenancyType
-  bondType: BondType @default(value: WEEKS_RENT_2)
+  bondType: BondType
   lowestRoomPrice: Float
   highestRoomPrice: Float
-  useAdvancedRent: Boolean @default(value: false)
+  useAdvancedRent: Boolean
   accommodation: [Accommodation!]! @relation(name: "PropertyAccommodation")
   bathrooms: Int
   garageSpaces: Int!
@@ -309,18 +252,18 @@ type Property implements PropertyInfo {
   moveInDate: DateTime
   expiryDate: DateTime
   leaseLengthInMonths: Int
-  onTheMarket: Boolean! @default(value: false)
+  onTheMarket: Boolean!
   owners: [User!]! @relation(name: "PropertyOwner")
   agents: [User!]! @relation(name: "PropertyAgents")
   creator: User! @relation(name: "PropertyCreator")
   images: [File!]! @relation(name: "PropertyImages", link: TABLE)
   proofOfOwnership: File @relation(name: "ProofOfOwnership", link: TABLE)
-  acceptedTerms: Boolean @default(value: false)
+  acceptedTerms: Boolean
   # floorPlans: File
   rentalApplications: [RentalApplication]
     @relation(name: "PropertyRentalApplication")
   leases: [PropertyLease] @relation(name: "PropertyLeases")
-  isLeased: Boolean @default(value: false)
+  isLeased: Boolean
   lastLeaseId: String
   leaseExpiryDate: DateTime
   rehouserStamp: Boolean
@@ -329,23 +272,23 @@ type Property implements PropertyInfo {
   petsAllowed: Boolean
   pets: [Pet] @scalarList(strategy: RELATION)
   manholeLocation: String
-  gardenToMaintain: Boolean @default(value: false)
+  gardenToMaintain: Boolean
   gardenResponsible: PartyResponsible
   maintenanceResponsible: PartyResponsible
   chattels: [PropertyChattel] @scalarList(strategy: RELATION)
-  landlordProtectionCover: Boolean @default(value: false)
-  freeGlassCover: Boolean @default(value: false)
-  workingAlarms: Boolean @default(value: false)
-  inHallway3mOfEachBedroom: Boolean @default(value: false)
-  tenYearPhotoelectricAlarms: Boolean @default(value: false)
-  alarmsEachLevel: Boolean @default(value: false)
+  landlordProtectionCover: Boolean
+  freeGlassCover: Boolean
+  workingAlarms: Boolean
+  inHallway3mOfEachBedroom: Boolean
+  tenYearPhotoelectricAlarms: Boolean
+  alarmsEachLevel: Boolean
   viewings: [Viewing] @relation(name: "PropertyViewings")
+  rehouserHandlesBills: Boolean
+  rehouserAssist: PropertyAssist @relation(name: "PropertyAssists", link: TABLE)
   files: PropertyFiles @relation(name: "PropertyFiles", link: TABLE)
   inspectionFrequency: InspectionFrequency
   inspections: [Inspection] @relation(name: "PropertyInspections", link: TABLE)
-  rehouserHandlesBills: Boolean @default(value: false)
-  rehouserAssist: PropertyAssist @relation(name: "PropertyAssists", link: TABLE)
-  rehouserManaged: Boolean @default(value: true)
+  rehouserManaged: Boolean
 }
 
 type PropertyFiles {
@@ -362,9 +305,9 @@ type PropertyFiles {
 type PropertyAssist {
   id: ID! @unique @id
   property: Property @relation(name: "PropertyAssists")
-  rates: Boolean @default(value: false)
-  insurance: Boolean @default(value: false)
-  water: Boolean @default(value: false)
+  rates: Boolean
+  insurance: Boolean
+  water: Boolean
 }
 
 type Viewing {
@@ -382,7 +325,6 @@ type Viewing {
 
 type PropertyLease implements PropertyInfo {
   id: ID! @unique @id
-  bankRef: String @unique
   stage: LeaseStage!
   property: Property! @relation(name: "PropertyLeases")
   placeId: String!
@@ -434,7 +376,6 @@ type Inspection {
   completedTime: DateTime
   completed: Boolean! @default(value: false)
   notes: String
-    @default(value: "Enter notes here for before and after inspection")
   inspectionForm: InspectionForm @relation(name: "InspectionForm")
   submittedForms: [InspectionForm] @relation(name: "SubmittedInspectionForms")
   files: [File] @relation(name: "InspectionFiles", link: TABLE)
@@ -447,7 +388,6 @@ type RentalAppraisal {
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
   requestedBy: User! @relation(name: "UserRentalAppraisals")
-  appraisedBy: User @relation(name: "UserAppraisalsAppraised")
   placeId: String! @unique
   location: String!
   locationLat: Float!
@@ -458,9 +398,9 @@ type RentalAppraisal {
   heatSources: [HeatSource] @scalarList(strategy: RELATION)
   rent: Float
   rentValueAccepted: Boolean
-  acceptTerms: Boolean @default(value: false)
+  acceptTerms: Boolean
   property: Property @relation(name: "PropertyRentalAppraisals")
-  hasBeenUsed: Boolean! @default(value: false)
+  hasBeenUsed: Boolean!
 }
 
 type Accommodation {
@@ -477,8 +417,8 @@ type RentalGroupApplicant {
   updatedAt: DateTime! @updatedAt
   createdAt: DateTime! @createdAt
   user: User!
-  approved: Boolean! @default(value: false)
-  completed: Boolean @default(value: false)
+  approved: Boolean!
+  completed: Boolean
   application: RentalApplication @relation(name: "RentalGroupApplicant")
   preTenancyApplicationForm: PreTenancyForm
     @relation(name: "ApplicantsPreTenancyForm")
@@ -504,7 +444,7 @@ type RentalApplication {
   leaseId: String
   chatId: String
   visibility: VisibilityLevel
-  finalised: Boolean @default(value: false)
+  finalised: Boolean
   property: Property! @relation(name: "PropertyRentalApplication")
   applicants: [RentalGroupApplicant!]! @relation(name: "RentalGroupApplicant")
 }
@@ -513,7 +453,7 @@ type Lessee {
   id: ID! @unique @id
   lease: PropertyLease @relation(name: "LeaseLessees")
   user: User @relation(name: "UserLesseeLeases")
-  signed: Boolean! @default(value: false)
+  signed: Boolean!
   signedAt: DateTime
 }
 
@@ -521,7 +461,7 @@ type Lessor {
   id: ID! @unique @id
   lease: PropertyLease @relation(name: "LeaseLessors")
   user: User @relation(name: "UserLessorLeases")
-  signed: Boolean! @default(value: false)
+  signed: Boolean!
   signedAt: DateTime
 }
 
@@ -537,13 +477,10 @@ type Charge {
   id: ID! @unique @id
   createdAt: DateTime! @createdAt
   wallet: Wallet @relation(name: "WalletCharges")
-  reason: ChargeReason
   amount: Float
   description: String
 }
-# bankNumber: String
-#   branchNumber: String
-#   accountNumber: String
+
 # ToDo add Payment model to the wallet and display wallet on the front end
 # Probably best to link the payment to a user
 type Payment {
@@ -551,13 +488,10 @@ type Payment {
   wallet: Wallet @relation(name: "WalletPayments")
   userId: ID!
   bankName: String
-  bankNumber: String
   bankBranch: String
   bankAccount: String
-  bankSuffix: String
   bankRef: String
   type: PaymentType
-  reason: PaymentReason
   leaseId: ID
   propertyId: ID
   stripePaymentId: String
