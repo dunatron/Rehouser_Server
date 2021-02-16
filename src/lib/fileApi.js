@@ -3,6 +3,7 @@ const { extractFileKey } = require("./extractFileKey");
 const { _isAdmin } = require("./permissionsCheck");
 
 const logger = require("../middleware/loggers/logger");
+var fs = require("fs");
 
 //https://cloudinary.com/documentation/image_upload_api_reference#required_parameters
 
@@ -81,36 +82,49 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
   const cloudinaryUpload = async ({ stream }) => {
     try {
       await new Promise((resolve, reject) => {
-        const streamLoad = cloudinary.uploader.upload_stream(
-          {
-            type: data.type ? data.type : "upload",
-            access_mode: data.access_mode ? data.access_mode : "authenticated",
-            ...data,
-            folder: `${process.env.STAGE}/${data.folder}`,
-          },
-          function(error, result) {
-            if (result) {
-              logger.log("info", `FILE UPLOAD SUCCESS`, {
-                result: result,
-              });
-              resultObj = {
-                ...result,
-              };
-              resolve();
-            } else {
-              // logger.log("error", `file APi reject err: `, {
-              //   message: error
-              // });
-              logger.log("info", `Debug: fileApi`, {
-                tron: "error in the resolve for file",
-                error: error,
-              });
-              reject(error);
-              throw new Error(`cloudinary.uploader.upload_stream error`);
+        // const streamLoad = cloudinary.uploader.upload_stream(
+        //   {
+        //     type: data.type ? data.type : "upload",
+        //     access_mode: data.access_mode ? data.access_mode : "authenticated",
+        //     ...data,
+        //     folder: `${process.env.STAGE}/${data.folder}`,
+        //   },
+        //   function(error, result) {
+        //     if (result) {
+        //       logger.log("info", `FILE UPLOAD SUCCESS`, {
+        //         result: result,
+        //       });
+        //       resultObj = {
+        //         ...result,
+        //       };
+        //       resolve();
+        //     } else {
+        //       // logger.log("error", `file APi reject err: `, {
+        //       //   message: error
+        //       // });
+        //       logger.log("info", `Debug: fileApi`, {
+        //         tron: "error in the resolve for file",
+        //         error: error,
+        //       });
+        //       reject(error);
+        //       throw new Error(`cloudinary.uploader.upload_stream error`);
+        //     }
+        //   }
+        // );
+        // stream.pipe(streamLoad);
+        var upload_stream = cloudinary.uploader.upload_stream(
+          { tags: "basic_sample" },
+          function(err, image) {
+            if (err) {
+              reject(err);
             }
+            resultObj = {
+              ...image,
+            };
+            resolve();
           }
         );
-        stream.pipe(streamLoad);
+        fs.createReadStream("./src/pizza.jpg").pipe(upload_stream);
       });
     } catch (err) {
       logger.log("info", `File Upload Error`, {
