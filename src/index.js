@@ -19,68 +19,58 @@ const routes = require("./routes/index");
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
 
-// process.on("uncaughtException", (err) => {
-//   logger.log("error", `Uncaught Exception: ${err.message}`, {
-//     message: err.message,
-//   });
-//   return err;
-// });
+process.on("uncaughtException", (err) => {
+  logger.log("error", `Uncaught Exception: ${err.message}`, {
+    message: err.message,
+  });
+  return err;
+});
 
-// process.on("unhandledRejection", (reason, promise) => {
-//   logger.log("error", `unhandledRejection`, {
-//     reason: reason,
-//   });
-//   return reason; // return the errors to try not crash express
-// });
+process.on("unhandledRejection", (reason, promise) => {
+  logger.log("error", `unhandledRejection`, {
+    reason: reason,
+  });
+  return reason; // return the errors to try not crash express
+});
 
 // sets up pasrsing the body of the request
 stripeMiddleWare(server);
 
-// const expressLogger = function(req, res, next) {
-//   var ip =
-//     req.headers["x-forwarded-for"] ||
-//     req.connection.remoteAddress ||
-//     req.socket.remoteAddress ||
-//     (req.connection.socket ? req.connection.socket.remoteAddress : null);
-//   var ipAddr = req.headers["x-forwarded-for"];
-//   if (ipAddr) {
-//     var list = ipAddr.split(",");
-//     ipAddr = list[list.length - 1];
-//   } else {
-//     ipAddr = req.connection.remoteAddress;
-//   }
-//   logger.log("info", `request to express server ${req.body.operationName}`, {
-//     ip: ip,
-//     ipAddr: ipAddr,
-//     url: req.url,
-//     user: {
-//       id: req.userId,
-//       permissions: req.userPermissions,
-//     },
-//     method: req.method,
-//     operationName: req.body.operationName,
-//     variables: req.body.variables,
-//     headers: req.headers,
-//     userAgent: req.headers["user-agent"],
-//     // query: req.body.query
-//   });
+const expressLogger = function(req, res, next) {
+  var ip =
+    req.headers["x-forwarded-for"] ||
+    req.connection.remoteAddress ||
+    req.socket.remoteAddress ||
+    (req.connection.socket ? req.connection.socket.remoteAddress : null);
+  var ipAddr = req.headers["x-forwarded-for"];
+  if (ipAddr) {
+    var list = ipAddr.split(",");
+    ipAddr = list[list.length - 1];
+  } else {
+    ipAddr = req.connection.remoteAddress;
+  }
+  logger.log("info", `request to express server ${req.body.operationName}`, {
+    ip: ip,
+    ipAddr: ipAddr,
+    url: req.url,
+    user: {
+      id: req.userId,
+      permissions: req.userPermissions,
+    },
+    method: req.method,
+    operationName: req.body.operationName,
+    variables: req.body.variables,
+    headers: req.headers,
+    userAgent: req.headers["user-agent"],
+    // query: req.body.query
+  });
 
-//   next();
-// };
+  next();
+};
 
-// server.use(expressLogger);
+server.use(expressLogger);
 server.express.use(cookieParser());
 
-// const expressErrorMiddleware = async (err, req, res, next) => {
-//   logger.log("error", `expressErrorMiddleware`, {
-//     err: err,
-//     req: req,
-//     res: res,
-//   });
-//   next();
-// };
-
-// server.express.use(expressErrorMiddleware);
 userMiddleware(server);
 
 routes(server);
@@ -97,7 +87,6 @@ const allowedClientOrigins = [
   "https://rehouser.co.nz",
   "https://yoga.rehouser.co.nz",
   "http://app.uat.rehouser.co.nz",
-  "wss://yoga.rehouser.co.nz",
   process.env.FRONTEND_URL,
 ];
 
@@ -112,17 +101,17 @@ const allowedClientOrigins = [
 //   next();
 // });
 
-// server.use((req, res, next) => {
-//   const origin = req.headers.origin;
-//   if (allowedClientOrigins.includes(origin)) {
-//     res.setHeader("Access-Control-Allow-Origin", origin);
-//   }
-//   //res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:8020');
-//   res.header("Access-Control-Allow-Methods", "GET, OPTIONS");
-//   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-//   res.header("Access-Control-Allow-Credentials", true);
-//   return next();
-// });
+server.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedClientOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+  //res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:8020');
+  res.header("Access-Control-Allow-Methods", "GET, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.header("Access-Control-Allow-Credentials", true);
+  return next();
+});
 
 // Start gql yoga/express server
 const app = server.start(
@@ -130,7 +119,9 @@ const app = server.start(
     port: process.env.PORT || 4444,
     cors: {
       credentials: true,
+      // origin: "*",
       origin: allowedClientOrigins,
+      // methods: ["GET", "PUT", "POST"]
     },
     // uploads: {
     //   maxFieldSize: 1000,
@@ -138,7 +129,7 @@ const app = server.start(
     //   maxFiles: 3
     // },
     debug: true,
-    // playground: "/playground",
+    playground: "/playground",
     // https://github.com/apollographql/subscriptions-transport-ws/issues/450
     subscriptions: {
       // path: "/subscriptions",
@@ -178,10 +169,10 @@ const app = server.start(
     },
   },
   (details) => {
-    // logger.info("gql yoga/express server is up", {
-    //   ...details,
-    //   port: details.port,
-    // });
+    logger.info("gql yoga/express server is up", {
+      ...details,
+      port: details.port,
+    });
   }
 );
 

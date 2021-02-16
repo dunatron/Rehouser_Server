@@ -9,7 +9,7 @@ const Connection = require("./resolvers/Connection");
 const Subscription = require("./resolvers/Subscription");
 const db = require("./db");
 const { errorHandler } = require("graphql-middleware-error-handler");
-// const logger = require("./middleware/loggers/logger");
+const logger = require("./middleware/loggers/logger");
 
 // https://www.robinwieruch.de/graphql-apollo-server-tutorial
 
@@ -102,18 +102,18 @@ const resolvers = {
 
 const errorHandlerMiddleware = errorHandler({
   onError: (error, context) => {
-    // logger.log("error", `resolver error`, {
-    //   message: error.message,
-    //   stack: error.stack ? error.stack.message : null,
-    //   user: context.request
-    //     ? {
-    //         id: context.request.userId,
-    //         permissions: context.request.permissions,
-    //       }
-    //     : {},
-    //   headers: context.request ? context.request.headers : null,
-    //   body: context.request ? context.request.body : null,
-    // });
+    logger.log("error", `resolver error`, {
+      message: error.message,
+      stack: error.stack ? error.stack.message : null,
+      user: context.request
+        ? {
+            id: context.request.userId,
+            permissions: context.request.permissions,
+          }
+        : {},
+      headers: context.request ? context.request.headers : null,
+      body: context.request ? context.request.body : null,
+    });
   },
   captureReturnedErrors: true,
   forwardErrors: true, // should probably turn on for prod. or client wont get errors
