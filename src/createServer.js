@@ -1,7 +1,7 @@
 const {
   GraphQLServer,
   PubSub,
-  SchemaDirectiveVisitor
+  SchemaDirectiveVisitor,
 } = require("graphql-yoga");
 const Mutation = require("./resolvers/Mutation");
 const Query = require("./resolvers/Query");
@@ -9,14 +9,14 @@ const Connection = require("./resolvers/Connection");
 const Subscription = require("./resolvers/Subscription");
 const db = require("./db");
 const { errorHandler } = require("graphql-middleware-error-handler");
-const logger = require("./middleware/loggers/logger");
+// const logger = require("./middleware/loggers/logger");
 
 // https://www.robinwieruch.de/graphql-apollo-server-tutorial
 
 const {
   DateTimeResolver,
   URLResolver,
-  JSONResolver
+  JSONResolver,
 } = require("graphql-scalars");
 
 const { _isAdmin } = require("./lib/permissionsCheck");
@@ -38,14 +38,14 @@ const resolvers = {
       const publicObj = {
         ...parent.photoIdentification,
         url: stockImageUrl,
-        secure_url: stockImageUrl
+        secure_url: stockImageUrl,
       };
       if (parent.photoIdentification === null) return null;
       if (!_isUploaderOrAdmin({ file: parent.photoIdentification, ctx: ctx })) {
         return publicObj;
       }
       return parent.photoIdentification;
-    }
+    },
   },
   // Chat: {
   //   // messages(chat) {
@@ -76,47 +76,47 @@ const resolvers = {
         }
       }
       return file.secure_url;
-    }
+    },
   },
   Property: {
     files: (parent, args, ctx, field) => {
       // I actually anticipate files being already associated with the property.
       // So if this is null. create new PropertyFiles row and associate it with property
       return {
-        ...parent.files
+        ...parent.files,
       };
     },
-    insulationStatementFile: {}
+    insulationStatementFile: {},
   },
   Date: DateTimeResolver,
   URL: URLResolver,
   Json: JSONResolver,
   Query: {
     ...Query,
-    ...Connection
+    ...Connection,
   },
   Mutation,
-  Subscription
+  Subscription,
 };
 // const pubsub = new PubSub();
 
 const errorHandlerMiddleware = errorHandler({
   onError: (error, context) => {
-    logger.log("error", `resolver error`, {
-      message: error.message,
-      stack: error.stack ? error.stack.message : null,
-      user: context.request
-        ? {
-            id: context.request.userId,
-            permissions: context.request.permissions
-          }
-        : {},
-      headers: context.request ? context.request.headers : null,
-      body: context.request ? context.request.body : null
-    });
+    // logger.log("error", `resolver error`, {
+    //   message: error.message,
+    //   stack: error.stack ? error.stack.message : null,
+    //   user: context.request
+    //     ? {
+    //         id: context.request.userId,
+    //         permissions: context.request.permissions,
+    //       }
+    //     : {},
+    //   headers: context.request ? context.request.headers : null,
+    //   body: context.request ? context.request.body : null,
+    // });
   },
   captureReturnedErrors: true,
-  forwardErrors: true // should probably turn on for prod. or client wont get errors
+  forwardErrors: true, // should probably turn on for prod. or client wont get errors
 });
 
 // create the graphql yoga server
@@ -127,9 +127,9 @@ function createServer() {
 
     middlewares: [errorHandlerMiddleware],
     resolverValidationOptions: {
-      requireResolversForResolveType: false
+      requireResolversForResolveType: false,
     },
-    context: req => ({ ...req, db }) // probs just put this back
+    context: (req) => ({ ...req, db }), // probs just put this back
     // context: req => ({ ...req, db, pubsub }) // maybe this
   });
 }
