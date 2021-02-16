@@ -102,8 +102,8 @@ const app = server.start(
     port: process.env.PORT || 4444,
     cors: {
       credentials: true,
-      origin: allowedClientOrigins,
-      methods: ["GET", "PUT", "POST"]
+      origin: allowedClientOrigins
+      // methods: ["GET", "PUT", "POST"]
     },
     // uploads: {
     //   maxFieldSize: 1000,
