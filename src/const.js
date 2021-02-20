@@ -60,7 +60,7 @@ exports.rehouserCookieOpt = () => {
     return {
       maxAge: JWT_TOKEN_MAX_AGE,
       httpOnly: true,
-      // sameSite: "lax"
+      sameSite: "lax",
     };
   // return {
   //   maxAge: JWT_TOKEN_MAX_AGE, // when the cookie expires
