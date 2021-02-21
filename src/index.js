@@ -15,14 +15,15 @@ const expressLogger = require("./middleware/loggers/expressLogger");
 var cors = require("cors");
 
 const clientOrigins = [
+  "http://localhost:7777",
   "https://localhost:7777",
   "https://rehouser-next-prod.herokuapp.com",
   "http://app.rehouser.co.nz",
-  "http://rehouser.co.nz",
   "https://app.rehouser.co.nz",
+  "http://rehouser.co.nz",
   "https://rehouser.co.nz",
-  "https://yoga.rehouser.co.nz",
   "http://app.uat.rehouser.co.nz",
+  "https://app.uat.rehouser.co.nz",
 ];
 
 server.express.use(
@@ -76,15 +77,9 @@ const app = server.start(
     port: process.env.PORT || 4444,
     cors: {
       credentials: true,
-      // origin: "*",
       origin: clientOrigins,
       // methods: ["GET", "PUT", "POST"]
     },
-    // uploads: {
-    //   maxFieldSize: 1000,
-    //   maxFileSize: 500,
-    //   maxFiles: 3,
-    // },
     debug: true,
     // playground: "/playground",
     // https://github.com/apollographql/subscriptions-transport-ws/issues/450
