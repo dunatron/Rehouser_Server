@@ -61,18 +61,18 @@ exports.rehouserCookieOpt = () => {
   // };
   //The httpOnly: true setting means that the cookie can’t be read using JavaScript but can still be sent back to the server in HTTP requests.
   // Without this setting, an XSS attack could use document.cookie to get a list of stored cookies and their values
-  // if (envStage == "dev")
-  //   return {
-  //     maxAge: JWT_TOKEN_MAX_AGE,
-  //     httpOnly: true,
-  //     // sameSite: "lax",
-  //   };
-  // return {
-  //   maxAge: JWT_TOKEN_MAX_AGE, // when the cookie expires
-  //   httpOnly: true,
-  //   sameSite: "None",
-  //   secure: envStage == "dev" ? false : true // connection needs to be over HTTPS
-  // };
+  if (envStage == "dev")
+    return {
+      maxAge: JWT_TOKEN_MAX_AGE,
+      httpOnly: true,
+      // sameSite: "lax",
+    };
+  return {
+    maxAge: JWT_TOKEN_MAX_AGE, // when the cookie expires
+    httpOnly: true,
+    sameSite: "None",
+    secure: envStage == "dev" ? false : true, // connection needs to be over HTTPS
+  };
   // return {
   //   maxAge: JWT_TOKEN_MAX_AGE, // when the cookie expires
   //   sameSite: "None",
