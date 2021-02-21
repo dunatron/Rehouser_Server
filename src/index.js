@@ -32,6 +32,8 @@ server.express.use(
     origin: clientOrigins,
     // methods: "GET,PUT,POST,DELETE",
     methods: "*",
+    allowedHeaders: ["Content-Type", "Authorization"],
+    preflightContinue: true,
   })
 );
 
@@ -58,15 +60,15 @@ process.on("unhandledRejection", (reason, promise) => {
 });
 
 server.express.use(cookieParser());
-// server.use(expressLogger);
-// // sets up pasrsing the body of the request
-// stripeMiddleWare(server);
+server.use(expressLogger);
+// sets up pasrsing the body of the request
+stripeMiddleWare(server);
 userMiddleware(server);
 
-// routes(server);
+routes(server);
 
-// // setup cron jobs
-// initialiseTasks();
+// setup cron jobs
+initialiseTasks();
 
 // Start gql yoga/express server
 const app = server.start(
@@ -89,28 +91,28 @@ const app = server.start(
     subscriptions: {
       // path: "/subscriptions",
       path: "/",
-      onConnect: (connectionParams, webSocket, context) => {
-        const { isLegacy, socket, request } = context;
-        webSocket.on("error", (error) => {
-          logger.log("error", `potential ws err onConnect`, {
-            error: error,
-          });
-        });
-        logger.log("info", `subscriptions on connect`, {
-          connectionParams: connectionParams,
-          headers: request.headers,
-        });
-      },
-      onDisconnect: (webSocket, context) => {
-        logger.log("info", `subscriptions on disconnect`, {
-          context: context,
-        });
-        webSocket.on("error", (error) => {
-          logger.log("error", `potential ws err onDisconnect`, {
-            error: error,
-          });
-        });
-      },
+      // onConnect: (connectionParams, webSocket, context) => {
+      //   const { isLegacy, socket, request } = context;
+      //   webSocket.on("error", (error) => {
+      //     logger.log("error", `potential ws err onConnect`, {
+      //       error: error,
+      //     });
+      //   });
+      //   logger.log("info", `subscriptions on connect`, {
+      //     connectionParams: connectionParams,
+      //     headers: request.headers,
+      //   });
+      // },
+      // onDisconnect: (webSocket, context) => {
+      //   logger.log("info", `subscriptions on disconnect`, {
+      //     context: context,
+      //   });
+      //   webSocket.on("error", (error) => {
+      //     logger.log("error", `potential ws err onDisconnect`, {
+      //       error: error,
+      //     });
+      //   });
+      // },
       keepAlive: 10000, // use 10000 like prisma or false
     },
   },
