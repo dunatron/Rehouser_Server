@@ -84,7 +84,7 @@ exports.rehouserCookieOpt = () => {
     httpOnly: true,
     secure: envStage == "dev" ? false : true, // connection needs to be over HTTPS
     // ...(envStage != "dev" && { sameSite: "strict" }), // None, Lax, or Strict
-    ...(envStage != "dev" && { sameSite: "None" }),
+    ...(envStage != "dev" && { sameSite: "Lax" }),
     // sameSite: "strict",
   };
 
