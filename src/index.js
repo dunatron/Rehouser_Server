@@ -10,8 +10,30 @@ const stripeMiddleWare = require("./middleware/stripe/index");
 const userMiddleware = require("./middleware/user/index");
 const routes = require("./routes/index");
 const logger = require("./middleware/loggers/logger");
-const db = require("./db");
-const jwt = require("jsonwebtoken");
+const expressLogger = require("./middleware/loggers/expressLogger");
+
+var cors = require("cors");
+
+const clientOrigins = [
+  "https://localhost:7777",
+  "https://rehouser-next-prod.herokuapp.com",
+  "http://app.rehouser.co.nz",
+  "http://rehouser.co.nz",
+  "https://app.rehouser.co.nz",
+  "https://rehouser.co.nz",
+  "https://yoga.rehouser.co.nz",
+  "http://app.uat.rehouser.co.nz",
+];
+
+server.express.use(
+  cors({
+    credentials: true,
+    // // origin: "*",
+    origin: clientOrigins,
+    // methods: "GET,PUT,POST,DELETE",
+    methods: "*",
+  })
+);
 
 // could be quite useful
 // https://developers.cloudflare.com/workers/examples/modify-request-property
@@ -35,95 +57,16 @@ process.on("unhandledRejection", (reason, promise) => {
   return reason; // return the errors to try not crash express
 });
 
-// sets up pasrsing the body of the request
-stripeMiddleWare(server);
-
-const expressLogger = function(req, res, next) {
-  var ip =
-    req.headers["x-forwarded-for"] ||
-    req.connection.remoteAddress ||
-    req.socket.remoteAddress ||
-    (req.connection.socket ? req.connection.socket.remoteAddress : null);
-  var ipAddr = req.headers["x-forwarded-for"];
-  if (ipAddr) {
-    var list = ipAddr.split(",");
-    ipAddr = list[list.length - 1];
-  } else {
-    ipAddr = req.connection.remoteAddress;
-  }
-  logger.log("info", `request to express server ${req.body.operationName}`, {
-    ip: ip,
-    ipAddr: ipAddr,
-    url: req.url,
-    user: {
-      id: req.userId,
-      permissions: req.userPermissions,
-    },
-    method: req.method,
-    operationName: req.body.operationName,
-    variables: req.body.variables,
-    headers: req.headers,
-    userAgent: req.headers["user-agent"],
-    // query: req.body.query
-  });
-
-  next();
-};
-
-server.use(expressLogger);
 server.express.use(cookieParser());
-
-// decode the JWT so we can get the user Id on each request
-// server.express.use((req, res, next) => {
-//   const { token } = req.cookies;
-//   if (token) {
-//     const { userId } = jwt.verify(token, process.env.APP_SECRET);
-//     // put the userId onto the req for future requests to access
-//     req.userId = userId;
-//   }
-//   next();
-// });
-
-// // 2. Create a middleware that populates the user on each request
-
-// server.express.use(async (req, res, next) => {
-//   // if they aren't logged in, skip this
-//   if (!req.userId) return next();
-//   const user = await db.query.user(
-//     { where: { id: req.userId } },
-//     "{ id, permissions, email, firstName }"
-//   );
-//   req.user = user;
-//   next();
-// });
-
-// const expressErrorMiddleware = async (err, req, res, next) => {
-//   logger.log("error", `expressErrorMiddleware`, {
-//     err: err,
-//     req: req,
-//     res: res,
-//   });
-//   next();
-// };
-
-// server.express.use(expressErrorMiddleware);
+// server.use(expressLogger);
+// // sets up pasrsing the body of the request
+// stripeMiddleWare(server);
 userMiddleware(server);
 
-routes(server);
+// routes(server);
 
-// setup cron jobs
-initialiseTasks();
-
-const allowedClientOrigins = [
-  "http://localhost:7777",
-  "https://rehouser-next-prod.herokuapp.com",
-  "http://app.rehouser.co.nz",
-  "http://rehouser.co.nz",
-  "https://app.rehouser.co.nz",
-  "https://rehouser.co.nz",
-  "https://yoga.rehouser.co.nz",
-  "http://app.uat.rehouser.co.nz",
-];
+// // setup cron jobs
+// initialiseTasks();
 
 // Start gql yoga/express server
 const app = server.start(
@@ -132,7 +75,7 @@ const app = server.start(
     cors: {
       credentials: true,
       // origin: "*",
-      origin: allowedClientOrigins,
+      origin: clientOrigins,
       // methods: ["GET", "PUT", "POST"]
     },
     // uploads: {
@@ -148,34 +91,25 @@ const app = server.start(
       path: "/",
       onConnect: (connectionParams, webSocket, context) => {
         const { isLegacy, socket, request } = context;
-        // console.log("context on connect context => ", context);
-        // webSocket.on("error", (error) => {
-        //   logger.log("error", `potential ws err onConnect`, {
-        //     error: error,
-        //     // webSocket: webSocket,
-        //     // context: context
-        //     // query: req.body.query
-        //   });
-        // });
-        // logger.log("info", `subscriptions on connect`, {
-        //   connectionParams: connectionParams,
-        //   headers: request.headers,
-        //   // webSocket: webSocket,
-        //   // context: context
-        //   // query: req.body.query
-        // });
+        webSocket.on("error", (error) => {
+          logger.log("error", `potential ws err onConnect`, {
+            error: error,
+          });
+        });
+        logger.log("info", `subscriptions on connect`, {
+          connectionParams: connectionParams,
+          headers: request.headers,
+        });
       },
       onDisconnect: (webSocket, context) => {
-        // console.log("context on disconnect context => ", context);
-        // console.log("context on disconnect webSocket => ", webSocket);
-        // logger.log("info", `subscriptions on disconnect`, {
-        //   context: context,
-        // });
-        // webSocket.on("error", (error) => {
-        //   logger.log("error", `potential ws err onDisconnect`, {
-        //     error: error,
-        //   });
-        // });
+        logger.log("info", `subscriptions on disconnect`, {
+          context: context,
+        });
+        webSocket.on("error", (error) => {
+          logger.log("error", `potential ws err onDisconnect`, {
+            error: error,
+          });
+        });
       },
       keepAlive: 10000, // use 10000 like prisma or false
     },

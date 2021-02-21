@@ -29,7 +29,6 @@ const { _isUploader, _isUploaderOrAdmin } = require("./lib/fileApi");
  * context => An object shared across all resolvers that are executing for a particular operation. Use this to share per-operation state, including authentication information, dataloader instances, and anything else to track across resolvers
  * info => Contains information about the operation's execution state, including the field name, the path to the field from the root, and more.
  */
-
 const stockImageUrl = `${process.env.FRONTEND_URL}/images/private_stock.jpg`;
 
 const resolvers = {
@@ -47,17 +46,6 @@ const resolvers = {
       return parent.photoIdentification;
     },
   },
-  // Chat: {
-  //   // messages(chat) {
-  //   //   if (chat.messages === undefined) return null
-  //   //   return chat.messages.filter(m => chat.messages.includes(m.id))
-  //   // },
-  //   // lastMessage(chat) {
-  //   //   if (chat.messages === undefined) return null
-  //   //   const lastMessage = chat.messages[chat.messages.length - 1]
-  //   //   return messages.find(m => m.id === lastMessage)
-  //   // },
-  // },
   File: {
     url: (file, args, ctx, info) => {
       // I guess all admins can see private files. apart from that you must be uploader of the file!
@@ -98,13 +86,11 @@ const resolvers = {
   Mutation,
   Subscription,
 };
-// const pubsub = new PubSub();
 
 const errorHandlerMiddleware = errorHandler({
   onError: (error, context) => {
     logger.log("error", `resolver error`, {
       message: error.message,
-      stack: error.stack ? error.stack.message : null,
       user: context.request
         ? {
             id: context.request.userId,
@@ -112,7 +98,6 @@ const errorHandlerMiddleware = errorHandler({
           }
         : {},
       headers: context.request ? context.request.headers : null,
-      body: context.request ? context.request.body : null,
     });
   },
   captureReturnedErrors: true,
@@ -130,7 +115,6 @@ function createServer() {
       requireResolversForResolveType: false,
     },
     context: (req) => ({ ...req, db }), // probs just put this back
-    // context: req => ({ ...req, db, pubsub }) // maybe this
   });
 }
 
