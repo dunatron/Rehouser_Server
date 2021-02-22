@@ -26,17 +26,17 @@ const clientOrigins = [
   "https://app.uat.rehouser.co.nz",
 ];
 
-server.express.use(
-  cors({
-    credentials: true,
-    // // origin: "*",
-    origin: clientOrigins,
-    // methods: "GET,PUT,POST,DELETE",
-    methods: "*",
-    allowedHeaders: ["Content-Type", "Authorization"],
-    preflightContinue: true,
-  })
-);
+// server.express.use(
+//   cors({
+//     credentials: true,
+//     // // origin: "*",
+//     origin: clientOrigins,
+//     // methods: "GET,PUT,POST,DELETE",
+//     methods: "*",
+//     allowedHeaders: ["Content-Type", "Authorization"],
+//     preflightContinue: true,
+//   })
+// );
 
 // could be quite useful
 // https://developers.cloudflare.com/workers/examples/modify-request-property
@@ -75,11 +75,11 @@ initialiseTasks();
 const app = server.start(
   {
     port: process.env.PORT || 4444,
-    cors: {
-      credentials: true,
-      origin: clientOrigins,
-      // methods: ["GET", "PUT", "POST"]
-    },
+    // cors: {
+    //   credentials: true,
+    //   origin: clientOrigins,
+    //   // methods: ["GET", "PUT", "POST"]
+    // },
     debug: true,
     // playground: "/playground",
     // https://github.com/apollographql/subscriptions-transport-ws/issues/450
