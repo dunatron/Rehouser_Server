@@ -75,9 +75,26 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
   // 'accept-language': 'en-US,en;q=0.9',
   // cookie: 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJyZWhvdXNlci1jdG8taWQiLCJ1c2VyUGVybWlzc2lvbnMiOlsiQURNSU4iLCJVU0VSIiwiUEVSTUlTU0lPTlVQREFURSIsIldJWkFSRCJdLCJpYXQiOjE2MTM0Nzk3NDR9.PBY4CSCtsBIL5sNdmKhTtiaFp_IMbJk0pkxHvYzxurg; refresh-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJyZWhvdXNlci1jdG8taWQiLCJpYXQiOjE2MTM0Nzk3NDR9.kxnlJMv-hytbc_GYAkwq8PnEIsvwKtjpOnBLzcfvWyo'
 
+  // PERHAPS TRY ADD THESE TO THE RESPONSE HEADER
+  // Access-Control-Allow-Credentials: true
+  // Access-Control-Allow-Origin: https://app.rehouser.co.nz
+  // Connection: keep-alive
+  // Content-Length: 893
+  // Content-Type: application/json
+  // Date: Mon, 22 Feb 2021 04:14:02 GMT
+  // Server: Cowboy
+  // Vary: Origin
+  // Via: 1.1 vegur
+  // X-Powered-By: Express
+
   logger.log("info", `file API HEADERS`, {
     headers: ctx.request.headers
   });
+
+  ctx.request.headers["Access-Control-Allow-Credentials"] = true;
+  ctx.request.headers["Access-Control-Allow-Origin"] =
+    "https://app.rehouser.co.nz";
+  ctx.request.headers["Server"] = "TronsServer";
 
   const cloudinaryUpload = async ({ stream }) => {
     try {
