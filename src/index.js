@@ -32,9 +32,9 @@ server.express.use(
     // // origin: "*",
     origin: clientOrigins,
     // methods: "GET,PUT,POST,DELETE",
-    methods: "*",
-    allowedHeaders: ["Content-Type", "Authorization"],
-    preflightContinue: true
+    methods: "*"
+    // allowedHeaders: ["Content-Type", "Authorization"],
+    // preflightContinue: true
   })
 );
 
