@@ -10,7 +10,7 @@ const stripeMiddleWare = require("./middleware/stripe/index");
 const userMiddleware = require("./middleware/user/index");
 const routes = require("./routes/index");
 const logger = require("./middleware/loggers/logger");
-const expressLogger = require("./middleware/loggers/expressLogger");
+const expressLoggingMiddleWare = require("./middleware/loggers/expressLogger");
 
 var cors = require("cors");
 
@@ -23,9 +23,10 @@ const clientOrigins = [
   "http://rehouser.co.nz",
   "https://rehouser.co.nz",
   "http://app.uat.rehouser.co.nz",
-  "https://app.uat.rehouser.co.nz",
+  "https://app.uat.rehouser.co.nz"
 ];
 
+<<<<<<< HEAD
 // server.express.use(
 //   cors({
 //     credentials: true,
@@ -37,6 +38,19 @@ const clientOrigins = [
 //     preflightContinue: true,
 //   })
 // );
+=======
+server.express.use(
+  cors({
+    credentials: true,
+    // // origin: "*",
+    origin: clientOrigins,
+    // methods: "GET,PUT,POST,DELETE",
+    methods: "*"
+    // allowedHeaders: ["Content-Type", "Authorization"],
+    // preflightContinue: true
+  })
+);
+>>>>>>> 3248a418d5918d1c1de570d65ed64925baae4203
 
 // could be quite useful
 // https://developers.cloudflare.com/workers/examples/modify-request-property
@@ -46,25 +60,26 @@ const clientOrigins = [
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
 
-process.on("uncaughtException", (err) => {
+process.on("uncaughtException", err => {
   logger.log("error", `Uncaught Exception: ${err.message}`, {
-    message: err.message,
+    message: err.message
   });
   return err;
 });
 
 process.on("unhandledRejection", (reason, promise) => {
   logger.log("error", `unhandledRejection`, {
-    reason: reason,
+    reason: reason
   });
   return reason; // return the errors to try not crash express
 });
 
 server.express.use(cookieParser());
-server.use(expressLogger);
+// server.use(expressLogger);
 // sets up pasrsing the body of the request
 stripeMiddleWare(server);
 userMiddleware(server);
+expressLoggingMiddleWare(server);
 
 routes(server);
 
@@ -75,11 +90,19 @@ initialiseTasks();
 const app = server.start(
   {
     port: process.env.PORT || 4444,
+<<<<<<< HEAD
     // cors: {
     //   credentials: true,
     //   origin: clientOrigins,
     //   // methods: ["GET", "PUT", "POST"]
     // },
+=======
+    cors: {
+      credentials: true,
+      origin: clientOrigins
+      // methods: ["GET", "PUT", "POST"]
+    },
+>>>>>>> 3248a418d5918d1c1de570d65ed64925baae4203
     debug: true,
     // playground: "/playground",
     // https://github.com/apollographql/subscriptions-transport-ws/issues/450
@@ -108,13 +131,13 @@ const app = server.start(
       //     });
       //   });
       // },
-      keepAlive: 10000, // use 10000 like prisma or false
-    },
+      keepAlive: 10000 // use 10000 like prisma or false
+    }
   },
-  (details) => {
+  details => {
     logger.info("gql yoga/express server is up", {
       ...details,
-      port: details.port,
+      port: details.port
     });
   }
 );

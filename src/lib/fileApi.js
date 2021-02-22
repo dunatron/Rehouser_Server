@@ -10,7 +10,7 @@ var fs = require("fs");
 const cloudinaryConfObj = {
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+  api_secret: process.env.CLOUDINARY_API_SECRET
 };
 
 exports._isUploader = ({ file, ctx }) => {
@@ -31,7 +31,7 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
     createReadStream,
     filename,
     mimetype,
-    encoding,
+    encoding
   } = await upload;
 
   const stream = createReadStream();
@@ -75,60 +75,78 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
   // 'accept-language': 'en-US,en;q=0.9',
   // cookie: 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJyZWhvdXNlci1jdG8taWQiLCJ1c2VyUGVybWlzc2lvbnMiOlsiQURNSU4iLCJVU0VSIiwiUEVSTUlTU0lPTlVQREFURSIsIldJWkFSRCJdLCJpYXQiOjE2MTM0Nzk3NDR9.PBY4CSCtsBIL5sNdmKhTtiaFp_IMbJk0pkxHvYzxurg; refresh-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJyZWhvdXNlci1jdG8taWQiLCJpYXQiOjE2MTM0Nzk3NDR9.kxnlJMv-hytbc_GYAkwq8PnEIsvwKtjpOnBLzcfvWyo'
 
+  // PERHAPS TRY ADD THESE TO THE RESPONSE HEADER
+  // Access-Control-Allow-Credentials: true
+  // Access-Control-Allow-Origin: https://app.rehouser.co.nz
+  // Connection: keep-alive
+  // Content-Length: 893
+  // Content-Type: application/json
+  // Date: Mon, 22 Feb 2021 04:14:02 GMT
+  // Server: Cowboy
+  // Vary: Origin
+  // Via: 1.1 vegur
+  // X-Powered-By: Express
+
+  ctx.request.headers["Access-Control-Allow-Credentials"] = true;
+  ctx.request.headers["Access-Control-Allow-Origin"] =
+    "https://app.rehouser.co.nz";
+  ctx.request.headers["Server"] = "TronsServer";
+
   logger.log("info", `file API HEADERS`, {
-    headers: ctx.request.headers,
+    headers: ctx.request.headers
   });
 
   const cloudinaryUpload = async ({ stream }) => {
     try {
       await new Promise((resolve, reject) => {
-        const streamLoad = cloudinary.uploader.upload_stream(
-          {
-            type: data.type ? data.type : "upload",
-            access_mode: data.access_mode ? data.access_mode : "authenticated",
-            ...data,
-            folder: `${process.env.STAGE}/${data.folder}`,
-          },
-          function(error, result) {
-            if (result) {
-              logger.log("info", `FILE UPLOAD SUCCESS`, {
-                result: result,
-              });
-              resultObj = {
-                ...result,
-              };
-              resolve();
-            } else {
-              // logger.log("error", `file APi reject err: `, {
-              //   message: error
-              // });
-              logger.log("info", `Debug: fileApi`, {
-                tron: "error in the resolve for file",
-                error: error,
-              });
-              reject(error);
-              throw new Error(`cloudinary.uploader.upload_stream error`);
-            }
-          }
-        );
-        stream.pipe(streamLoad);
-        // var upload_stream = cloudinary.uploader.upload_stream(
-        //   { tags: "basic_sample" },
-        //   function(err, image) {
-        //     if (err) {
-        //       reject(err);
+        // const streamLoad = cloudinary.uploader.upload_stream(
+        //   {
+        //     type: data.type ? data.type : "upload"
+        //     // access_mode: data.access_mode ? data.access_mode : "authenticated",
+        //     // ...data,
+        //     // folder: `${process.env.STAGE}/${data.folder}`,
+        //   },
+        //   function(error, result) {
+        //     if (result) {
+        //       logger.log("info", `FILE UPLOAD SUCCESS`, {
+        //         result: result
+        //       });
+        //       resultObj = {
+        //         ...result
+        //       };
+        //       resolve();
+        //     } else {
+        //       // logger.log("error", `file APi reject err: `, {
+        //       //   message: error
+        //       // });
+        //       logger.log("info", `Debug: fileApi`, {
+        //         tron: "error in the resolve for file",
+        //         error: error
+        //       });
+        //       reject(error);
+        //       throw new Error(`cloudinary.uploader.upload_stream error`);
         //     }
-        //     resultObj = {
-        //       ...image,
-        //     };
-        //     resolve();
         //   }
         // );
+        // stream.pipe(streamLoad);
+        var upload_stream = cloudinary.uploader.upload_stream(
+          { tags: "basic_sample" },
+          function(err, image) {
+            if (err) {
+              reject(err);
+            }
+            resultObj = {
+              ...image
+            };
+            resolve();
+          }
+        );
         // fs.createReadStream("./src/pizza.jpg").pipe(upload_stream);
+        stream.pipe(upload_stream);
       });
     } catch (err) {
       logger.log("info", `File Upload Error`, {
-        message: err.message,
+        message: err.message
       });
       throw new Error(`caught error uploading to cloudinry`);
     }
@@ -141,7 +159,7 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
     filename,
     mimetype,
     encoding,
-    ...resultObj,
+    ...resultObj
   };
 
   // return file;
@@ -149,8 +167,8 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
     {
       data: {
         ...combinedFileData,
-        uploaderId: ctx.request.userId,
-      },
+        uploaderId: ctx.request.userId
+      }
     },
     info
   );
