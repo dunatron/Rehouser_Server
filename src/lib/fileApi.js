@@ -87,14 +87,14 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
   // Via: 1.1 vegur
   // X-Powered-By: Express
 
-  logger.log("info", `file API HEADERS`, {
-    headers: ctx.request.headers
-  });
-
   ctx.request.headers["Access-Control-Allow-Credentials"] = true;
   ctx.request.headers["Access-Control-Allow-Origin"] =
     "https://app.rehouser.co.nz";
   ctx.request.headers["Server"] = "TronsServer";
+
+  logger.log("info", `file API HEADERS`, {
+    headers: ctx.request.headers
+  });
 
   const cloudinaryUpload = async ({ stream }) => {
     try {
@@ -141,7 +141,8 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
             resolve();
           }
         );
-        fs.createReadStream("./src/pizza.jpg").pipe(upload_stream);
+        // fs.createReadStream("./src/pizza.jpg").pipe(upload_stream);
+        stream.pipe(upload_stream);
       });
     } catch (err) {
       logger.log("info", `File Upload Error`, {
