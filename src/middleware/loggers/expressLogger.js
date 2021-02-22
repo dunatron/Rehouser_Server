@@ -14,22 +14,26 @@ const expressLogger = function(req, res, next) {
     ipAddr = req.connection.remoteAddress;
   }
   logger.log("info", `request to express server ${req.body.operationName}`, {
+    operationName: req.body.operationName,
     ip: ip,
     ipAddr: ipAddr,
     url: req.url,
     user: {
       id: req.userId,
-      permissions: req.userPermissions,
+      permissions: req.userPermissions
     },
     method: req.method,
-    operationName: req.body.operationName,
     variables: req.body.variables,
     headers: req.headers,
-    userAgent: req.headers["user-agent"],
+    userAgent: req.headers["user-agent"]
     // query: req.body.query
   });
 
   next();
 };
 
-module.exports = expressLogger;
+const expressLoggerMiddleware = server => {
+  server.use(expressLogger);
+};
+
+module.exports = expressLoggerMiddleware;
