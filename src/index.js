@@ -75,6 +75,11 @@ const app = server.start(
       credentials: true,
       origin: clientOrigins,
     },
+    uploads: {
+      maxFieldSize: 999999999,
+      maxFileSize: 999999999,
+      maxFiles: 5,
+    },
     debug: true,
     // playground: "/playground",
     // https://github.com/apollographql/subscriptions-transport-ws/issues/450
