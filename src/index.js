@@ -12,26 +12,26 @@ const routes = require("./routes/index");
 const logger = require("./middleware/loggers/logger");
 const expressLoggingMiddleWare = require("./middleware/loggers/expressLogger");
 
-var cors = require("cors");
+// var cors = require("cors");
 
-const clientOrigins = [
-  "http://localhost:7777",
-  "https://localhost:7777",
-  "https://rehouser-next-prod.herokuapp.com",
-  "http://app.rehouser.co.nz",
-  "https://app.rehouser.co.nz",
-  "http://rehouser.co.nz",
-  "https://rehouser.co.nz",
-  "http://app.uat.rehouser.co.nz",
-  "https://app.uat.rehouser.co.nz",
-];
+// const clientOrigins = [
+//   "http://localhost:7777",
+//   "https://localhost:7777",
+//   "https://rehouser-next-prod.herokuapp.com",
+//   "http://app.rehouser.co.nz",
+//   "https://app.rehouser.co.nz",
+//   "http://rehouser.co.nz",
+//   "https://rehouser.co.nz",
+//   "http://app.uat.rehouser.co.nz",
+//   "https://app.uat.rehouser.co.nz",
+// ];
 
-server.express.use(
-  cors({
-    credentials: true,
-    origin: clientOrigins,
-  })
-);
+// server.express.use(
+//   cors({
+//     credentials: true,
+//     origin: clientOrigins,
+//   })
+// );
 
 // could be quite useful
 // https://developers.cloudflare.com/workers/examples/modify-request-property

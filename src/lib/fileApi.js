@@ -10,7 +10,7 @@ var fs = require("fs");
 const cloudinaryConfObj = {
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 };
 
 exports._isUploader = ({ file, ctx }) => {
@@ -27,14 +27,14 @@ exports._isUploaderOrAdmin = ({ file, ctx }) => {
 
 exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
   const {
-    // stream,
+    stream,
     createReadStream,
     filename,
     mimetype,
-    encoding
+    encoding,
   } = await upload;
 
-  const stream = createReadStream();
+  // const stream = createReadStream();
 
   cloudinary.config(cloudinaryConfObj);
   let resultObj = {};
@@ -93,7 +93,7 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
   ctx.request.headers["Server"] = "TronsServer";
 
   logger.log("info", `file API HEADERS`, {
-    headers: ctx.request.headers
+    headers: ctx.request.headers,
   });
 
   const cloudinaryUpload = async ({ stream }) => {
@@ -136,17 +136,17 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
               reject(err);
             }
             resultObj = {
-              ...image
+              ...image,
             };
             resolve();
           }
         );
-        // fs.createReadStream("./src/pizza.jpg").pipe(upload_stream);
-        stream.pipe(upload_stream);
+        fs.createReadStream("./src/pizza.jpg").pipe(upload_stream);
+        // stream.pipe(upload_stream);
       });
     } catch (err) {
       logger.log("info", `File Upload Error`, {
-        message: err.message
+        message: err.message,
       });
       throw new Error(`caught error uploading to cloudinry`);
     }
@@ -159,7 +159,7 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
     filename,
     mimetype,
     encoding,
-    ...resultObj
+    ...resultObj,
   };
 
   // return file;
@@ -167,8 +167,8 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
     {
       data: {
         ...combinedFileData,
-        uploaderId: ctx.request.userId
-      }
+        uploaderId: ctx.request.userId,
+      },
     },
     info
   );
