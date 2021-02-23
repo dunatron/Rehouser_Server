@@ -21,6 +21,7 @@ const CEO_DETAILS = {
 // maxAge: 1000 * 60 * 60 * 24 * 365
 // https://medium.com/@ryanchenkie_40935/react-authentication-how-to-store-jwt-in-a-cookie-346519310e81
 // https://hasura.io/blog/best-practices-of-using-jwt-with-graphql/
+// https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
 module.exports.JWT_TOKEN_MAX_AGE = JWT_TOKEN_MAX_AGE;
 module.exports.CEO_DETAILS = CEO_DETAILS;
 module.exports.CTO_DETAILS = CTO_DETAILS;
@@ -37,11 +38,12 @@ exports.rehouserCookieOpt = () => {
     };
 
   // try for prod?
-  return {
-    maxAge: JWT_TOKEN_MAX_AGE,
-    httpOnly: true,
-    sameSite: "lax",
-  };
+  // tried. Stored but cleared when refreshed
+  // return {
+  //   maxAge: JWT_TOKEN_MAX_AGE,
+  //   httpOnly: true,
+  //   sameSite: "lax",
+  // };
   return {
     maxAge: JWT_TOKEN_MAX_AGE, // when the cookie expires
     sameSite: "None",
