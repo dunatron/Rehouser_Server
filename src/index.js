@@ -57,7 +57,7 @@ process.on("unhandledRejection", (reason, promise) => {
 
 server.express.use(function(req, res, next) {
   // res.header("Access-Control-Allow-Origin", "https://app.rehouser.co.nz");
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Origin", "https://app.rehouser.co.nz");
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
