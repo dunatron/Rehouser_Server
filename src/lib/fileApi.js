@@ -4,6 +4,7 @@ const { _isAdmin } = require("./permissionsCheck");
 
 const logger = require("../middleware/loggers/logger");
 var fs = require("fs");
+// import { createWriteStream } from 'fs'
 
 //https://cloudinary.com/documentation/image_upload_api_reference#required_parameters
 
@@ -25,16 +26,24 @@ exports._isUploaderOrAdmin = ({ file, ctx }) => {
   return false;
 };
 
-exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
-  const {
-    stream,
-    createReadStream,
-    filename,
-    mimetype,
-    encoding,
-  } = await upload;
+const uploadDir = "./uploads";
+const storeUpload = async ({ stream, filename }) => {
+  // const id = shortid.generate()
+  const id = "tro";
+  const path = `${uploadDir}/${id}-${filename}`;
 
-  // const stream = createReadStream();
+  return new Promise((resolve, reject) =>
+    stream
+      .pipe(fs.createWriteStream(path))
+      .on("finish", () => resolve({ path }))
+      .on("error", reject)
+  );
+};
+
+exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
+  const { createReadStream, filename, mimetype, encoding } = await upload;
+
+  const stream = createReadStream();
 
   cloudinary.config(cloudinaryConfObj);
   let resultObj = {};
@@ -45,39 +54,69 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
     headers: ctx.request.headers,
   });
 
-  const cloudinaryUpload = async ({ stream }) => {
+  // const cloudinaryUpload = async ({ stream }) => {
+  //   try {
+  //     await new Promise((resolve, reject) => {
+  //       // const streamLoad = cloudinary.uploader.upload_stream(
+  //       //   {
+  //       //     type: data.type ? data.type : "upload"
+  //       //     // access_mode: data.access_mode ? data.access_mode : "authenticated",
+  //       //     // ...data,
+  //       //     // folder: `${process.env.STAGE}/${data.folder}`,
+  //       //   },
+  //       //   function(error, result) {
+  //       //     if (result) {
+  //       //       logger.log("info", `FILE UPLOAD SUCCESS`, {
+  //       //         result: result
+  //       //       });
+  //       //       resultObj = {
+  //       //         ...result
+  //       //       };
+  //       //       resolve();
+  //       //     } else {
+  //       //       // logger.log("error", `file APi reject err: `, {
+  //       //       //   message: error
+  //       //       // });
+  //       //       logger.log("info", `Debug: fileApi`, {
+  //       //         tron: "error in the resolve for file",
+  //       //         error: error
+  //       //       });
+  //       //       reject(error);
+  //       //       throw new Error(`cloudinary.uploader.upload_stream error`);
+  //       //     }
+  //       //   }
+  //       // );
+  //       // stream.pipe(streamLoad);
+  //       var upload_stream = cloudinary.uploader.upload_stream(
+  //         { tags: "basic_sample" },
+  //         function(err, image) {
+  //           if (err) {
+  //             reject(err);
+  //           }
+  //           resultObj = {
+  //             ...image,
+  //           };
+  //           resolve();
+  //         }
+  //       );
+  //       // fs.createReadStream("./src/pizza.jpg").pipe(upload_stream);
+  //       stream.pipe(upload_stream);
+  //     });
+  //   } catch (err) {
+  //     logger.log("info", `File Upload Error`, {
+  //       message: err.message,
+  //     });
+  //     throw new Error(`caught error uploading to cloudinry`);
+  //   }
+  // };
+
+  // await cloudinaryUpload({ stream });
+
+  // prove the stream can write to  file system
+
+  const cloudinaryUpload = async ({ path }) => {
     try {
       await new Promise((resolve, reject) => {
-        // const streamLoad = cloudinary.uploader.upload_stream(
-        //   {
-        //     type: data.type ? data.type : "upload"
-        //     // access_mode: data.access_mode ? data.access_mode : "authenticated",
-        //     // ...data,
-        //     // folder: `${process.env.STAGE}/${data.folder}`,
-        //   },
-        //   function(error, result) {
-        //     if (result) {
-        //       logger.log("info", `FILE UPLOAD SUCCESS`, {
-        //         result: result
-        //       });
-        //       resultObj = {
-        //         ...result
-        //       };
-        //       resolve();
-        //     } else {
-        //       // logger.log("error", `file APi reject err: `, {
-        //       //   message: error
-        //       // });
-        //       logger.log("info", `Debug: fileApi`, {
-        //         tron: "error in the resolve for file",
-        //         error: error
-        //       });
-        //       reject(error);
-        //       throw new Error(`cloudinary.uploader.upload_stream error`);
-        //     }
-        //   }
-        // );
-        // stream.pipe(streamLoad);
         var upload_stream = cloudinary.uploader.upload_stream(
           { tags: "basic_sample" },
           function(err, image) {
@@ -90,8 +129,8 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
             resolve();
           }
         );
-        // fs.createReadStream("./src/pizza.jpg").pipe(upload_stream);
-        stream.pipe(upload_stream);
+        fs.createReadStream(path).pipe(upload_stream);
+        // stream.pipe(upload_stream);
       });
     } catch (err) {
       logger.log("info", `File Upload Error`, {
@@ -100,8 +139,9 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
       throw new Error(`caught error uploading to cloudinry`);
     }
   };
+  const { id, path } = await storeUpload({ stream, filename });
 
-  await cloudinaryUpload({ stream });
+  await cloudinaryUpload({ path });
 
   // Sync with Prisma
   const combinedFileData = {

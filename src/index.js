@@ -65,7 +65,7 @@ process.on("unhandledRejection", (reason, promise) => {
 //   );
 //   next();
 // });
-
+// server.express.use(server.express.static("uploads"));
 server.express.use(cookieParser());
 // server.use(expressLogger);
 // sets up pasrsing the body of the request
