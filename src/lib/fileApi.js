@@ -141,7 +141,7 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
   };
   const { id, path } = await storeUpload({ stream, filename });
 
-  await cloudinaryUpload({ path });
+  // await cloudinaryUpload({ path });
 
   // Sync with Prisma
   const combinedFileData = {
