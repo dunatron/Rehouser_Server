@@ -141,8 +141,8 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
             resolve();
           }
         );
-        fs.createReadStream("./src/pizza.jpg").pipe(upload_stream);
-        // stream.pipe(upload_stream);
+        // fs.createReadStream("./src/pizza.jpg").pipe(upload_stream);
+        stream.pipe(upload_stream);
       });
     } catch (err) {
       logger.log("info", `File Upload Error`, {
