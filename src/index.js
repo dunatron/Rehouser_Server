@@ -82,15 +82,15 @@ initialiseTasks();
 const app = server.start(
   {
     port: process.env.PORT || 4444,
-    // cors: {
-    //   credentials: true,
-    //   origin: clientOrigins,
-    // },
-    // uploads: {
-    //   maxFieldSize: 999999999,
-    //   maxFileSize: 999999999,
-    //   maxFiles: 5,
-    // },
+    cors: {
+      credentials: true,
+      origin: clientOrigins,
+    },
+    uploads: {
+      maxFieldSize: 999999999,
+      maxFileSize: 999999999,
+      maxFiles: 5,
+    },
     debug: true,
     // playground: "/playground",
     // https://github.com/apollographql/subscriptions-transport-ws/issues/450
