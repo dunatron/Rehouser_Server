@@ -55,16 +55,16 @@ process.on("unhandledRejection", (reason, promise) => {
   return reason; // return the errors to try not crash express
 });
 
-server.express.use(function(req, res, next) {
-  // res.header("Access-Control-Allow-Origin", "https://app.rehouser.co.nz");
-  // res.header("Access-Control-Allow-Origin", "https://app.rehouser.co.nz");
-  res.header("Access-Control-Allow-Origin", "http://localhost:7777");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
+// server.express.use(function(req, res, next) {
+//   // res.header("Access-Control-Allow-Origin", "https://app.rehouser.co.nz");
+//   // res.header("Access-Control-Allow-Origin", "https://app.rehouser.co.nz");
+//   res.header("Access-Control-Allow-Origin", "http://localhost:7777");
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept"
+//   );
+//   next();
+// });
 
 server.express.use(cookieParser());
 // server.use(expressLogger);
