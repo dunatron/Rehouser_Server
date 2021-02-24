@@ -2,10 +2,6 @@ const cloudinary = require("cloudinary").v2;
 const { extractFileKey } = require("./extractFileKey");
 const { _isAdmin } = require("./permissionsCheck");
 
-const logger = require("../middleware/loggers/logger");
-var fs = require("fs");
-// import { createWriteStream } from 'fs'
-
 //https://cloudinary.com/documentation/image_upload_api_reference#required_parameters
 
 const cloudinaryConfObj = {
@@ -26,122 +22,46 @@ exports._isUploaderOrAdmin = ({ file, ctx }) => {
   return false;
 };
 
-const uploadDir = "./uploads";
-const storeUpload = async ({ stream, filename }) => {
-  // const id = shortid.generate()
-  const id = "tro";
-  const path = `${uploadDir}/${id}-${filename}`;
-
-  return new Promise((resolve, reject) =>
-    stream
-      .pipe(fs.createWriteStream(path))
-      .on("finish", () => resolve({ path }))
-      .on("error", reject)
-  );
-};
-
 exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
-  const { createReadStream, filename, mimetype, encoding } = await upload;
-
-  const stream = createReadStream();
+  const {
+    stream,
+    createReadStream,
+    filename,
+    mimetype,
+    encoding,
+  } = await upload;
 
   cloudinary.config(cloudinaryConfObj);
   let resultObj = {};
-
-  console.log("SHOW ME THE FILE CTX headers => ", ctx.request.headers);
-
-  logger.log("info", `file API HEADERS`, {
-    headers: ctx.request.headers,
-  });
-
-  // const cloudinaryUpload = async ({ stream }) => {
-  //   try {
-  //     await new Promise((resolve, reject) => {
-  //       // const streamLoad = cloudinary.uploader.upload_stream(
-  //       //   {
-  //       //     type: data.type ? data.type : "upload"
-  //       //     // access_mode: data.access_mode ? data.access_mode : "authenticated",
-  //       //     // ...data,
-  //       //     // folder: `${process.env.STAGE}/${data.folder}`,
-  //       //   },
-  //       //   function(error, result) {
-  //       //     if (result) {
-  //       //       logger.log("info", `FILE UPLOAD SUCCESS`, {
-  //       //         result: result
-  //       //       });
-  //       //       resultObj = {
-  //       //         ...result
-  //       //       };
-  //       //       resolve();
-  //       //     } else {
-  //       //       // logger.log("error", `file APi reject err: `, {
-  //       //       //   message: error
-  //       //       // });
-  //       //       logger.log("info", `Debug: fileApi`, {
-  //       //         tron: "error in the resolve for file",
-  //       //         error: error
-  //       //       });
-  //       //       reject(error);
-  //       //       throw new Error(`cloudinary.uploader.upload_stream error`);
-  //       //     }
-  //       //   }
-  //       // );
-  //       // stream.pipe(streamLoad);
-  //       var upload_stream = cloudinary.uploader.upload_stream(
-  //         { tags: "basic_sample" },
-  //         function(err, image) {
-  //           if (err) {
-  //             reject(err);
-  //           }
-  //           resultObj = {
-  //             ...image,
-  //           };
-  //           resolve();
-  //         }
-  //       );
-  //       // fs.createReadStream("./src/pizza.jpg").pipe(upload_stream);
-  //       stream.pipe(upload_stream);
-  //     });
-  //   } catch (err) {
-  //     logger.log("info", `File Upload Error`, {
-  //       message: err.message,
-  //     });
-  //     throw new Error(`caught error uploading to cloudinry`);
-  //   }
-  // };
-
-  // await cloudinaryUpload({ stream });
-
-  // prove the stream can write to  file system
-
-  const cloudinaryUpload = async ({ path }) => {
+  const cloudinaryUpload = async ({ stream }) => {
     try {
       await new Promise((resolve, reject) => {
-        var upload_stream = cloudinary.uploader.upload_stream(
-          { tags: "basic_sample" },
-          function(err, image) {
-            if (err) {
-              reject(err);
+        const streamLoad = cloudinary.uploader.upload_stream(
+          {
+            type: data.type ? data.type : "upload",
+            access_mode: data.access_mode ? data.access_mode : "authenticated",
+            ...data,
+            folder: `${process.env.STAGE}/${data.folder}`,
+          },
+          function(error, result) {
+            if (result) {
+              resultObj = {
+                ...result,
+              };
+              resolve();
+            } else {
+              reject(error);
             }
-            resultObj = {
-              ...image,
-            };
-            resolve();
           }
         );
-        fs.createReadStream(path).pipe(upload_stream);
-        // stream.pipe(upload_stream);
+        stream.pipe(streamLoad);
       });
     } catch (err) {
-      logger.log("info", `File Upload Error`, {
-        message: err.message,
-      });
-      throw new Error(`caught error uploading to cloudinry`);
+      throw new Error(`Failed to upload item image ! Err:${err.message}`);
     }
   };
-  const { id, path } = await storeUpload({ stream, filename });
 
-  // await cloudinaryUpload({ path });
+  await cloudinaryUpload({ stream });
 
   // Sync with Prisma
   const combinedFileData = {
@@ -162,33 +82,20 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
     info
   );
 
-  // const file = await ctx.db.mutation.createFile(
-  //   {
-  //     data: {
-  //       filename,
-  //       mimetype,
-  //       encoding
-  //     }
-  //   },
-  //   info
-  // );
-
   return file;
 };
 
 exports.deleteFile = async ({ url, id, ctx }) => {
-  try {
-    cloudinary.config(cloudinaryConfObj);
-    const cloudinaryFileKey = extractFileKey(url);
-    await cloudinary.uploader.destroy(
-      cloudinaryFileKey,
-      { invalidate: true },
-      async function(error, result) {
-        if (result.result === "ok") {
-          const where = { id: id };
-          // return await ctx.db.mutation.deleteFile({ where }, `{ id }`);
-        }
+  cloudinary.config(cloudinaryConfObj);
+  const cloudinaryFileKey = extractFileKey(url);
+  await cloudinary.uploader.destroy(
+    cloudinaryFileKey,
+    { invalidate: true },
+    async function(error, result) {
+      if (result.result === "ok") {
+        const where = { id: id };
+        // return await ctx.db.mutation.deleteFile({ where }, `{ id }`);
       }
-    );
-  } catch (err) {}
+    }
+  );
 };
