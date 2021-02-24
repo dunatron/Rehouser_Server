@@ -11,7 +11,7 @@ var fs = require("fs");
 const cloudinaryConfObj = {
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+  api_secret: process.env.CLOUDINARY_API_SECRET
 };
 
 exports._isUploader = ({ file, ctx }) => {
@@ -47,12 +47,6 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
 
   cloudinary.config(cloudinaryConfObj);
   let resultObj = {};
-
-  console.log("SHOW ME THE FILE CTX headers => ", ctx.request.headers);
-
-  logger.log("info", `file API HEADERS`, {
-    headers: ctx.request.headers,
-  });
 
   // const cloudinaryUpload = async ({ stream }) => {
   //   try {
@@ -124,31 +118,31 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
               reject(err);
             }
             resultObj = {
-              ...image,
+              ...image
             };
             resolve();
           }
         );
-        fs.createReadStream(path).pipe(upload_stream);
-        // stream.pipe(upload_stream);
+        // fs.createReadStream(path).pipe(upload_stream);
+        stream.pipe(upload_stream);
       });
     } catch (err) {
       logger.log("info", `File Upload Error`, {
-        message: err.message,
+        message: err.message
       });
       throw new Error(`caught error uploading to cloudinry`);
     }
   };
-  const { id, path } = await storeUpload({ stream, filename });
+  // const { id, path } = await storeUpload({ stream, filename });
 
-  // await cloudinaryUpload({ path });
+  await cloudinaryUpload({ path });
 
   // Sync with Prisma
   const combinedFileData = {
     filename,
     mimetype,
     encoding,
-    ...resultObj,
+    ...resultObj
   };
 
   // return file;
@@ -156,8 +150,8 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
     {
       data: {
         ...combinedFileData,
-        uploaderId: ctx.request.userId,
-      },
+        uploaderId: ctx.request.userId
+      }
     },
     info
   );
