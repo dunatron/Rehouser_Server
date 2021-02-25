@@ -11,16 +11,16 @@ const userMiddleware = require("./middleware/user/index");
 const routes = require("./routes/index");
 const logger = require("./middleware/loggers/logger");
 
-process.on("uncaughtException", (err) => {
+process.on("uncaughtException", err => {
   logger.log("error", `Uncaught Exception: ${err.message}`, {
-    message: err.message,
+    message: err.message
   });
   return err;
 });
 
 process.on("unhandledRejection", (reason, promise) => {
   logger.log("error", `unhandledRejection`, {
-    reason: reason,
+    reason: reason
   });
   return reason; // return the errors to try not crash express
 });
@@ -47,13 +47,13 @@ const expressLogger = function(req, res, next) {
     url: req.url,
     user: {
       id: req.userId,
-      permissions: req.userPermissions,
+      permissions: req.userPermissions
     },
     method: req.method,
     operationName: req.body.operationName,
     variables: req.body.variables,
     headers: req.headers,
-    userAgent: req.headers["user-agent"],
+    userAgent: req.headers["user-agent"]
     // query: req.body.query
   });
 
@@ -67,7 +67,7 @@ const expressErrorMiddleware = async (err, req, res, next) => {
   logger.log("error", `expressErrorMiddleware`, {
     err: err,
     req: req,
-    res: res,
+    res: res
   });
   next();
 };
@@ -89,7 +89,7 @@ const allowedClientOrigins = [
   "https://rehouser.co.nz",
   "https://yoga.rehouser.co.nz",
   "http://app.uat.rehouser.co.nz",
-  process.env.FRONTEND_URL,
+  process.env.FRONTEND_URL
 ];
 
 // Start gql yoga/express server
@@ -99,6 +99,7 @@ const app = server.start(
     cors: {
       credentials: true,
       origin: allowedClientOrigins,
+      methods: ["GET", "PUT", "POST"]
     },
     // uploads: {
     //   maxFieldSize: 1000,
@@ -111,44 +112,44 @@ const app = server.start(
     subscriptions: {
       // path: "/subscriptions",
       path: "/",
-      onConnect: (connectionParams, webSocket, context) => {
-        const { isLegacy, socket, request } = context;
-        // console.log("context on connect context => ", context);
-        webSocket.on("error", (error) => {
-          logger.log("error", `potential ws err onConnect`, {
-            error: error,
-            // webSocket: webSocket,
-            // context: context
-            // query: req.body.query
-          });
-        });
-        logger.log("info", `subscriptions on connect`, {
-          connectionParams: connectionParams,
-          headers: request.headers,
-          // webSocket: webSocket,
-          // context: context
-          // query: req.body.query
-        });
-      },
-      onDisconnect: (webSocket, context) => {
-        // console.log("context on disconnect context => ", context);
-        // console.log("context on disconnect webSocket => ", webSocket);
-        logger.log("info", `subscriptions on disconnect`, {
-          context: context,
-        });
-        webSocket.on("error", (error) => {
-          logger.log("error", `potential ws err onDisconnect`, {
-            error: error,
-          });
-        });
-      },
-      keepAlive: 10000, // use 10000 like prisma or false
-    },
+      // onConnect: (connectionParams, webSocket, context) => {
+      //   const { isLegacy, socket, request } = context;
+      //   // console.log("context on connect context => ", context);
+      //   // webSocket.on("error", (error) => {
+      //   //   logger.log("error", `potential ws err onConnect`, {
+      //   //     error: error,
+      //   //     // webSocket: webSocket,
+      //   //     // context: context
+      //   //     // query: req.body.query
+      //   //   });
+      //   // });
+      //   // logger.log("info", `subscriptions on connect`, {
+      //   //   connectionParams: connectionParams,
+      //   //   headers: request.headers,
+      //   //   // webSocket: webSocket,
+      //   //   // context: context
+      //   //   // query: req.body.query
+      //   // });
+      // },
+      // onDisconnect: (webSocket, context) => {
+      //   // console.log("context on disconnect context => ", context);
+      //   // console.log("context on disconnect webSocket => ", webSocket);
+      //   // logger.log("info", `subscriptions on disconnect`, {
+      //   //   context: context,
+      //   // });
+      //   // webSocket.on("error", (error) => {
+      //   //   logger.log("error", `potential ws err onDisconnect`, {
+      //   //     error: error,
+      //   //   });
+      //   // });
+      // },
+      keepAlive: 10000 // use 10000 like prisma or false
+    }
   },
-  (details) => {
+  details => {
     logger.info("gql yoga/express server is up", {
       ...details,
-      port: details.port,
+      port: details.port
     });
   }
 );
