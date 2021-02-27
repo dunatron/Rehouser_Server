@@ -14,6 +14,8 @@ const cloudinaryConfObj = {
   api_secret: process.env.CLOUDINARY_API_SECRET,
 };
 
+cloudinary.config(cloudinaryConfObj);
+
 exports._isUploader = ({ file, ctx }) => {
   return file.uploaderId === ctx.request.userId;
 };
@@ -40,63 +42,113 @@ const storeUpload = async ({ stream, filename }) => {
   );
 };
 
+// const cloudinaryUpload = async ({ stream, data }) => {
+//   try {
+//     await new Promise((resolve, reject) => {
+//       const streamLoad = cloudinary.uploader.upload_stream(
+//         {
+//           type: data.type ? data.type : "upload",
+//           access_mode: data.access_mode ? data.access_mode : "authenticated",
+//           ...data,
+//           folder: `${process.env.STAGE}/${data.folder}`,
+//         },
+//         function(error, result) {
+//           if (result) {
+//             logger.log("info", `FILE UPLOAD SUCCESS`, {
+//               result: result,
+//             });
+//             resultObj = {
+//               ...result,
+//             };
+//             resolve(result);
+//           } else {
+//             logger.log("info", `Debug: fileApi`, {
+//               tron: "error in the resolve for file",
+//               error: error,
+//             });
+//             reject(error);
+//             throw new Error(`cloudinary.uploader.upload_stream error`);
+//           }
+//         }
+//       );
+//       stream.pipe(streamLoad);
+//     });
+//   } catch (err) {
+//     logger.log("info", `File Upload Error`, {
+//       message: err.message,
+//     });
+//     throw new Error(`caught error uploading to cloudinry`);
+//   }
+// };
+
+// const cloudinaryUpload = async ({ stream, data }) => {
+//   return new Promise((resolve, reject) => {
+//     const streamLoad = cloudinary.uploader.upload_stream(
+//       {
+//         type: data.type ? data.type : "upload",
+//         access_mode: data.access_mode ? data.access_mode : "authenticated",
+//         ...data,
+//         folder: `${process.env.STAGE}/${data.folder}`,
+//       },
+//       function(error, result) {
+//         if (result) {
+//           logger.log("info", `FILE UPLOAD SUCCESS`, {
+//             result: result,
+//           });
+//           resultObj = {
+//             ...result,
+//           };
+//           resolve(result);
+//         } else {
+//           logger.log("info", `Debug: fileApi`, {
+//             tron: "error in the resolve for file",
+//             error: error,
+//           });
+//           reject(error);
+//           throw new Error(`cloudinary.uploader.upload_stream error`);
+//         }
+//       }
+//     );
+//     stream.pipe(streamLoad);
+//   });
+// };
+
+const cloudinaryUploadStream = async ({ stream, data }) =>
+  new Promise((resolve, reject) => {
+    const streamLoad = cloudinary.uploader.upload_stream(
+      {
+        type: data.type ? data.type : "upload",
+        access_mode: data.access_mode ? data.access_mode : "authenticated",
+        ...data,
+        folder: `${process.env.STAGE}/${data.folder}`,
+      },
+      function(error, result) {
+        if (result) {
+          resolve(result);
+        } else {
+          reject(error);
+          throw new Error(`cloudinary.uploader.upload_stream error`);
+        }
+      }
+    );
+    stream.pipe(streamLoad);
+  });
+
 exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
-  cloudinary.config(cloudinaryConfObj);
   const { createReadStream, filename, mimetype, encoding } = await upload;
   const stream = createReadStream();
 
-  let resultObj = {};
+  const cloudinaryFile = await cloudinaryUploadStream({ stream, data });
 
-  const cloudinaryUpload = async ({ stream }) => {
-    try {
-      await new Promise((resolve, reject) => {
-        const streamLoad = cloudinary.uploader.upload_stream(
-          {
-            type: data.type ? data.type : "upload",
-            access_mode: data.access_mode ? data.access_mode : "authenticated",
-            ...data,
-            folder: `${process.env.STAGE}/${data.folder}`,
-          },
-          function(error, result) {
-            if (result) {
-              logger.log("info", `FILE UPLOAD SUCCESS`, {
-                result: result,
-              });
-              resultObj = {
-                ...result,
-              };
-              resolve();
-            } else {
-              logger.log("info", `Debug: fileApi`, {
-                tron: "error in the resolve for file",
-                error: error,
-              });
-              reject(error);
-              throw new Error(`cloudinary.uploader.upload_stream error`);
-            }
-          }
-        );
-        stream.pipe(streamLoad);
-      });
-    } catch (err) {
-      logger.log("info", `File Upload Error`, {
-        message: err.message,
-      });
-      throw new Error(`caught error uploading to cloudinry`);
-    }
-  };
-
-  await cloudinaryUpload({ stream });
-
-  // Sync with Prisma
+  // combine cloudiary returned file data
   const combinedFileData = {
     filename,
     mimetype,
     encoding,
-    ...resultObj,
+    ...cloudinaryFile,
   };
 
-  // return file;
+  // upload cloudinary result object to the database
   const file = await ctx.db.mutation.createFile(
     {
       data: {
@@ -111,6 +163,7 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
 };
 
 exports.deleteFile = async ({ url, id, ctx }) => {
+  const where = { id: id };
   try {
     cloudinary.config(cloudinaryConfObj);
     const cloudinaryFileKey = extractFileKey(url);
@@ -119,8 +172,10 @@ exports.deleteFile = async ({ url, id, ctx }) => {
       { invalidate: true },
       async function(error, result) {
         if (result.result === "ok") {
-          const where = { id: id };
-          // return await ctx.db.mutation.deleteFile({ where }, `{ id }`);
+          return await ctx.db.mutation.deleteFile({ where }, `{ id }`);
+        }
+        if (error) {
+          throw new Error(`Error deleting file from storage provider`);
         }
       }
     );

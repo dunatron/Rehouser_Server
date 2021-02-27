@@ -92,6 +92,8 @@ const allowedClientOrigins = [
   process.env.FRONTEND_URL,
 ];
 
+const Mib = 1048576;
+
 // Start gql yoga/express server
 const app = server.start(
   {
@@ -100,39 +102,29 @@ const app = server.start(
       credentials: true,
       origin: allowedClientOrigins,
     },
-    // uploads: {
-    //   maxFieldSize: 1000,
-    //   maxFileSize: 500,
-    //   maxFiles: 3
-    // },
+    uploads: {
+      maxFieldSize: 1000000, // Maximum allowed non-file multipart form field size in bytes; enough for your queries.
+      maxFileSize: Mib * 2, // Maximum allowed file size in bytes.
+      maxFiles: 5, // Maximum allowed number of files.
+    },
     debug: true,
     playground: "/playground",
     // https://github.com/apollographql/subscriptions-transport-ws/issues/450
     subscriptions: {
-      // path: "/subscriptions",
       path: "/",
       onConnect: (connectionParams, webSocket, context) => {
         const { isLegacy, socket, request } = context;
-        // console.log("context on connect context => ", context);
         webSocket.on("error", (error) => {
           logger.log("error", `potential ws err onConnect`, {
             error: error,
-            // webSocket: webSocket,
-            // context: context
-            // query: req.body.query
           });
         });
         logger.log("info", `subscriptions on connect`, {
           connectionParams: connectionParams,
           headers: request.headers,
-          // webSocket: webSocket,
-          // context: context
-          // query: req.body.query
         });
       },
       onDisconnect: (webSocket, context) => {
-        // console.log("context on disconnect context => ", context);
-        // console.log("context on disconnect webSocket => ", webSocket);
         logger.log("info", `subscriptions on disconnect`, {
           context: context,
         });
