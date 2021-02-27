@@ -30,7 +30,6 @@ exports._isUploaderOrAdmin = ({ file, ctx }) => {
 
 const uploadDir = "./uploads";
 const storeUpload = async ({ stream, filename }) => {
-  // const id = shortid.generate()
   const id = "tro";
   const path = `${uploadDir}/${id}-${filename}`;
 
@@ -41,77 +40,6 @@ const storeUpload = async ({ stream, filename }) => {
       .on("error", reject)
   );
 };
-
-// const cloudinaryUpload = async ({ stream, data }) => {
-//   try {
-//     await new Promise((resolve, reject) => {
-//       const streamLoad = cloudinary.uploader.upload_stream(
-//         {
-//           type: data.type ? data.type : "upload",
-//           access_mode: data.access_mode ? data.access_mode : "authenticated",
-//           ...data,
-//           folder: `${process.env.STAGE}/${data.folder}`,
-//         },
-//         function(error, result) {
-//           if (result) {
-//             logger.log("info", `FILE UPLOAD SUCCESS`, {
-//               result: result,
-//             });
-//             resultObj = {
-//               ...result,
-//             };
-//             resolve(result);
-//           } else {
-//             logger.log("info", `Debug: fileApi`, {
-//               tron: "error in the resolve for file",
-//               error: error,
-//             });
-//             reject(error);
-//             throw new Error(`cloudinary.uploader.upload_stream error`);
-//           }
-//         }
-//       );
-//       stream.pipe(streamLoad);
-//     });
-//   } catch (err) {
-//     logger.log("info", `File Upload Error`, {
-//       message: err.message,
-//     });
-//     throw new Error(`caught error uploading to cloudinry`);
-//   }
-// };
-
-// const cloudinaryUpload = async ({ stream, data }) => {
-//   return new Promise((resolve, reject) => {
-//     const streamLoad = cloudinary.uploader.upload_stream(
-//       {
-//         type: data.type ? data.type : "upload",
-//         access_mode: data.access_mode ? data.access_mode : "authenticated",
-//         ...data,
-//         folder: `${process.env.STAGE}/${data.folder}`,
-//       },
-//       function(error, result) {
-//         if (result) {
-//           logger.log("info", `FILE UPLOAD SUCCESS`, {
-//             result: result,
-//           });
-//           resultObj = {
-//             ...result,
-//           };
-//           resolve(result);
-//         } else {
-//           logger.log("info", `Debug: fileApi`, {
-//             tron: "error in the resolve for file",
-//             error: error,
-//           });
-//           reject(error);
-//           throw new Error(`cloudinary.uploader.upload_stream error`);
-//         }
-//       }
-//     );
-//     stream.pipe(streamLoad);
-//   });
-// };
 
 const cloudinaryUploadStream = async ({ stream, data }) =>
   new Promise((resolve, reject) => {
@@ -126,6 +54,9 @@ const cloudinaryUploadStream = async ({ stream, data }) =>
         if (result) {
           resolve(result);
         } else {
+          logger.log("Cloudinary file upload error", `cloudinaryUploadStream`, {
+            error: error,
+          });
           reject(error);
           throw new Error(`cloudinary.uploader.upload_stream error`);
         }
