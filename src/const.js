@@ -37,12 +37,12 @@ exports.rehouserCookieOpt = () => {
       sameSite: "lax",
     };
 
-  return {
-    maxAge: JWT_TOKEN_MAX_AGE, // when the cookie expires
-    sameSite: "Lax",
-    httpOnly: false,
-    secure: false,
-  };
+  // return {
+  //   maxAge: JWT_TOKEN_MAX_AGE, // when the cookie expires
+  //   sameSite: "Lax",
+  //   httpOnly: false,
+  //   secure: false,
+  // };
 
   // try for prod?
   // tried. Stored but cleared when refreshed
@@ -53,8 +53,8 @@ exports.rehouserCookieOpt = () => {
   // };
   return {
     maxAge: JWT_TOKEN_MAX_AGE, // when the cookie expires
-    // sameSite: "None",
-    // secure: true, // connection needs to be over HTTPS
-    // httpOnly: true,
+    sameSite: "None",
+    secure: true, // connection needs to be over HTTPS
+    httpOnly: true,
   };
 };
