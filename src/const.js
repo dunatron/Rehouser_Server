@@ -37,13 +37,22 @@ exports.rehouserCookieOpt = () => {
       sameSite: "lax",
     };
 
+  // WORKS
+  // return {
+  //   maxAge: JWT_TOKEN_MAX_AGE, // when the cookie expires
+  //   httpOnly: true,
+  //   sameSite: "Lax",
+  //   httpOnly: false,
+  //   domain: ".rehouser.co.nz",
+  //   secure: false,
+  // };
+
   return {
     maxAge: JWT_TOKEN_MAX_AGE, // when the cookie expires
-    httpOnly: true,
-    sameSite: "Lax",
-    httpOnly: false,
     domain: ".rehouser.co.nz",
-    secure: false,
+    sameSite: "Strict",
+    httpOnly: true,
+    secure: true,
   };
 
   return {
