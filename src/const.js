@@ -37,12 +37,12 @@ exports.rehouserCookieOpt = () => {
       sameSite: "lax",
     };
 
-  // return {
-  //   maxAge: JWT_TOKEN_MAX_AGE, // when the cookie expires
-  //   sameSite: "Lax",
-  //   httpOnly: false,
-  //   secure: false,
-  // };
+  return {
+    maxAge: JWT_TOKEN_MAX_AGE, // when the cookie expires
+    sameSite: "Lax",
+    httpOnly: true,
+    secure: true,
+  };
 
   // try for prod?
   // tried. Stored but cleared when refreshed
