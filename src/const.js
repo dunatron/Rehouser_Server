@@ -54,30 +54,4 @@ exports.rehouserCookieOpt = () => {
     httpOnly: true,
     secure: true,
   };
-
-  return {
-    maxAge: JWT_TOKEN_MAX_AGE, // when the cookie expires
-    httpOnly: true,
-  };
-
-  // return {
-  //   maxAge: JWT_TOKEN_MAX_AGE, // when the cookie expires
-  //   sameSite: "Lax",
-  //   httpOnly: true,
-  //   secure: true,
-  // };
-
-  // try for prod?
-  // tried. Stored but cleared when refreshed
-  // return {
-  //   maxAge: JWT_TOKEN_MAX_AGE,
-  //   httpOnly: true,
-  //   sameSite: "lax",
-  // };
-  return {
-    maxAge: JWT_TOKEN_MAX_AGE, // when the cookie expires
-    // sameSite: "None",
-    // secure: true, // connection needs to be over HTTPS
-    // httpOnly: true,
-  };
 };
