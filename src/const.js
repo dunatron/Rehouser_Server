@@ -42,6 +42,7 @@ exports.rehouserCookieOpt = () => {
     httpOnly: true,
     sameSite: "Lax",
     httpOnly: false,
+    domain: ".rehouser.co.nz",
     secure: false,
   };
 
