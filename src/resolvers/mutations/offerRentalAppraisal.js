@@ -14,8 +14,8 @@ async function offerRentalAppraisal(parent, args, ctx, info) {
   const appraisal = await ctx.db.query.rentalAppraisal(
     {
       where: {
-        ...where
-      }
+        ...where,
+      },
     },
     `{ id requestedBy { id firstName lastName email } }`
   );
@@ -30,25 +30,25 @@ async function offerRentalAppraisal(parent, args, ctx, info) {
         ...data,
         appraisedBy: {
           connect: {
-            id: loggedInUserId
-          }
-        }
+            id: loggedInUserId,
+          },
+        },
       },
       where: {
-        ...where
-      }
+        ...where,
+      },
     },
     info
   );
 
   if (!property) {
     // there is no property so we must sen them to the add prooperty form via email
-    // with the data attached so it can prefill the form yea
-    offerRentalAppraisalEmail({
+    // dont know why i want to await i just do
+    await offerRentalAppraisalEmail({
       ctx: ctx,
       appraisal: updatedRentalAppraisal,
-      toEmail: appraisal.requestedBy,
-      user: appraisal.requestedBy
+      toEmail: appraisal.requestedBy.email,
+      user: appraisal.requestedBy,
     });
     // throw new Error("email should be sending");
   }

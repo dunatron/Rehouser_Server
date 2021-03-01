@@ -19,9 +19,9 @@ const sendInspectionsEmail = (subject, inspections) => {
     subject: subject,
     from: {
       name: "Rehouser Inspections",
-      address: process.env.MAIL_USER
+      address: process.env.MAIL_USER,
     },
-    body: body
+    body: body,
   });
 };
 

@@ -4,7 +4,7 @@ const offerRentalAppraisalEmail = async function({
   toEmail,
   appraisal,
   ctx,
-  user
+  user,
 }) {
   const {
     id,
@@ -14,20 +14,14 @@ const offerRentalAppraisalEmail = async function({
     bathrooms,
     heatSources,
     rent,
-    rentValueAccepted
+    rentValueAccepted,
   } = appraisal;
-
-  const strJSON = encodeURIComponent(JSON.stringify(appraisal));
-
-  // We have appraised the property at a weekly rent of $${rent}! \n
-  //   You can create a property at the following link <a href="${process.env.EMAIL_PREFIX}/properties/add?eData=${strJSON}">add Property</a> \n
-  //   It will prefill in the information with the appraised information. You can always edit this information
 
   return transport.sendMail({
     // from: process.env.MAIL_USER,
     from: {
       name: "Rehouser Property Appraised",
-      address: process.env.MAIL_USER
+      address: process.env.MAIL_USER,
     },
     to: toEmail,
     subject: `Property has been appraised for ${location}`,
@@ -57,7 +51,7 @@ const offerRentalAppraisalEmail = async function({
 </div>
   \n\n`,
       user
-    )
+    ),
   });
 };
 
