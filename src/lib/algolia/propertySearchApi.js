@@ -10,8 +10,15 @@ const client = algoliasearch(
   }
 );
 
+// administrative_area_level_1: String
+// country: String
+// locality: String
+// postal_code: String
+// route: String
+// street_number: String
+
 const index = client.initIndex(`${process.env.SEARCH_STAGE}_PropertySearch`);
-const propertyQueryString = `{id, type, rooms, rent, bathrooms, accommodation{id ,roomSize, rent, expenses, description},lowestRoomPrice, highestRoomPrice, moveInDate, onTheMarket, isLeased, location, locationLat, locationLng, images{url}, carportSpaces, garageSpaces, offStreetSpaces, outdoorFeatures, indoorFeatures  }`;
+const propertyQueryString = `{id, type, administrative_area_level_1, country, locality, postal_code, route, street_number, rooms, rent, bathrooms, accommodation{id ,roomSize, rent, expenses, description},lowestRoomPrice, highestRoomPrice, moveInDate, onTheMarket, isLeased, location, locationLat, locationLng,  images{url}, carportSpaces, garageSpaces, offStreetSpaces, outdoorFeatures, indoorFeatures  }`;
 
 const addPropertySearchNode = async function({ propertyId, db }) {
   const property = await db.query.property(
@@ -28,31 +35,37 @@ const addPropertySearchNode = async function({ propertyId, db }) {
 
   const propertyObject = {
     objectID: property.id,
-    id: property.id,
-    type: property.type,
-    rooms: property.rooms,
-    bathrooms: property.bathrooms,
-    accommodation: property.accommodation,
-    lowestRoomPrice: property.lowestRoomPrice,
-    highestRoomPrice: property.highestRoomPrice,
-    rent: property.rent,
-    moveInDate: property.moveInDate,
-    move_in_date_timestamp: moveInTimeStamp,
-    onTheMarket: property.onTheMarket,
-    isLeased: property.isLeased,
-    location: property.location,
+    ...property,
+    // type: property.type,
+    // rooms: property.rooms,
+    // bathrooms: property.bathrooms,
+    // accommodation: property.accommodation,
+    // lowestRoomPrice: property.lowestRoomPrice,
+    // highestRoomPrice: property.highestRoomPrice,
+    // rent: property.rent,
+    // moveInDate: property.moveInDate,
+    // move_in_date_timestamp: moveInTimeStamp,
+    // onTheMarket: property.onTheMarket,
+    // isLeased: property.isLeased,
+    // location: property.location,
     _geoloc: {
       lat: property.locationLat,
       lng: property.locationLng,
     },
-    locationLat: property.locationLat,
-    locationLng: property.locationLng,
+    // administrative_area_level_1: property,
+    // country: property.country,
+    // locality: property.locality,
+    // postal_code: property.postal_code,
+    // route: property.route,
+    // street_number: property.street_number,
+    // locationLat: property.locationLat,
+    // locationLng: property.locationLng,
     imageUrls: property.images.map((image) => image.url),
-    carportSpaces: property.carportSpaces,
-    garageSpaces: property.garageSpaces,
-    offStreetSpaces: property.offStreetSpaces,
-    outdoorFeatures: property.outdoorFeatures, // If you add an array in the list of attributes to index, we extract and index all strings in the array.
-    indoorFeatures: property.indoorFeatures, // https://www.algolia.com/doc/faq/index-configuration/do-you-support-indexing-of-arrays/
+    // carportSpaces: property.carportSpaces,
+    // garageSpaces: property.garageSpaces,
+    // offStreetSpaces: property.offStreetSpaces,
+    // outdoorFeatures: property.outdoorFeatures, // If you add an array in the list of attributes to index, we extract and index all strings in the array.
+    // indoorFeatures: property.indoorFeatures, // https://www.algolia.com/doc/faq/index-configuration/do-you-support-indexing-of-arrays/
   };
 
   propertiesObjectArr.push(propertyObject);

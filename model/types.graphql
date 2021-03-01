@@ -277,6 +277,12 @@ type Property implements PropertyInfo {
   location: String!
   locationLat: Float!
   locationLng: Float!
+  administrative_area_level_1: String
+  country: String
+  locality: String
+  postal_code: String
+  route: String
+  street_number: String
   titleType: PropertyTitleType!
   updatedAt: DateTime! @updatedAt
   createdAt: DateTime! @createdAt

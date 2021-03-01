@@ -3,12 +3,12 @@ const PROPERTY_INDEX = {
   attributes: {
     searchableAttributes: [
       "location",
+      "route",
       "rent",
-      "lowestRoomPrice",
-      "highestRoomPrice",
       "rooms",
       "move_in_date_timestamp",
-      "accommodation"
+      "accommodation",
+      "administrative_area_level_1",
     ],
     // Define business metrics for ranking and sorting
     customRanking: ["desc(popularity)"],
@@ -20,18 +20,21 @@ const PROPERTY_INDEX = {
       "outdoorFeatures",
       "type",
       "onTheMarket",
-      "lowestRoomPrice",
-      "highestRoomPrice"
-    ]
-  }
+      "administrative_area_level_1",
+      "country",
+      "locality",
+      "postal_code",
+      "route",
+    ],
+  },
 };
 
 const USER_INDEX = {
   name: "UserSearch",
   attributes: {
     searchableAttributes: ["email", "firstName", "lastName"],
-    attributesForFaceting: ["permissions"]
-  }
+    attributesForFaceting: ["permissions"],
+  },
 };
 
 const ALL_INDEXES = [PROPERTY_INDEX, USER_INDEX];
