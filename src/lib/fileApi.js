@@ -41,6 +41,12 @@ const storeUpload = async ({ stream, filename }) => {
   );
 };
 
+// the idea is that all prod files are the root. uat and prod share the same account for now
+const makeFolder = (folder) => {
+  if (process.env.STAGE === "prod") return folder;
+  return `${process.env.STAGE}/${data.folder}`;
+};
+
 const cloudinaryUploadStream = async ({ stream, data }) =>
   new Promise((resolve, reject) => {
     const streamLoad = cloudinary.uploader.upload_stream(
@@ -48,7 +54,8 @@ const cloudinaryUploadStream = async ({ stream, data }) =>
         type: data.type ? data.type : "upload",
         access_mode: data.access_mode ? data.access_mode : "authenticated",
         ...data,
-        folder: `${process.env.STAGE}/${data.folder}`,
+        // folder: `${process.env.STAGE}/${data.folder}`,
+        folder: makeFolder(data.folder),
       },
       function(error, result) {
         if (result) {
