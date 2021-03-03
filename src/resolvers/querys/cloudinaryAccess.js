@@ -1,7 +1,7 @@
 var crypto = require("crypto");
 var moment = require("moment");
 
-async function makeCoudinaryAccess(parent, args, ctx, info) {
+async function cloudinaryAccess(parent, args, ctx, info) {
   if (!ctx.request.userEmail) {
     return null;
   }
@@ -30,4 +30,4 @@ async function makeCoudinaryAccess(parent, args, ctx, info) {
   };
 }
 
-module.exports = makeCoudinaryAccess;
+module.exports = cloudinaryAccess;

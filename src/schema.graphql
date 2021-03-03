@@ -251,7 +251,7 @@ type Query {
   user(where: UserWhereUniqueInput!): User
   file(id: ID!): File
   files: [File!]!
-  makeCoudinaryAccess: CloudinaryMediaLibraryAccess
+  cloudinaryAccess: CloudinaryMediaLibraryAccess
   activities(
     where: ActivityWhereInput
     orderBy: ActivityOrderByInput

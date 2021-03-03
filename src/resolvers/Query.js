@@ -34,7 +34,7 @@ const inspection = require("./querys/inspection");
 const propertyFiles = require("./querys/propertyFiles");
 const propertyLeases = require("./querys/propertyLeases");
 const charge = require("./querys/charge");
-const makeCoudinaryAccess = require("./querys/makeCoudinaryAccess");
+const cloudinaryAccess = require("./querys/cloudinaryAccess");
 
 const Query = {
   crashMe,
@@ -70,7 +70,7 @@ const Query = {
   inspection,
   propertyLeases,
   charge,
-  makeCoudinaryAccess,
+  cloudinaryAccess,
 };
 
 module.exports = Query;
