@@ -22,13 +22,14 @@ const addUser = async (req, res, next) => {
   }
   try {
     // decode the id and permissions from the token request
-    const { userId, userPermissions } = jwt.verify(
+    const { userId, userPermissions, userEmail } = jwt.verify(
       token,
       process.env.APP_SECRET
     );
     // attach the id and permissions to the request
     req.userId = userId;
     req.userPermissions = userPermissions;
+    req.userEmail = userEmail;
   } catch (err) {
     const refreshToken = req.cookies["refresh-token"];
     if (!refreshToken) {
@@ -47,6 +48,7 @@ const addUser = async (req, res, next) => {
     }
     req.userId = newTokens.user.id;
     req.userPermissions = newTokens.user.permissions;
+    req.userEmail = newTokens.user.email;
   }
   return next();
 };

@@ -11,7 +11,11 @@ const APP_SECRET_2 = process.env.APP_SECRET_2;
 exports.createTokens = async (user, password) => {
   // 1. create jwt signed token
   const token = jwt.sign(
-    { userId: user.id, userPermissions: user.permissions },
+    {
+      userId: user.id,
+      userPermissions: user.permissions,
+      userEmail: user.email,
+    },
     APP_SECRET
   );
   // we will attach the password to a refreshToken so we can handle refreshTokens automagically without user input

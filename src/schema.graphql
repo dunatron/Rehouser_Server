@@ -15,6 +15,14 @@ input CloudinaryParams {
   tags: Json
 }
 
+type CloudinaryMediaLibraryAccess {
+  cloud_name: String
+  api_key: String
+  username: String
+  timestamp: String
+  signature: String
+}
+
 input InviteUserParams {
   email: String!
   subUrl: String
@@ -243,6 +251,7 @@ type Query {
   user(where: UserWhereUniqueInput!): User
   file(id: ID!): File
   files: [File!]!
+  makeCoudinaryAccess: CloudinaryMediaLibraryAccess
   activities(
     where: ActivityWhereInput
     orderBy: ActivityOrderByInput
