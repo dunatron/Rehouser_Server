@@ -9,8 +9,8 @@ async function updatePermissions(parent, args, ctx, info) {
   const currentUser = await ctx.db.query.user(
     {
       where: {
-        id: ctx.request.userId
-      }
+        id: ctx.request.userId,
+      },
     },
     info
   );
@@ -21,12 +21,12 @@ async function updatePermissions(parent, args, ctx, info) {
     {
       data: {
         permissions: {
-          set: args.permissions
-        }
+          set: args.permissions,
+        },
       },
       where: {
-        id: args.userId
-      }
+        id: args.userId,
+      },
     },
     info
   );
