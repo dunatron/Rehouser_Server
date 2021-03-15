@@ -412,7 +412,6 @@ type PropertyLease implements PropertyInfo {
   moveInDate: DateTime
   expiryDate: DateTime
   leaseLengthInMonths: Int
-
   activity: [Activity!]! @relation(name: "PropertyLeaseActivity")
   wallet: Wallet @relation(name: "LeaseWallet", link: INLINE)
   tenancyType: TenancyType
@@ -458,6 +457,12 @@ type RentalAppraisal {
   location: String!
   locationLat: Float!
   locationLng: Float!
+  administrative_area_level_1: String
+  country: String
+  locality: String
+  postal_code: String
+  route: String
+  street_number: String
   rooms: Int!
   bathrooms: Int!
   garageSpaces: Int!

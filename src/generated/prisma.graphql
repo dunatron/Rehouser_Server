@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/heath-dunlop-37e897/rehouser-service/dev
-# timestamp: Tue Mar 02 2021 01:02:46 GMT+1300 (New Zealand Daylight Time)
+# timestamp: Tue Mar 16 2021 01:47:55 GMT+1300 (New Zealand Daylight Time)
 
 type Accommodation implements Node {
   id: ID!
@@ -27315,6 +27315,12 @@ type RentalAppraisal implements Node {
   location: String!
   locationLat: Float!
   locationLng: Float!
+  administrative_area_level_1: String
+  country: String
+  locality: String
+  postal_code: String
+  route: String
+  street_number: String
   rooms: Int!
   bathrooms: Int!
   garageSpaces: Int!
@@ -27346,6 +27352,12 @@ input RentalAppraisalCreateInput {
   location: String!
   locationLat: Float!
   locationLng: Float!
+  administrative_area_level_1: String
+  country: String
+  locality: String
+  postal_code: String
+  route: String
+  street_number: String
   rooms: Int!
   bathrooms: Int!
   garageSpaces: Int!
@@ -27380,6 +27392,12 @@ input RentalAppraisalCreateWithoutAppraisedByInput {
   location: String!
   locationLat: Float!
   locationLng: Float!
+  administrative_area_level_1: String
+  country: String
+  locality: String
+  postal_code: String
+  route: String
+  street_number: String
   rooms: Int!
   bathrooms: Int!
   garageSpaces: Int!
@@ -27398,6 +27416,12 @@ input RentalAppraisalCreateWithoutPropertyInput {
   location: String!
   locationLat: Float!
   locationLng: Float!
+  administrative_area_level_1: String
+  country: String
+  locality: String
+  postal_code: String
+  route: String
+  street_number: String
   rooms: Int!
   bathrooms: Int!
   garageSpaces: Int!
@@ -27416,6 +27440,12 @@ input RentalAppraisalCreateWithoutRequestedByInput {
   location: String!
   locationLat: Float!
   locationLng: Float!
+  administrative_area_level_1: String
+  country: String
+  locality: String
+  postal_code: String
+  route: String
+  street_number: String
   rooms: Int!
   bathrooms: Int!
   garageSpaces: Int!
@@ -27452,6 +27482,18 @@ enum RentalAppraisalOrderByInput {
   locationLat_DESC
   locationLng_ASC
   locationLng_DESC
+  administrative_area_level_1_ASC
+  administrative_area_level_1_DESC
+  country_ASC
+  country_DESC
+  locality_ASC
+  locality_DESC
+  postal_code_ASC
+  postal_code_DESC
+  route_ASC
+  route_DESC
+  street_number_ASC
+  street_number_DESC
   rooms_ASC
   rooms_DESC
   bathrooms_ASC
@@ -27476,6 +27518,12 @@ type RentalAppraisalPreviousValues {
   location: String!
   locationLat: Float!
   locationLng: Float!
+  administrative_area_level_1: String
+  country: String
+  locality: String
+  postal_code: String
+  route: String
+  street_number: String
   rooms: Int!
   bathrooms: Int!
   garageSpaces: Int!
@@ -27703,6 +27751,246 @@ input RentalAppraisalScalarWhereInput {
 
   """All values greater than or equal the given value."""
   locationLng_gte: Float
+  administrative_area_level_1: String
+
+  """All values that are not equal to given value."""
+  administrative_area_level_1_not: String
+
+  """All values that are contained in given list."""
+  administrative_area_level_1_in: [String!]
+
+  """All values that are not contained in given list."""
+  administrative_area_level_1_not_in: [String!]
+
+  """All values less than the given value."""
+  administrative_area_level_1_lt: String
+
+  """All values less than or equal the given value."""
+  administrative_area_level_1_lte: String
+
+  """All values greater than the given value."""
+  administrative_area_level_1_gt: String
+
+  """All values greater than or equal the given value."""
+  administrative_area_level_1_gte: String
+
+  """All values containing the given string."""
+  administrative_area_level_1_contains: String
+
+  """All values not containing the given string."""
+  administrative_area_level_1_not_contains: String
+
+  """All values starting with the given string."""
+  administrative_area_level_1_starts_with: String
+
+  """All values not starting with the given string."""
+  administrative_area_level_1_not_starts_with: String
+
+  """All values ending with the given string."""
+  administrative_area_level_1_ends_with: String
+
+  """All values not ending with the given string."""
+  administrative_area_level_1_not_ends_with: String
+  country: String
+
+  """All values that are not equal to given value."""
+  country_not: String
+
+  """All values that are contained in given list."""
+  country_in: [String!]
+
+  """All values that are not contained in given list."""
+  country_not_in: [String!]
+
+  """All values less than the given value."""
+  country_lt: String
+
+  """All values less than or equal the given value."""
+  country_lte: String
+
+  """All values greater than the given value."""
+  country_gt: String
+
+  """All values greater than or equal the given value."""
+  country_gte: String
+
+  """All values containing the given string."""
+  country_contains: String
+
+  """All values not containing the given string."""
+  country_not_contains: String
+
+  """All values starting with the given string."""
+  country_starts_with: String
+
+  """All values not starting with the given string."""
+  country_not_starts_with: String
+
+  """All values ending with the given string."""
+  country_ends_with: String
+
+  """All values not ending with the given string."""
+  country_not_ends_with: String
+  locality: String
+
+  """All values that are not equal to given value."""
+  locality_not: String
+
+  """All values that are contained in given list."""
+  locality_in: [String!]
+
+  """All values that are not contained in given list."""
+  locality_not_in: [String!]
+
+  """All values less than the given value."""
+  locality_lt: String
+
+  """All values less than or equal the given value."""
+  locality_lte: String
+
+  """All values greater than the given value."""
+  locality_gt: String
+
+  """All values greater than or equal the given value."""
+  locality_gte: String
+
+  """All values containing the given string."""
+  locality_contains: String
+
+  """All values not containing the given string."""
+  locality_not_contains: String
+
+  """All values starting with the given string."""
+  locality_starts_with: String
+
+  """All values not starting with the given string."""
+  locality_not_starts_with: String
+
+  """All values ending with the given string."""
+  locality_ends_with: String
+
+  """All values not ending with the given string."""
+  locality_not_ends_with: String
+  postal_code: String
+
+  """All values that are not equal to given value."""
+  postal_code_not: String
+
+  """All values that are contained in given list."""
+  postal_code_in: [String!]
+
+  """All values that are not contained in given list."""
+  postal_code_not_in: [String!]
+
+  """All values less than the given value."""
+  postal_code_lt: String
+
+  """All values less than or equal the given value."""
+  postal_code_lte: String
+
+  """All values greater than the given value."""
+  postal_code_gt: String
+
+  """All values greater than or equal the given value."""
+  postal_code_gte: String
+
+  """All values containing the given string."""
+  postal_code_contains: String
+
+  """All values not containing the given string."""
+  postal_code_not_contains: String
+
+  """All values starting with the given string."""
+  postal_code_starts_with: String
+
+  """All values not starting with the given string."""
+  postal_code_not_starts_with: String
+
+  """All values ending with the given string."""
+  postal_code_ends_with: String
+
+  """All values not ending with the given string."""
+  postal_code_not_ends_with: String
+  route: String
+
+  """All values that are not equal to given value."""
+  route_not: String
+
+  """All values that are contained in given list."""
+  route_in: [String!]
+
+  """All values that are not contained in given list."""
+  route_not_in: [String!]
+
+  """All values less than the given value."""
+  route_lt: String
+
+  """All values less than or equal the given value."""
+  route_lte: String
+
+  """All values greater than the given value."""
+  route_gt: String
+
+  """All values greater than or equal the given value."""
+  route_gte: String
+
+  """All values containing the given string."""
+  route_contains: String
+
+  """All values not containing the given string."""
+  route_not_contains: String
+
+  """All values starting with the given string."""
+  route_starts_with: String
+
+  """All values not starting with the given string."""
+  route_not_starts_with: String
+
+  """All values ending with the given string."""
+  route_ends_with: String
+
+  """All values not ending with the given string."""
+  route_not_ends_with: String
+  street_number: String
+
+  """All values that are not equal to given value."""
+  street_number_not: String
+
+  """All values that are contained in given list."""
+  street_number_in: [String!]
+
+  """All values that are not contained in given list."""
+  street_number_not_in: [String!]
+
+  """All values less than the given value."""
+  street_number_lt: String
+
+  """All values less than or equal the given value."""
+  street_number_lte: String
+
+  """All values greater than the given value."""
+  street_number_gt: String
+
+  """All values greater than or equal the given value."""
+  street_number_gte: String
+
+  """All values containing the given string."""
+  street_number_contains: String
+
+  """All values not containing the given string."""
+  street_number_not_contains: String
+
+  """All values starting with the given string."""
+  street_number_starts_with: String
+
+  """All values not starting with the given string."""
+  street_number_not_starts_with: String
+
+  """All values ending with the given string."""
+  street_number_ends_with: String
+
+  """All values not ending with the given string."""
+  street_number_not_ends_with: String
   rooms: Int
 
   """All values that are not equal to given value."""
@@ -27851,6 +28139,12 @@ input RentalAppraisalUpdateInput {
   location: String
   locationLat: Float
   locationLng: Float
+  administrative_area_level_1: String
+  country: String
+  locality: String
+  postal_code: String
+  route: String
+  street_number: String
   rooms: Int
   bathrooms: Int
   garageSpaces: Int
@@ -27869,6 +28163,12 @@ input RentalAppraisalUpdateManyDataInput {
   location: String
   locationLat: Float
   locationLng: Float
+  administrative_area_level_1: String
+  country: String
+  locality: String
+  postal_code: String
+  route: String
+  street_number: String
   rooms: Int
   bathrooms: Int
   garageSpaces: Int
@@ -27884,6 +28184,12 @@ input RentalAppraisalUpdateManyMutationInput {
   location: String
   locationLat: Float
   locationLng: Float
+  administrative_area_level_1: String
+  country: String
+  locality: String
+  postal_code: String
+  route: String
+  street_number: String
   rooms: Int
   bathrooms: Int
   garageSpaces: Int
@@ -27940,6 +28246,12 @@ input RentalAppraisalUpdateWithoutAppraisedByDataInput {
   location: String
   locationLat: Float
   locationLng: Float
+  administrative_area_level_1: String
+  country: String
+  locality: String
+  postal_code: String
+  route: String
+  street_number: String
   rooms: Int
   bathrooms: Int
   garageSpaces: Int
@@ -27957,6 +28269,12 @@ input RentalAppraisalUpdateWithoutPropertyDataInput {
   location: String
   locationLat: Float
   locationLng: Float
+  administrative_area_level_1: String
+  country: String
+  locality: String
+  postal_code: String
+  route: String
+  street_number: String
   rooms: Int
   bathrooms: Int
   garageSpaces: Int
@@ -27974,6 +28292,12 @@ input RentalAppraisalUpdateWithoutRequestedByDataInput {
   location: String
   locationLat: Float
   locationLng: Float
+  administrative_area_level_1: String
+  country: String
+  locality: String
+  postal_code: String
+  route: String
+  street_number: String
   rooms: Int
   bathrooms: Int
   garageSpaces: Int
@@ -28236,6 +28560,246 @@ input RentalAppraisalWhereInput {
 
   """All values greater than or equal the given value."""
   locationLng_gte: Float
+  administrative_area_level_1: String
+
+  """All values that are not equal to given value."""
+  administrative_area_level_1_not: String
+
+  """All values that are contained in given list."""
+  administrative_area_level_1_in: [String!]
+
+  """All values that are not contained in given list."""
+  administrative_area_level_1_not_in: [String!]
+
+  """All values less than the given value."""
+  administrative_area_level_1_lt: String
+
+  """All values less than or equal the given value."""
+  administrative_area_level_1_lte: String
+
+  """All values greater than the given value."""
+  administrative_area_level_1_gt: String
+
+  """All values greater than or equal the given value."""
+  administrative_area_level_1_gte: String
+
+  """All values containing the given string."""
+  administrative_area_level_1_contains: String
+
+  """All values not containing the given string."""
+  administrative_area_level_1_not_contains: String
+
+  """All values starting with the given string."""
+  administrative_area_level_1_starts_with: String
+
+  """All values not starting with the given string."""
+  administrative_area_level_1_not_starts_with: String
+
+  """All values ending with the given string."""
+  administrative_area_level_1_ends_with: String
+
+  """All values not ending with the given string."""
+  administrative_area_level_1_not_ends_with: String
+  country: String
+
+  """All values that are not equal to given value."""
+  country_not: String
+
+  """All values that are contained in given list."""
+  country_in: [String!]
+
+  """All values that are not contained in given list."""
+  country_not_in: [String!]
+
+  """All values less than the given value."""
+  country_lt: String
+
+  """All values less than or equal the given value."""
+  country_lte: String
+
+  """All values greater than the given value."""
+  country_gt: String
+
+  """All values greater than or equal the given value."""
+  country_gte: String
+
+  """All values containing the given string."""
+  country_contains: String
+
+  """All values not containing the given string."""
+  country_not_contains: String
+
+  """All values starting with the given string."""
+  country_starts_with: String
+
+  """All values not starting with the given string."""
+  country_not_starts_with: String
+
+  """All values ending with the given string."""
+  country_ends_with: String
+
+  """All values not ending with the given string."""
+  country_not_ends_with: String
+  locality: String
+
+  """All values that are not equal to given value."""
+  locality_not: String
+
+  """All values that are contained in given list."""
+  locality_in: [String!]
+
+  """All values that are not contained in given list."""
+  locality_not_in: [String!]
+
+  """All values less than the given value."""
+  locality_lt: String
+
+  """All values less than or equal the given value."""
+  locality_lte: String
+
+  """All values greater than the given value."""
+  locality_gt: String
+
+  """All values greater than or equal the given value."""
+  locality_gte: String
+
+  """All values containing the given string."""
+  locality_contains: String
+
+  """All values not containing the given string."""
+  locality_not_contains: String
+
+  """All values starting with the given string."""
+  locality_starts_with: String
+
+  """All values not starting with the given string."""
+  locality_not_starts_with: String
+
+  """All values ending with the given string."""
+  locality_ends_with: String
+
+  """All values not ending with the given string."""
+  locality_not_ends_with: String
+  postal_code: String
+
+  """All values that are not equal to given value."""
+  postal_code_not: String
+
+  """All values that are contained in given list."""
+  postal_code_in: [String!]
+
+  """All values that are not contained in given list."""
+  postal_code_not_in: [String!]
+
+  """All values less than the given value."""
+  postal_code_lt: String
+
+  """All values less than or equal the given value."""
+  postal_code_lte: String
+
+  """All values greater than the given value."""
+  postal_code_gt: String
+
+  """All values greater than or equal the given value."""
+  postal_code_gte: String
+
+  """All values containing the given string."""
+  postal_code_contains: String
+
+  """All values not containing the given string."""
+  postal_code_not_contains: String
+
+  """All values starting with the given string."""
+  postal_code_starts_with: String
+
+  """All values not starting with the given string."""
+  postal_code_not_starts_with: String
+
+  """All values ending with the given string."""
+  postal_code_ends_with: String
+
+  """All values not ending with the given string."""
+  postal_code_not_ends_with: String
+  route: String
+
+  """All values that are not equal to given value."""
+  route_not: String
+
+  """All values that are contained in given list."""
+  route_in: [String!]
+
+  """All values that are not contained in given list."""
+  route_not_in: [String!]
+
+  """All values less than the given value."""
+  route_lt: String
+
+  """All values less than or equal the given value."""
+  route_lte: String
+
+  """All values greater than the given value."""
+  route_gt: String
+
+  """All values greater than or equal the given value."""
+  route_gte: String
+
+  """All values containing the given string."""
+  route_contains: String
+
+  """All values not containing the given string."""
+  route_not_contains: String
+
+  """All values starting with the given string."""
+  route_starts_with: String
+
+  """All values not starting with the given string."""
+  route_not_starts_with: String
+
+  """All values ending with the given string."""
+  route_ends_with: String
+
+  """All values not ending with the given string."""
+  route_not_ends_with: String
+  street_number: String
+
+  """All values that are not equal to given value."""
+  street_number_not: String
+
+  """All values that are contained in given list."""
+  street_number_in: [String!]
+
+  """All values that are not contained in given list."""
+  street_number_not_in: [String!]
+
+  """All values less than the given value."""
+  street_number_lt: String
+
+  """All values less than or equal the given value."""
+  street_number_lte: String
+
+  """All values greater than the given value."""
+  street_number_gt: String
+
+  """All values greater than or equal the given value."""
+  street_number_gte: String
+
+  """All values containing the given string."""
+  street_number_contains: String
+
+  """All values not containing the given string."""
+  street_number_not_contains: String
+
+  """All values starting with the given string."""
+  street_number_starts_with: String
+
+  """All values not starting with the given string."""
+  street_number_not_starts_with: String
+
+  """All values ending with the given string."""
+  street_number_ends_with: String
+
+  """All values not ending with the given string."""
+  street_number_not_ends_with: String
   rooms: Int
 
   """All values that are not equal to given value."""
