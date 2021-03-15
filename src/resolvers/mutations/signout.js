@@ -15,7 +15,11 @@ async function signout(parent, args, ctx, info) {
   //   ...cookieOptions
   // });
 
-  ctx.response.clearCookie("token");
+  // ctx.response.clearCookie("token");
+
+  ctx.response.clearCookie("token", {
+    domain: ".rehouser.co.nz",
+  });
 
   // await wait(5000);
 
