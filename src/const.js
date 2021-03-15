@@ -33,6 +33,7 @@ exports.rehouserCookieOpt = () => {
   if (envStage == "dev")
     return {
       maxAge: JWT_TOKEN_MAX_AGE,
+      domain: ".rehouser.co.nz",
       // httpOnly: true,
       // sameSite: "lax",
     };
