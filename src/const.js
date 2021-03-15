@@ -33,8 +33,8 @@ exports.rehouserCookieOpt = () => {
   if (envStage == "dev")
     return {
       maxAge: JWT_TOKEN_MAX_AGE,
-      httpOnly: true,
-      sameSite: "lax",
+      // httpOnly: true,
+      // sameSite: "lax",
     };
 
   // WORKS
@@ -50,7 +50,7 @@ exports.rehouserCookieOpt = () => {
   return {
     maxAge: JWT_TOKEN_MAX_AGE, // when the cookie expires
     domain: ".rehouser.co.nz",
-    sameSite: "Strict",
+    // sameSite: "Strict",
     httpOnly: true,
     secure: true,
   };

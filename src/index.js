@@ -11,6 +11,10 @@ const userMiddleware = require("./middleware/user/index");
 const routes = require("./routes/index");
 const logger = require("./middleware/loggers/logger");
 
+const db = require("./db");
+
+const jwt = require("jsonwebtoken");
+
 process.on("uncaughtException", (err) => {
   logger.log("error", `Uncaught Exception: ${err.message}`, {
     message: err.message,
@@ -73,7 +77,35 @@ const expressErrorMiddleware = async (err, req, res, next) => {
 };
 
 server.express.use(expressErrorMiddleware);
-userMiddleware(server);
+// userMiddleware(server);
+// decode the JWT so we can get the user Id on each request
+server.express.use((req, res, next) => {
+  const { token } = req.cookies;
+  if (token) {
+    const { userId, userPermissions, userEmail } = jwt.verify(
+      token,
+      process.env.APP_SECRET
+    );
+    // attach the id and permissions to the request
+    req.userId = userId;
+    req.userPermissions = userPermissions;
+    req.userEmail = userEmail;
+  }
+  next();
+});
+
+// 2. Create a middleware that populates the user on each request
+
+server.express.use(async (req, res, next) => {
+  // if they aren't logged in, skip this
+  if (!req.userId) return next();
+  const user = await db.query.user(
+    { where: { id: req.userId } },
+    "{ id, permissions, email }"
+  );
+  req.user = user;
+  next();
+});
 
 routes(server);
 
