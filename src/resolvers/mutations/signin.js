@@ -125,13 +125,16 @@ async function signin(parent, { email, password, captchaToken }, ctx, info) {
   if (!valid) {
     throw new Error("Invalid Password!");
   }
+
+  const cookieOptions = rehouserCookieOpt();
   // now that we have validated credentials we should create tokens and send as a cookie
   // 3. generate the JWT Token
   const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
   // 4. Set the cookie with the token
   ctx.response.cookie("token", token, {
-    httpOnly: true,
-    domain: ".rehouser.co.nz",
+    // httpOnly: true,
+    // domain: ".rehouser.co.nz",
+    ...cookieOptions,
     maxAge: 1000 * 60 * 60 * 24 * 365,
   });
   // 5. Return the user

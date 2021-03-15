@@ -48,10 +48,15 @@ exports.rehouserCookieOpt = () => {
   // };
 
   return {
-    maxAge: JWT_TOKEN_MAX_AGE, // when the cookie expires
-    domain: ".rehouser.co.nz",
-    sameSite: "Strict",
     httpOnly: true,
-    secure: true,
+    domain: ".rehouser.co.nz", // Note this is only because I cant get it to persist in live. Possibly
   };
+
+  // return {
+  //   maxAge: JWT_TOKEN_MAX_AGE, // when the cookie expires
+  //   domain: ".rehouser.co.nz",
+  //   sameSite: "Strict",
+  //   httpOnly: true,
+  //   secure: true,
+  // };
 };

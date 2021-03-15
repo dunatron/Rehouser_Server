@@ -74,9 +74,9 @@ async function signup(parent, args, ctx, info) {
   ctx.response.cookie("token", token, {
     ...cookieOptions,
   });
-  ctx.response.cookie("refresh-token", refreshToken, {
-    ...cookieOptions,
-  });
+  // ctx.response.cookie("refresh-token", refreshToken, {
+  //   ...cookieOptions,
+  // });
   // Finalllllly we return the user to the browser
   createActivity({
     ctx: ctx,

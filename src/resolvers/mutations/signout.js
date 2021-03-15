@@ -8,18 +8,18 @@ function wait(timeout) {
 
 async function signout(parent, args, ctx, info) {
   const cookieOptions = rehouserCookieOpt();
-  // ctx.response.clearCookie("token", {
-  //   ...cookieOptions,
-  // });
+  ctx.response.clearCookie("token", {
+    ...cookieOptions,
+  });
   // ctx.response.clearCookie("refresh-token", {
   //   ...cookieOptions
   // });
 
   // ctx.response.clearCookie("token");
 
-  ctx.response.clearCookie("token", {
-    domain: ".rehouser.co.nz",
-  });
+  // ctx.response.clearCookie("token", {
+  //   domain: ".rehouser.co.nz",
+  // });
 
   // await wait(5000);
 
