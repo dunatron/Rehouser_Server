@@ -131,6 +131,7 @@ async function signin(parent, { email, password, captchaToken }, ctx, info) {
   // 4. Set the cookie with the token
   ctx.response.cookie("token", token, {
     httpOnly: true,
+    domain: ".rehouser.co.nz",
     maxAge: 1000 * 60 * 60 * 24 * 365,
   });
   // 5. Return the user
