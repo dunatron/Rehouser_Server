@@ -471,6 +471,7 @@ type RentalAppraisal {
   rentValueAccepted: Boolean
   acceptTerms: Boolean @default(value: false)
   property: Property @relation(name: "PropertyRentalAppraisals")
+  appraised: Boolean! @default(value: false)
   hasBeenUsed: Boolean! @default(value: false)
 }
 
