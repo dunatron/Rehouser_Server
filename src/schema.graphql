@@ -434,6 +434,15 @@ type Query {
     first: Int
     last: Int
   ): ForeignLinkConnection!
+  filesConnection(
+    where: FileWhereInput
+    orderBy: FileOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): FileConnection
   inspection(where: InspectionWhereUniqueInput!): Inspection
   propertyLeases(where: PropertyLeaseWhereInput): [PropertyLease]!
   charge(where: ChargeWhereUniqueInput!): Charge!
