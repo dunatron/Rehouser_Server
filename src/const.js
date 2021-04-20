@@ -10,6 +10,14 @@ const CTO_DETAILS = {
   phone: "021 243 9998",
 };
 
+// const CEO_DETAILS = {
+//   id: "rehouser-cto-id",
+//   firstname: "Heath",
+//   lastname: "Dunlop",
+//   email: "heathd@rehouser.co.nz",
+//   phone: "021 243 9998",
+// };
+
 const CEO_DETAILS = {
   id: "rehouser-ceo-id",
   firstname: "Heath",

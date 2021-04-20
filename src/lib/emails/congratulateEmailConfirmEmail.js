@@ -6,15 +6,15 @@ const congratulateEmailConfirmEmail = async function({ email, user }) {
     // from: process.env.MAIL_USER,
     from: {
       name: "Rehouser Account Validated",
-      address: process.env.MAIL_USER
+      address: process.env.MAIL_USER,
     },
     to: email,
     subject: "Rehouser account validated",
     html: makeANiceEmail(
-      `Congratulations on validating your email!
+      `Congratulations on validating your email! You are now able to use the platform.
         \n\n`,
       user
-    )
+    ),
   });
 };
 

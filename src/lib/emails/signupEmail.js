@@ -5,7 +5,7 @@ const signupEmail = async function({ toEmail, ctx, user, confirmEmailToken }) {
     // from: process.env.MAIL_USER,
     from: {
       name: "Rehouser User Signup",
-      address: process.env.MAIL_USER
+      address: process.env.MAIL_USER,
     },
     to: toEmail,
     subject: `Welcome to Rehouser`,
@@ -23,7 +23,7 @@ const signupEmail = async function({ toEmail, ctx, user, confirmEmailToken }) {
 </div>
   \n\n`,
       user
-    )
+    ),
   });
 };
 

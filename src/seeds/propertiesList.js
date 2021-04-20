@@ -18,7 +18,7 @@ const propertyFrag = {
   garageSpaces: 1,
   carportSpaces: 1,
   offStreetSpaces: 1,
-  rent: dollarsToCents(1000),
+  rent: dollarsToCents(550),
   moveInDate: moment()
     .subtract(1, "day")
     .format(),
@@ -113,17 +113,6 @@ const propertyFrag = {
   },
 };
 
-// id: ID! @unique @id
-//   updatedAt: DateTime! @updatedAt
-//   createdAt: DateTime! @createdAt
-//   property: Property @relation(name: "PropertyInspections")
-//   lease: PropertyLease @relation(name: "LeaseInspections")
-//   date: DateTime
-//   completedTime: DateTime
-//   completed: Boolean
-//   notes: String
-//   files: [File] @relation(name: "InspectionFiles", link: TABLE)
-
 const propertiesList = [
   {
     ...propertyFrag,
@@ -145,7 +134,7 @@ const propertiesList = [
     id: "2",
     placeId: "ChIJHwPz9TSKMW0RtTKdCiXIPSs", // @unique google placeId
     location: "28 Berry Street, Saint Albans, Christchurch",
-    rent: dollarsToCents(1000),
+    rent: dollarsToCents(350),
     locationLat: -43.51756319999999,
     locationLng: 172.6305258,
     creator: {
@@ -170,7 +159,7 @@ const propertiesList = [
     placeId:
       "EkA4MyBDaHJpc3RjaHVyY2ggTm9ydGhlcm4gTW90b3J3YXksIEJlbGZhc3QsIEthaWFwb2ksIE5ldyBaZWFsYW5kIi4qLAoUChIJQW0l8PiRMW0RpzO2IJg0UQsSFAoSCSmFNqEzjDFtEeBfeYSG7wAF", // @unique google placeId
     location: "83 Christchurch Northern Motorway, Belfast, Kaiapoi",
-    rent: dollarsToCents(1000),
+    rent: dollarsToCents(340),
     locationLat: -43.4258662,
     locationLng: 172.6475268,
     creator: {
@@ -191,7 +180,7 @@ const propertiesList = [
     id: "4",
     placeId: "ChIJAdRlwzKMMW0R9Feek8JcaFA", // @unique google placeId
     location: "875 Main North Road, Belfast, Christchurch",
-    rent: dollarsToCents(1000),
+    rent: dollarsToCents(650),
     locationLat: -43.439839,
     locationLng: 172.6356211,
     creator: {
@@ -212,7 +201,7 @@ const propertiesList = [
     id: "5",
     placeId: "ChIJN0GiyjKMMW0RtcMWT7EpDVI", // @unique google placeId
     location: "885 Main North Road, Belfast, Christchurch",
-    rent: dollarsToCents(1000),
+    rent: dollarsToCents(450),
     locationLat: -43.4390152,
     locationLng: 172.6361623,
     creator: {
@@ -233,7 +222,7 @@ const propertiesList = [
     id: "6",
     placeId: "ChIJZZyVhDCMMW0Rj91hyUp4Bd4", // @unique google placeId
     location: "32 Donegal Street, Belfast, Christchurch",
-    rent: dollarsToCents(1000),
+    rent: dollarsToCents(280),
     locationLat: -43.4480434,
     locationLng: 172.6342515,
     creator: {
@@ -254,7 +243,7 @@ const propertiesList = [
     id: "7",
     placeId: "ChIJbZ406zCMMW0Rh03KC66W6K4", // @unique google placeId
     location: "17C Donegal Street, Belfast, Christchurch",
-    rent: dollarsToCents(1000),
+    rent: dollarsToCents(180),
     locationLat: -43.44716950000001,
     locationLng: 172.6337208,
     creator: {
@@ -276,7 +265,7 @@ const propertiesList = [
     id: "8",
     placeId: "ChIJkeAC7VyMMW0RC6iBnsXuUVA", // @unique google placeId
     location: "11 Northwater Drive, Northwood, Christchurch",
-    rent: dollarsToCents(1000),
+    rent: dollarsToCents(120),
     locationLat: -43.4532091,
     locationLng: 172.6140598,
     creator: {
@@ -299,7 +288,7 @@ const propertiesList = [
     placeId:
       "EjExOCBKb2hucyBSb2FkLCBCZWxmYXN0LCBDaHJpc3RjaHVyY2gsIE5ldyBaZWFsYW5kIjASLgoUChIJrddNIEeMMW0Rka-XTIbvABMQEioUChIJezrZd5CMMW0RHfQXqhWuQPI", // @unique google placeId
     location: "18 Johns Road, Belfast, Christchurch",
-    rent: dollarsToCents(1000),
+    rent: dollarsToCents(550),
     locationLat: -43.45147069999999,
     locationLng: 172.624347,
     creator: {
@@ -321,7 +310,7 @@ const propertiesList = [
     id: "10",
     placeId: "ChIJWdEh0ECMMW0RawFWxD0SoMM", // @unique google placeId
     location: "23 Lagan Street, Belfast, Christchurch",
-    rent: dollarsToCents(1000),
+    rent: dollarsToCents(800),
     locationLat: -43.4531047,
     locationLng: 172.6246964,
     creator: {
@@ -364,7 +353,7 @@ const propertiesList = [
     id: "12",
     placeId: "ChIJX7FYtT-MMW0RBuH8Y_Hvkiw", // @unique google placeId
     location: "6 Hossack Close, Belfast, Christchurch",
-    rent: dollarsToCents(1000),
+    rent: dollarsToCents(650),
     locationLat: -43.4564744,
     locationLng: 172.6293742,
     creator: {
@@ -385,7 +374,7 @@ const propertiesList = [
     id: "13",
     placeId: "ChIJ6bjMAIqLMW0R6Z14XIdPAOo", // @unique google placeId
     location: "33 Dunedin Street, Redwood, Christchurch",
-    rent: dollarsToCents(1000),
+    rent: dollarsToCents(550),
     locationLat: -43.4764352,
     locationLng: 172.6216652,
     creator: {
@@ -406,7 +395,7 @@ const propertiesList = [
     id: "14",
     placeId: "ChIJPS4-PHWMMW0RQUHKfJolT4w", // @unique google placeId
     location: "11 Clipper Place, Redwood, Christchurch",
-    rent: dollarsToCents(1000),
+    rent: dollarsToCents(720),
     locationLat: -43.47503330000001,
     locationLng: 172.6256346,
     creator: {
@@ -427,7 +416,7 @@ const propertiesList = [
     id: "15",
     placeId: "ChIJw-hGGQuMMW0RLxZGW9UB-D0", // @unique google placeId
     location: "117 Prestons Road, Redwood, Christchurch",
-    rent: dollarsToCents(1000),
+    rent: dollarsToCents(420),
     locationLat: -43.474025,
     locationLng: 172.6283523,
     creator: {
@@ -449,7 +438,7 @@ const propertiesList = [
     placeId:
       "EjMxMyBBcG9sbG8gUGxhY2UsIFBhcGFudWksIENocmlzdGNodXJjaCwgTmV3IFplYWxhbmQiMBIuChQKEgkfUz3xmYsxbRGQPDpMhu8AExANKhQKEgkfUz3xmYsxbRFgy9aJT43DQw", // @unique google placeId
     location: "13 Apollo Place, Papanui, Christchurch",
-    rent: dollarsToCents(1000),
+    rent: dollarsToCents(480),
     locationLat: -43.4906198,
     locationLng: 172.6154603,
     creator: {
@@ -470,7 +459,7 @@ const propertiesList = [
     id: "17",
     placeId: "ChIJCYoj9pmLMW0RNbHJkGnQAfY", // @unique google placeId
     location: "7B Apollo Place, Papanui, Christchurch",
-    rent: dollarsToCents(1000),
+    rent: dollarsToCents(160),
     locationLat: -43.4902971,
     locationLng: 172.6150194,
     creator: {
@@ -491,7 +480,7 @@ const propertiesList = [
     id: "18",
     placeId: "ChIJj4imKAuLMW0ROvsTOUgxDpQ", // @unique google placeId
     location: "91 Harewood Road, Papanui, Christchurch",
-    rent: dollarsToCents(1000),
+    rent: dollarsToCents(666),
     locationLat: -43.4948076,
     locationLng: 172.6021312,
     creator: {
@@ -512,7 +501,7 @@ const propertiesList = [
     id: "19",
     placeId: "ChIJzSxWYZyLMW0RtlD8iHAIHyQ", // @unique google placeId
     location: "9 Nyoli Street, Northcote, Christchurch",
-    rent: dollarsToCents(1000),
+    rent: dollarsToCents(187),
     locationLat: -43.4877845,
     locationLng: 172.6094902,
     creator: {
@@ -533,7 +522,7 @@ const propertiesList = [
     id: "20",
     placeId: "ChIJeXNj-ZyLMW0RNPEBN9B_XJw", // @unique google placeId
     location: "14 Sawtell Place, Northcote, Christchurch",
-    rent: dollarsToCents(1000),
+    rent: dollarsToCents(660),
     locationLat: -43.4871575,
     locationLng: 172.6082758,
     creator: {
@@ -554,7 +543,7 @@ const propertiesList = [
     id: "21",
     placeId: "ChIJ5WICPJ2LMW0RlEUZ74rh4-0", // @unique google placeId
     location: "3 Phoenix Lane, Northcote, Christchurch",
-    rent: dollarsToCents(1000),
+    rent: dollarsToCents(999),
     locationLat: -43.48587860000001,
     locationLng: 172.6068102,
     creator: {
@@ -575,7 +564,7 @@ const propertiesList = [
     id: "22",
     placeId: "ChIJeYlgGneLMW0RY0eto6IGsfY", // @unique google placeId
     location: "8 Honeysuckle Place, Northcote, Christchurch",
-    rent: dollarsToCents(1000),
+    rent: dollarsToCents(555),
     locationLat: -43.4864799,
     locationLng: 172.6015597,
     creator: {
@@ -596,7 +585,7 @@ const propertiesList = [
     id: "23",
     placeId: "ChIJWcsoax-vOG0RKCb3UpSS7s0", // @unique google placeId
     location: "Honey Badger Saloon Featherston Street, Wellington",
-    rent: dollarsToCents(1000),
+    rent: dollarsToCents(444),
     locationLat: -41.2826621,
     locationLng: 174.7775441,
     creator: {
@@ -617,7 +606,7 @@ const propertiesList = [
     id: "24",
     placeId: "ChIJgcIxN9SxOG0Rz6o_-TN-q1A", // @unique google placeId
     location: "29 Ascot Street, Thorndon, Wellington",
-    rent: dollarsToCents(1000),
+    rent: dollarsToCents(333),
     locationLat: -41.278619,
     locationLng: 174.770189,
     creator: {
@@ -639,7 +628,7 @@ const propertiesList = [
     placeId:
       "EjcyOSBKYXJtYW4gUm9hZCwgTW91bnQgV2VsbGluZ3RvbiwgQXVja2xhbmQsIE5ldyBaZWFsYW5kIjASLgoUChIJrXyj8GpJDW0RMMAWB2HvABMQHSoUChIJqVECl2pJDW0RchkDJLVqPA8", // @unique google placeId
     location: "29 Jarman Road, Mount Wellington, Auckland",
-    rent: dollarsToCents(1000),
+    rent: dollarsToCents(222),
     locationLat: -36.9047587,
     locationLng: 174.8375263,
     creator: {
@@ -660,7 +649,7 @@ const propertiesList = [
     id: "26",
     placeId: "ChIJa4WaRxNJDW0RrOL-WZvO60A", // @unique google placeId
     location: "13 Boakes Road, Mount Wellington, Auckland",
-    rent: dollarsToCents(1000),
+    rent: dollarsToCents(111),
     locationLat: -36.8999132,
     locationLng: 174.8351632,
     creator: {

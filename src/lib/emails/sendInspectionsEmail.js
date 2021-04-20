@@ -1,4 +1,5 @@
 const emailCEO = require("./emailCEO");
+const moment = require("moment");
 
 const sendInspectionsEmail = (subject, inspections) => {
   const body = inspections.reduce((acc, inspection) => {
