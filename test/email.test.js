@@ -33,7 +33,7 @@ const unsuccessfulLeaseEmail = require("../src/lib/emails/unsuccessfulLeaseEmail
 const unsuccessfulRentalApplicationEmail = require("../src/lib/emails/unsuccessfulRentalApplicationEmail"); // ToDo
 const updatePropertyLeaseEmail = require("../src/lib/emails/updatePropertyLeaseEmail"); // ToDo
 
-const rehouserCTO = userList[0];
+const rehouserCTO = userList[1];
 const property1 = propertiesList[0];
 const property2 = propertiesList[1];
 
@@ -229,10 +229,10 @@ describe("Emails", function() {
     it("should return maybe a success if we await it", async function() {
       this.timeout(5000); // wait 5s
       await requestAppraisalEmail({
-        toEmail,
-        user,
-        location,
-        appraisal,
+        toEmail: rehouserCTO.email,
+        user: rehouserCTO,
+        location: property1.location,
+        appraisal: appraisal1,
       });
     });
   });
