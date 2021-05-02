@@ -72,6 +72,19 @@ type User {
   inspections: [Inspection]
     @relation(name: "InspectionInspector", link: TABLE, onDelete: SET_NULL)
   bondLodgementNumber: String
+  savedForms: [SavedForm!]!
+    @relation(name: "UserSavedForms", link: TABLE, onDelete: CASCADE)
+}
+
+type SavedForm {
+  id: ID! @unique @id
+  identifier: String @unique
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  name: String
+  path: String
+  user: User! @relation(name: "UserSavedForms")
+  json: Json
 }
 
 type ForeignLink {

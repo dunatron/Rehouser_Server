@@ -56,6 +56,7 @@ const addBankTransferToLease = require("./mutations/addBankTransferToLease");
 const updateContactSubmission = require("./mutations/updateContactSubmission");
 const createForeignLink = require("./mutations/createForeignLink");
 const updateForeignLink = require("./mutations/updateForeignLink");
+const saveForm = require("./mutations/saveForm");
 
 // a collection of our business logic mutations
 const mutations = {
@@ -116,6 +117,7 @@ const mutations = {
   updateContactSubmission,
   createForeignLink,
   updateForeignLink,
+  saveForm,
 };
 
 module.exports = mutations;

@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/heath-dunlop-37e897/rehouser-service/dev
-# timestamp: Mon Apr 12 2021 18:23:20 GMT+1200 (New Zealand Standard Time)
+# timestamp: Sun May 02 2021 13:35:19 GMT+1200 (New Zealand Standard Time)
 
 type Accommodation implements Node {
   id: ID!
@@ -1822,6 +1822,10 @@ type AggregateRentalAppraisal {
 }
 
 type AggregateRentalGroupApplicant {
+  count: Int!
+}
+
+type AggregateSavedForm {
   count: Int!
 }
 
@@ -14458,6 +14462,7 @@ input MessageWhereUniqueInput {
 }
 
 type Mutation {
+  createSavedForm(data: SavedFormCreateInput!): SavedForm!
   createForeignLink(data: ForeignLinkCreateInput!): ForeignLink!
   createContactSubmission(data: ContactSubmissionCreateInput!): ContactSubmission!
   createContactSubmissionReply(data: ContactSubmissionReplyCreateInput!): ContactSubmissionReply!
@@ -14492,6 +14497,7 @@ type Mutation {
   createUser(data: UserCreateInput!): User!
   createCreditCard(data: CreditCardCreateInput!): CreditCard!
   createInspectionForm(data: InspectionFormCreateInput!): InspectionForm!
+  updateSavedForm(data: SavedFormUpdateInput!, where: SavedFormWhereUniqueInput!): SavedForm
   updateForeignLink(data: ForeignLinkUpdateInput!, where: ForeignLinkWhereUniqueInput!): ForeignLink
   updateContactSubmission(data: ContactSubmissionUpdateInput!, where: ContactSubmissionWhereUniqueInput!): ContactSubmission
   updateContactSubmissionReply(data: ContactSubmissionReplyUpdateInput!, where: ContactSubmissionReplyWhereUniqueInput!): ContactSubmissionReply
@@ -14525,6 +14531,7 @@ type Mutation {
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateCreditCard(data: CreditCardUpdateInput!, where: CreditCardWhereUniqueInput!): CreditCard
   updateInspectionForm(data: InspectionFormUpdateInput!, where: InspectionFormWhereUniqueInput!): InspectionForm
+  deleteSavedForm(where: SavedFormWhereUniqueInput!): SavedForm
   deleteForeignLink(where: ForeignLinkWhereUniqueInput!): ForeignLink
   deleteContactSubmission(where: ContactSubmissionWhereUniqueInput!): ContactSubmission
   deleteContactSubmissionReply(where: ContactSubmissionReplyWhereUniqueInput!): ContactSubmissionReply
@@ -14559,6 +14566,7 @@ type Mutation {
   deleteUser(where: UserWhereUniqueInput!): User
   deleteCreditCard(where: CreditCardWhereUniqueInput!): CreditCard
   deleteInspectionForm(where: InspectionFormWhereUniqueInput!): InspectionForm
+  upsertSavedForm(where: SavedFormWhereUniqueInput!, create: SavedFormCreateInput!, update: SavedFormUpdateInput!): SavedForm!
   upsertForeignLink(where: ForeignLinkWhereUniqueInput!, create: ForeignLinkCreateInput!, update: ForeignLinkUpdateInput!): ForeignLink!
   upsertContactSubmission(where: ContactSubmissionWhereUniqueInput!, create: ContactSubmissionCreateInput!, update: ContactSubmissionUpdateInput!): ContactSubmission!
   upsertContactSubmissionReply(where: ContactSubmissionReplyWhereUniqueInput!, create: ContactSubmissionReplyCreateInput!, update: ContactSubmissionReplyUpdateInput!): ContactSubmissionReply!
@@ -14592,6 +14600,7 @@ type Mutation {
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   upsertCreditCard(where: CreditCardWhereUniqueInput!, create: CreditCardCreateInput!, update: CreditCardUpdateInput!): CreditCard!
   upsertInspectionForm(where: InspectionFormWhereUniqueInput!, create: InspectionFormCreateInput!, update: InspectionFormUpdateInput!): InspectionForm!
+  updateManySavedForms(data: SavedFormUpdateManyMutationInput!, where: SavedFormWhereInput): BatchPayload!
   updateManyForeignLinks(data: ForeignLinkUpdateManyMutationInput!, where: ForeignLinkWhereInput): BatchPayload!
   updateManyContactSubmissions(data: ContactSubmissionUpdateManyMutationInput!, where: ContactSubmissionWhereInput): BatchPayload!
   updateManyContactSubmissionReplies(data: ContactSubmissionReplyUpdateManyMutationInput!, where: ContactSubmissionReplyWhereInput): BatchPayload!
@@ -14623,6 +14632,7 @@ type Mutation {
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   updateManyCreditCards(data: CreditCardUpdateManyMutationInput!, where: CreditCardWhereInput): BatchPayload!
   updateManyInspectionForms(data: InspectionFormUpdateManyMutationInput!, where: InspectionFormWhereInput): BatchPayload!
+  deleteManySavedForms(where: SavedFormWhereInput): BatchPayload!
   deleteManyForeignLinks(where: ForeignLinkWhereInput): BatchPayload!
   deleteManyContactSubmissions(where: ContactSubmissionWhereInput): BatchPayload!
   deleteManyContactSubmissionReplies(where: ContactSubmissionReplyWhereInput): BatchPayload!
@@ -25898,6 +25908,7 @@ input PropertyWhereUniqueInput {
 }
 
 type Query {
+  savedForms(where: SavedFormWhereInput, orderBy: SavedFormOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SavedForm]!
   foreignLinks(where: ForeignLinkWhereInput, orderBy: ForeignLinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ForeignLink]!
   contactSubmissions(where: ContactSubmissionWhereInput, orderBy: ContactSubmissionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ContactSubmission]!
   contactSubmissionReplies(where: ContactSubmissionReplyWhereInput, orderBy: ContactSubmissionReplyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ContactSubmissionReply]!
@@ -25932,6 +25943,7 @@ type Query {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   creditCards(where: CreditCardWhereInput, orderBy: CreditCardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CreditCard]!
   inspectionForms(where: InspectionFormWhereInput, orderBy: InspectionFormOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [InspectionForm]!
+  savedForm(where: SavedFormWhereUniqueInput!): SavedForm
   foreignLink(where: ForeignLinkWhereUniqueInput!): ForeignLink
   contactSubmission(where: ContactSubmissionWhereUniqueInput!): ContactSubmission
   contactSubmissionReply(where: ContactSubmissionReplyWhereUniqueInput!): ContactSubmissionReply
@@ -25966,6 +25978,7 @@ type Query {
   user(where: UserWhereUniqueInput!): User
   creditCard(where: CreditCardWhereUniqueInput!): CreditCard
   inspectionForm(where: InspectionFormWhereUniqueInput!): InspectionForm
+  savedFormsConnection(where: SavedFormWhereInput, orderBy: SavedFormOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SavedFormConnection!
   foreignLinksConnection(where: ForeignLinkWhereInput, orderBy: ForeignLinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ForeignLinkConnection!
   contactSubmissionsConnection(where: ContactSubmissionWhereInput, orderBy: ContactSubmissionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ContactSubmissionConnection!
   contactSubmissionRepliesConnection(where: ContactSubmissionReplyWhereInput, orderBy: ContactSubmissionReplyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ContactSubmissionReplyConnection!
@@ -29618,6 +29631,615 @@ input RentalGroupApplicantWhereUniqueInput {
   id: ID
 }
 
+type SavedForm implements Node {
+  id: ID!
+  identifier: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String
+  path: String
+  user: User!
+  json: Json
+}
+
+"""A connection to a list of items."""
+type SavedFormConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [SavedFormEdge]!
+  aggregate: AggregateSavedForm!
+}
+
+input SavedFormCreateInput {
+  id: ID
+  identifier: String
+  name: String
+  path: String
+  json: Json
+  user: UserCreateOneWithoutSavedFormsInput!
+}
+
+input SavedFormCreateManyWithoutUserInput {
+  create: [SavedFormCreateWithoutUserInput!]
+  connect: [SavedFormWhereUniqueInput!]
+}
+
+input SavedFormCreateWithoutUserInput {
+  id: ID
+  identifier: String
+  name: String
+  path: String
+  json: Json
+}
+
+"""An edge in a connection."""
+type SavedFormEdge {
+  """The item at the end of the edge."""
+  node: SavedForm!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum SavedFormOrderByInput {
+  id_ASC
+  id_DESC
+  identifier_ASC
+  identifier_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  name_ASC
+  name_DESC
+  path_ASC
+  path_DESC
+  json_ASC
+  json_DESC
+}
+
+type SavedFormPreviousValues {
+  id: ID!
+  identifier: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String
+  path: String
+  json: Json
+}
+
+input SavedFormScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [SavedFormScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [SavedFormScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [SavedFormScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  identifier: String
+
+  """All values that are not equal to given value."""
+  identifier_not: String
+
+  """All values that are contained in given list."""
+  identifier_in: [String!]
+
+  """All values that are not contained in given list."""
+  identifier_not_in: [String!]
+
+  """All values less than the given value."""
+  identifier_lt: String
+
+  """All values less than or equal the given value."""
+  identifier_lte: String
+
+  """All values greater than the given value."""
+  identifier_gt: String
+
+  """All values greater than or equal the given value."""
+  identifier_gte: String
+
+  """All values containing the given string."""
+  identifier_contains: String
+
+  """All values not containing the given string."""
+  identifier_not_contains: String
+
+  """All values starting with the given string."""
+  identifier_starts_with: String
+
+  """All values not starting with the given string."""
+  identifier_not_starts_with: String
+
+  """All values ending with the given string."""
+  identifier_ends_with: String
+
+  """All values not ending with the given string."""
+  identifier_not_ends_with: String
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  path: String
+
+  """All values that are not equal to given value."""
+  path_not: String
+
+  """All values that are contained in given list."""
+  path_in: [String!]
+
+  """All values that are not contained in given list."""
+  path_not_in: [String!]
+
+  """All values less than the given value."""
+  path_lt: String
+
+  """All values less than or equal the given value."""
+  path_lte: String
+
+  """All values greater than the given value."""
+  path_gt: String
+
+  """All values greater than or equal the given value."""
+  path_gte: String
+
+  """All values containing the given string."""
+  path_contains: String
+
+  """All values not containing the given string."""
+  path_not_contains: String
+
+  """All values starting with the given string."""
+  path_starts_with: String
+
+  """All values not starting with the given string."""
+  path_not_starts_with: String
+
+  """All values ending with the given string."""
+  path_ends_with: String
+
+  """All values not ending with the given string."""
+  path_not_ends_with: String
+}
+
+type SavedFormSubscriptionPayload {
+  mutation: MutationType!
+  node: SavedForm
+  updatedFields: [String!]
+  previousValues: SavedFormPreviousValues
+}
+
+input SavedFormSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [SavedFormSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [SavedFormSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [SavedFormSubscriptionWhereInput!]
+
+  """The subscription event gets dispatched when it's listed in mutation_in"""
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: SavedFormWhereInput
+}
+
+input SavedFormUpdateInput {
+  identifier: String
+  name: String
+  path: String
+  json: Json
+  user: UserUpdateOneRequiredWithoutSavedFormsInput
+}
+
+input SavedFormUpdateManyDataInput {
+  identifier: String
+  name: String
+  path: String
+  json: Json
+}
+
+input SavedFormUpdateManyMutationInput {
+  identifier: String
+  name: String
+  path: String
+  json: Json
+}
+
+input SavedFormUpdateManyWithoutUserInput {
+  create: [SavedFormCreateWithoutUserInput!]
+  connect: [SavedFormWhereUniqueInput!]
+  set: [SavedFormWhereUniqueInput!]
+  disconnect: [SavedFormWhereUniqueInput!]
+  delete: [SavedFormWhereUniqueInput!]
+  update: [SavedFormUpdateWithWhereUniqueWithoutUserInput!]
+  updateMany: [SavedFormUpdateManyWithWhereNestedInput!]
+  deleteMany: [SavedFormScalarWhereInput!]
+  upsert: [SavedFormUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input SavedFormUpdateManyWithWhereNestedInput {
+  where: SavedFormScalarWhereInput!
+  data: SavedFormUpdateManyDataInput!
+}
+
+input SavedFormUpdateWithoutUserDataInput {
+  identifier: String
+  name: String
+  path: String
+  json: Json
+}
+
+input SavedFormUpdateWithWhereUniqueWithoutUserInput {
+  where: SavedFormWhereUniqueInput!
+  data: SavedFormUpdateWithoutUserDataInput!
+}
+
+input SavedFormUpsertWithWhereUniqueWithoutUserInput {
+  where: SavedFormWhereUniqueInput!
+  update: SavedFormUpdateWithoutUserDataInput!
+  create: SavedFormCreateWithoutUserInput!
+}
+
+input SavedFormWhereInput {
+  """Logical AND on all given filters."""
+  AND: [SavedFormWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [SavedFormWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [SavedFormWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  identifier: String
+
+  """All values that are not equal to given value."""
+  identifier_not: String
+
+  """All values that are contained in given list."""
+  identifier_in: [String!]
+
+  """All values that are not contained in given list."""
+  identifier_not_in: [String!]
+
+  """All values less than the given value."""
+  identifier_lt: String
+
+  """All values less than or equal the given value."""
+  identifier_lte: String
+
+  """All values greater than the given value."""
+  identifier_gt: String
+
+  """All values greater than or equal the given value."""
+  identifier_gte: String
+
+  """All values containing the given string."""
+  identifier_contains: String
+
+  """All values not containing the given string."""
+  identifier_not_contains: String
+
+  """All values starting with the given string."""
+  identifier_starts_with: String
+
+  """All values not starting with the given string."""
+  identifier_not_starts_with: String
+
+  """All values ending with the given string."""
+  identifier_ends_with: String
+
+  """All values not ending with the given string."""
+  identifier_not_ends_with: String
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  path: String
+
+  """All values that are not equal to given value."""
+  path_not: String
+
+  """All values that are contained in given list."""
+  path_in: [String!]
+
+  """All values that are not contained in given list."""
+  path_not_in: [String!]
+
+  """All values less than the given value."""
+  path_lt: String
+
+  """All values less than or equal the given value."""
+  path_lte: String
+
+  """All values greater than the given value."""
+  path_gt: String
+
+  """All values greater than or equal the given value."""
+  path_gte: String
+
+  """All values containing the given string."""
+  path_contains: String
+
+  """All values not containing the given string."""
+  path_not_contains: String
+
+  """All values starting with the given string."""
+  path_starts_with: String
+
+  """All values not starting with the given string."""
+  path_not_starts_with: String
+
+  """All values ending with the given string."""
+  path_ends_with: String
+
+  """All values not ending with the given string."""
+  path_not_ends_with: String
+  user: UserWhereInput
+}
+
+input SavedFormWhereUniqueInput {
+  id: ID
+  identifier: String
+}
+
 type Seen implements Node {
   id: ID!
   lastSeen: DateTime
@@ -30049,6 +30671,7 @@ input SeenWhereUniqueInput {
 }
 
 type Subscription {
+  savedForm(where: SavedFormSubscriptionWhereInput): SavedFormSubscriptionPayload
   foreignLink(where: ForeignLinkSubscriptionWhereInput): ForeignLinkSubscriptionPayload
   contactSubmission(where: ContactSubmissionSubscriptionWhereInput): ContactSubmissionSubscriptionPayload
   contactSubmissionReply(where: ContactSubmissionReplySubscriptionWhereInput): ContactSubmissionReplySubscriptionPayload
@@ -30160,6 +30783,7 @@ type User implements Node {
   bankDetails: BankDetail
   inspections(where: InspectionWhereInput, orderBy: InspectionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Inspection!]
   bondLodgementNumber: String
+  savedForms(where: SavedFormWhereInput, orderBy: SavedFormOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SavedForm!]
 }
 
 """A connection to a list of items."""
@@ -30224,6 +30848,7 @@ input UserCreateInput {
   viewings: ViewingCreateManyWithoutHostsInput
   bankDetails: BankDetailCreateOneWithoutUserInput
   inspections: InspectionCreateManyWithoutInspectorInput
+  savedForms: SavedFormCreateManyWithoutUserInput
 }
 
 input UserCreateManyInput {
@@ -30356,6 +30981,11 @@ input UserCreateOneWithoutRentalAppraisalsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutSavedFormsInput {
+  create: UserCreateWithoutSavedFormsInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateOneWithoutSentMessagesInput {
   create: UserCreateWithoutSentMessagesInput
   connect: UserWhereUniqueInput
@@ -30421,6 +31051,7 @@ input UserCreateWithoutActivityInput {
   viewings: ViewingCreateManyWithoutHostsInput
   bankDetails: BankDetailCreateOneWithoutUserInput
   inspections: InspectionCreateManyWithoutInspectorInput
+  savedForms: SavedFormCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutAdminSettingsInput {
@@ -30474,6 +31105,7 @@ input UserCreateWithoutAdminSettingsInput {
   viewings: ViewingCreateManyWithoutHostsInput
   bankDetails: BankDetailCreateOneWithoutUserInput
   inspections: InspectionCreateManyWithoutInspectorInput
+  savedForms: SavedFormCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutAppraisedApplicationsInput {
@@ -30527,6 +31159,7 @@ input UserCreateWithoutAppraisedApplicationsInput {
   viewings: ViewingCreateManyWithoutHostsInput
   bankDetails: BankDetailCreateOneWithoutUserInput
   inspections: InspectionCreateManyWithoutInspectorInput
+  savedForms: SavedFormCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutAwaitingFriendsInput {
@@ -30580,6 +31213,7 @@ input UserCreateWithoutAwaitingFriendsInput {
   viewings: ViewingCreateManyWithoutHostsInput
   bankDetails: BankDetailCreateOneWithoutUserInput
   inspections: InspectionCreateManyWithoutInspectorInput
+  savedForms: SavedFormCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutBankDetailsInput {
@@ -30633,6 +31267,7 @@ input UserCreateWithoutBankDetailsInput {
   adminSettings: AdminSettingCreateOneWithoutUserInput!
   viewings: ViewingCreateManyWithoutHostsInput
   inspections: InspectionCreateManyWithoutInspectorInput
+  savedForms: SavedFormCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutChatsInput {
@@ -30686,6 +31321,7 @@ input UserCreateWithoutChatsInput {
   viewings: ViewingCreateManyWithoutHostsInput
   bankDetails: BankDetailCreateOneWithoutUserInput
   inspections: InspectionCreateManyWithoutInspectorInput
+  savedForms: SavedFormCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutCreatedPropertiesInput {
@@ -30739,6 +31375,7 @@ input UserCreateWithoutCreatedPropertiesInput {
   viewings: ViewingCreateManyWithoutHostsInput
   bankDetails: BankDetailCreateOneWithoutUserInput
   inspections: InspectionCreateManyWithoutInspectorInput
+  savedForms: SavedFormCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutCreditCardsInput {
@@ -30792,6 +31429,7 @@ input UserCreateWithoutCreditCardsInput {
   viewings: ViewingCreateManyWithoutHostsInput
   bankDetails: BankDetailCreateOneWithoutUserInput
   inspections: InspectionCreateManyWithoutInspectorInput
+  savedForms: SavedFormCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutCurrentAddressInput {
@@ -30845,6 +31483,7 @@ input UserCreateWithoutCurrentAddressInput {
   viewings: ViewingCreateManyWithoutHostsInput
   bankDetails: BankDetailCreateOneWithoutUserInput
   inspections: InspectionCreateManyWithoutInspectorInput
+  savedForms: SavedFormCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutForeignLinksInput {
@@ -30898,6 +31537,7 @@ input UserCreateWithoutForeignLinksInput {
   viewings: ViewingCreateManyWithoutHostsInput
   bankDetails: BankDetailCreateOneWithoutUserInput
   inspections: InspectionCreateManyWithoutInspectorInput
+  savedForms: SavedFormCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutFriendRequestsInput {
@@ -30951,6 +31591,7 @@ input UserCreateWithoutFriendRequestsInput {
   viewings: ViewingCreateManyWithoutHostsInput
   bankDetails: BankDetailCreateOneWithoutUserInput
   inspections: InspectionCreateManyWithoutInspectorInput
+  savedForms: SavedFormCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutInspectionsInput {
@@ -31004,6 +31645,7 @@ input UserCreateWithoutInspectionsInput {
   adminSettings: AdminSettingCreateOneWithoutUserInput!
   viewings: ViewingCreateManyWithoutHostsInput
   bankDetails: BankDetailCreateOneWithoutUserInput
+  savedForms: SavedFormCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutInvolvedActivityInput {
@@ -31057,6 +31699,7 @@ input UserCreateWithoutInvolvedActivityInput {
   viewings: ViewingCreateManyWithoutHostsInput
   bankDetails: BankDetailCreateOneWithoutUserInput
   inspections: InspectionCreateManyWithoutInspectorInput
+  savedForms: SavedFormCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutLesseeLeasesInput {
@@ -31110,6 +31753,7 @@ input UserCreateWithoutLesseeLeasesInput {
   viewings: ViewingCreateManyWithoutHostsInput
   bankDetails: BankDetailCreateOneWithoutUserInput
   inspections: InspectionCreateManyWithoutInspectorInput
+  savedForms: SavedFormCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutLessorLeasesInput {
@@ -31163,6 +31807,7 @@ input UserCreateWithoutLessorLeasesInput {
   viewings: ViewingCreateManyWithoutHostsInput
   bankDetails: BankDetailCreateOneWithoutUserInput
   inspections: InspectionCreateManyWithoutInspectorInput
+  savedForms: SavedFormCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutManagedPropertiesInput {
@@ -31216,6 +31861,7 @@ input UserCreateWithoutManagedPropertiesInput {
   viewings: ViewingCreateManyWithoutHostsInput
   bankDetails: BankDetailCreateOneWithoutUserInput
   inspections: InspectionCreateManyWithoutInspectorInput
+  savedForms: SavedFormCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutPhotoIdentificationInput {
@@ -31269,6 +31915,7 @@ input UserCreateWithoutPhotoIdentificationInput {
   viewings: ViewingCreateManyWithoutHostsInput
   bankDetails: BankDetailCreateOneWithoutUserInput
   inspections: InspectionCreateManyWithoutInspectorInput
+  savedForms: SavedFormCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutProfilePhotoInput {
@@ -31322,6 +31969,7 @@ input UserCreateWithoutProfilePhotoInput {
   viewings: ViewingCreateManyWithoutHostsInput
   bankDetails: BankDetailCreateOneWithoutUserInput
   inspections: InspectionCreateManyWithoutInspectorInput
+  savedForms: SavedFormCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutProofOfAddressInput {
@@ -31375,6 +32023,7 @@ input UserCreateWithoutProofOfAddressInput {
   viewings: ViewingCreateManyWithoutHostsInput
   bankDetails: BankDetailCreateOneWithoutUserInput
   inspections: InspectionCreateManyWithoutInspectorInput
+  savedForms: SavedFormCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutPropertiesInput {
@@ -31428,6 +32077,7 @@ input UserCreateWithoutPropertiesInput {
   viewings: ViewingCreateManyWithoutHostsInput
   bankDetails: BankDetailCreateOneWithoutUserInput
   inspections: InspectionCreateManyWithoutInspectorInput
+  savedForms: SavedFormCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutRecievedMessagesInput {
@@ -31481,6 +32131,7 @@ input UserCreateWithoutRecievedMessagesInput {
   viewings: ViewingCreateManyWithoutHostsInput
   bankDetails: BankDetailCreateOneWithoutUserInput
   inspections: InspectionCreateManyWithoutInspectorInput
+  savedForms: SavedFormCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutRefereesInput {
@@ -31534,6 +32185,7 @@ input UserCreateWithoutRefereesInput {
   viewings: ViewingCreateManyWithoutHostsInput
   bankDetails: BankDetailCreateOneWithoutUserInput
   inspections: InspectionCreateManyWithoutInspectorInput
+  savedForms: SavedFormCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutRentalAppraisalsInput {
@@ -31580,6 +32232,61 @@ input UserCreateWithoutRentalAppraisalsInput {
   signature: FileCreateOneWithoutUserSignatureInput
   activity: ActivityCreateManyWithoutUserInput
   involvedActivity: ActivityCreateManyWithoutInvolvedInput
+  appraisedApplications: RentalAppraisalCreateManyWithoutAppraisedByInput
+  currentAddress: AddressCreateOneWithoutUserInput
+  proofOfAddress: FileCreateOneWithoutUserProofOfAddressInput
+  adminSettings: AdminSettingCreateOneWithoutUserInput!
+  viewings: ViewingCreateManyWithoutHostsInput
+  bankDetails: BankDetailCreateOneWithoutUserInput
+  inspections: InspectionCreateManyWithoutInspectorInput
+  savedForms: SavedFormCreateManyWithoutUserInput
+}
+
+input UserCreateWithoutSavedFormsInput {
+  id: ID
+  notes: String
+  dob: DateTime
+  firstName: String!
+  lastName: String!
+  phone: String!
+  email: String!
+  emailValidated: Boolean
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  confirmEmailToken: String
+  confirmEmailTokenExpiry: Float
+  photoIdType: PhotoIdType
+  identificationNumber: String
+  emergencyContactName: String
+  emergencyContactNumber: String
+  emergencyContactEmail: String
+  rehouserStamp: Boolean
+  acceptedSignupTerms: Boolean!
+  acceptedTermsOfEngagement: Boolean
+  bondLodgementNumber: String
+  permissions: UserCreatepermissionsInput
+  friends: UserCreateManyInput
+  foreignLinks: ForeignLinkCreateManyWithoutUserInput
+  friendRequests: FriendRequestCreateManyWithoutAcceptingUserInput
+  awaitingFriends: FriendRequestCreateManyWithoutRequestUserInput
+  properties: PropertyCreateManyWithoutOwnersInput
+  managedProperties: PropertyCreateManyWithoutAgentsInput
+  lesseeLeases: LesseeCreateManyWithoutUserInput
+  lessorLeases: LessorCreateManyWithoutUserInput
+  createdProperties: PropertyCreateManyWithoutCreatorInput
+  photoIdentification: FileCreateOneWithoutUserPhotoIdInput
+  profilePhoto: FileCreateOneWithoutUserProfilePhotoInput
+  referees: RefereeCreateManyWithoutUserInput
+  creditCards: CreditCardCreateManyWithoutCardOwnerInput
+  primaryCreditCard: CreditCardCreateOneInput
+  chats: ChatCreateManyWithoutParticipantsInput
+  sentMessages: MessageCreateManyWithoutSenderInput
+  recievedMessages: MessageCreateManyWithoutRecipientInput
+  signature: FileCreateOneWithoutUserSignatureInput
+  activity: ActivityCreateManyWithoutUserInput
+  involvedActivity: ActivityCreateManyWithoutInvolvedInput
+  rentalAppraisals: RentalAppraisalCreateManyWithoutRequestedByInput
   appraisedApplications: RentalAppraisalCreateManyWithoutAppraisedByInput
   currentAddress: AddressCreateOneWithoutUserInput
   proofOfAddress: FileCreateOneWithoutUserProofOfAddressInput
@@ -31640,6 +32347,7 @@ input UserCreateWithoutSentMessagesInput {
   viewings: ViewingCreateManyWithoutHostsInput
   bankDetails: BankDetailCreateOneWithoutUserInput
   inspections: InspectionCreateManyWithoutInspectorInput
+  savedForms: SavedFormCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutSignatureInput {
@@ -31693,6 +32401,7 @@ input UserCreateWithoutSignatureInput {
   viewings: ViewingCreateManyWithoutHostsInput
   bankDetails: BankDetailCreateOneWithoutUserInput
   inspections: InspectionCreateManyWithoutInspectorInput
+  savedForms: SavedFormCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutViewingsInput {
@@ -31746,6 +32455,7 @@ input UserCreateWithoutViewingsInput {
   adminSettings: AdminSettingCreateOneWithoutUserInput!
   bankDetails: BankDetailCreateOneWithoutUserInput
   inspections: InspectionCreateManyWithoutInspectorInput
+  savedForms: SavedFormCreateManyWithoutUserInput
 }
 
 """An edge in a connection."""
@@ -32631,6 +33341,7 @@ input UserUpdateDataInput {
   viewings: ViewingUpdateManyWithoutHostsInput
   bankDetails: BankDetailUpdateOneWithoutUserInput
   inspections: InspectionUpdateManyWithoutInspectorInput
+  savedForms: SavedFormUpdateManyWithoutUserInput
 }
 
 input UserUpdateInput {
@@ -32684,6 +33395,7 @@ input UserUpdateInput {
   viewings: ViewingUpdateManyWithoutHostsInput
   bankDetails: BankDetailUpdateOneWithoutUserInput
   inspections: InspectionUpdateManyWithoutInspectorInput
+  savedForms: SavedFormUpdateManyWithoutUserInput
 }
 
 input UserUpdateManyDataInput {
@@ -32853,6 +33565,13 @@ input UserUpdateOneRequiredWithoutRentalAppraisalsInput {
   connect: UserWhereUniqueInput
   update: UserUpdateWithoutRentalAppraisalsDataInput
   upsert: UserUpsertWithoutRentalAppraisalsInput
+}
+
+input UserUpdateOneRequiredWithoutSavedFormsInput {
+  create: UserCreateWithoutSavedFormsInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutSavedFormsDataInput
+  upsert: UserUpsertWithoutSavedFormsInput
 }
 
 input UserUpdateOneWithoutActivityInput {
@@ -33053,6 +33772,7 @@ input UserUpdateWithoutActivityDataInput {
   viewings: ViewingUpdateManyWithoutHostsInput
   bankDetails: BankDetailUpdateOneWithoutUserInput
   inspections: InspectionUpdateManyWithoutInspectorInput
+  savedForms: SavedFormUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutAdminSettingsDataInput {
@@ -33105,6 +33825,7 @@ input UserUpdateWithoutAdminSettingsDataInput {
   viewings: ViewingUpdateManyWithoutHostsInput
   bankDetails: BankDetailUpdateOneWithoutUserInput
   inspections: InspectionUpdateManyWithoutInspectorInput
+  savedForms: SavedFormUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutAppraisedApplicationsDataInput {
@@ -33157,6 +33878,7 @@ input UserUpdateWithoutAppraisedApplicationsDataInput {
   viewings: ViewingUpdateManyWithoutHostsInput
   bankDetails: BankDetailUpdateOneWithoutUserInput
   inspections: InspectionUpdateManyWithoutInspectorInput
+  savedForms: SavedFormUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutAwaitingFriendsDataInput {
@@ -33209,6 +33931,7 @@ input UserUpdateWithoutAwaitingFriendsDataInput {
   viewings: ViewingUpdateManyWithoutHostsInput
   bankDetails: BankDetailUpdateOneWithoutUserInput
   inspections: InspectionUpdateManyWithoutInspectorInput
+  savedForms: SavedFormUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutBankDetailsDataInput {
@@ -33261,6 +33984,7 @@ input UserUpdateWithoutBankDetailsDataInput {
   adminSettings: AdminSettingUpdateOneRequiredWithoutUserInput
   viewings: ViewingUpdateManyWithoutHostsInput
   inspections: InspectionUpdateManyWithoutInspectorInput
+  savedForms: SavedFormUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutChatsDataInput {
@@ -33313,6 +34037,7 @@ input UserUpdateWithoutChatsDataInput {
   viewings: ViewingUpdateManyWithoutHostsInput
   bankDetails: BankDetailUpdateOneWithoutUserInput
   inspections: InspectionUpdateManyWithoutInspectorInput
+  savedForms: SavedFormUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutCreatedPropertiesDataInput {
@@ -33365,6 +34090,7 @@ input UserUpdateWithoutCreatedPropertiesDataInput {
   viewings: ViewingUpdateManyWithoutHostsInput
   bankDetails: BankDetailUpdateOneWithoutUserInput
   inspections: InspectionUpdateManyWithoutInspectorInput
+  savedForms: SavedFormUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutCreditCardsDataInput {
@@ -33417,6 +34143,7 @@ input UserUpdateWithoutCreditCardsDataInput {
   viewings: ViewingUpdateManyWithoutHostsInput
   bankDetails: BankDetailUpdateOneWithoutUserInput
   inspections: InspectionUpdateManyWithoutInspectorInput
+  savedForms: SavedFormUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutCurrentAddressDataInput {
@@ -33469,6 +34196,7 @@ input UserUpdateWithoutCurrentAddressDataInput {
   viewings: ViewingUpdateManyWithoutHostsInput
   bankDetails: BankDetailUpdateOneWithoutUserInput
   inspections: InspectionUpdateManyWithoutInspectorInput
+  savedForms: SavedFormUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutForeignLinksDataInput {
@@ -33521,6 +34249,7 @@ input UserUpdateWithoutForeignLinksDataInput {
   viewings: ViewingUpdateManyWithoutHostsInput
   bankDetails: BankDetailUpdateOneWithoutUserInput
   inspections: InspectionUpdateManyWithoutInspectorInput
+  savedForms: SavedFormUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutFriendRequestsDataInput {
@@ -33573,6 +34302,7 @@ input UserUpdateWithoutFriendRequestsDataInput {
   viewings: ViewingUpdateManyWithoutHostsInput
   bankDetails: BankDetailUpdateOneWithoutUserInput
   inspections: InspectionUpdateManyWithoutInspectorInput
+  savedForms: SavedFormUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutInspectionsDataInput {
@@ -33625,6 +34355,7 @@ input UserUpdateWithoutInspectionsDataInput {
   adminSettings: AdminSettingUpdateOneRequiredWithoutUserInput
   viewings: ViewingUpdateManyWithoutHostsInput
   bankDetails: BankDetailUpdateOneWithoutUserInput
+  savedForms: SavedFormUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutInvolvedActivityDataInput {
@@ -33677,6 +34408,7 @@ input UserUpdateWithoutInvolvedActivityDataInput {
   viewings: ViewingUpdateManyWithoutHostsInput
   bankDetails: BankDetailUpdateOneWithoutUserInput
   inspections: InspectionUpdateManyWithoutInspectorInput
+  savedForms: SavedFormUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutLesseeLeasesDataInput {
@@ -33729,6 +34461,7 @@ input UserUpdateWithoutLesseeLeasesDataInput {
   viewings: ViewingUpdateManyWithoutHostsInput
   bankDetails: BankDetailUpdateOneWithoutUserInput
   inspections: InspectionUpdateManyWithoutInspectorInput
+  savedForms: SavedFormUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutLessorLeasesDataInput {
@@ -33781,6 +34514,7 @@ input UserUpdateWithoutLessorLeasesDataInput {
   viewings: ViewingUpdateManyWithoutHostsInput
   bankDetails: BankDetailUpdateOneWithoutUserInput
   inspections: InspectionUpdateManyWithoutInspectorInput
+  savedForms: SavedFormUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutManagedPropertiesDataInput {
@@ -33833,6 +34567,7 @@ input UserUpdateWithoutManagedPropertiesDataInput {
   viewings: ViewingUpdateManyWithoutHostsInput
   bankDetails: BankDetailUpdateOneWithoutUserInput
   inspections: InspectionUpdateManyWithoutInspectorInput
+  savedForms: SavedFormUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutPhotoIdentificationDataInput {
@@ -33885,6 +34620,7 @@ input UserUpdateWithoutPhotoIdentificationDataInput {
   viewings: ViewingUpdateManyWithoutHostsInput
   bankDetails: BankDetailUpdateOneWithoutUserInput
   inspections: InspectionUpdateManyWithoutInspectorInput
+  savedForms: SavedFormUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutProfilePhotoDataInput {
@@ -33937,6 +34673,7 @@ input UserUpdateWithoutProfilePhotoDataInput {
   viewings: ViewingUpdateManyWithoutHostsInput
   bankDetails: BankDetailUpdateOneWithoutUserInput
   inspections: InspectionUpdateManyWithoutInspectorInput
+  savedForms: SavedFormUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutProofOfAddressDataInput {
@@ -33989,6 +34726,7 @@ input UserUpdateWithoutProofOfAddressDataInput {
   viewings: ViewingUpdateManyWithoutHostsInput
   bankDetails: BankDetailUpdateOneWithoutUserInput
   inspections: InspectionUpdateManyWithoutInspectorInput
+  savedForms: SavedFormUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutPropertiesDataInput {
@@ -34041,6 +34779,7 @@ input UserUpdateWithoutPropertiesDataInput {
   viewings: ViewingUpdateManyWithoutHostsInput
   bankDetails: BankDetailUpdateOneWithoutUserInput
   inspections: InspectionUpdateManyWithoutInspectorInput
+  savedForms: SavedFormUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutRecievedMessagesDataInput {
@@ -34093,6 +34832,7 @@ input UserUpdateWithoutRecievedMessagesDataInput {
   viewings: ViewingUpdateManyWithoutHostsInput
   bankDetails: BankDetailUpdateOneWithoutUserInput
   inspections: InspectionUpdateManyWithoutInspectorInput
+  savedForms: SavedFormUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutRefereesDataInput {
@@ -34145,6 +34885,7 @@ input UserUpdateWithoutRefereesDataInput {
   viewings: ViewingUpdateManyWithoutHostsInput
   bankDetails: BankDetailUpdateOneWithoutUserInput
   inspections: InspectionUpdateManyWithoutInspectorInput
+  savedForms: SavedFormUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutRentalAppraisalsDataInput {
@@ -34190,6 +34931,60 @@ input UserUpdateWithoutRentalAppraisalsDataInput {
   signature: FileUpdateOneWithoutUserSignatureInput
   activity: ActivityUpdateManyWithoutUserInput
   involvedActivity: ActivityUpdateManyWithoutInvolvedInput
+  appraisedApplications: RentalAppraisalUpdateManyWithoutAppraisedByInput
+  currentAddress: AddressUpdateOneWithoutUserInput
+  proofOfAddress: FileUpdateOneWithoutUserProofOfAddressInput
+  adminSettings: AdminSettingUpdateOneRequiredWithoutUserInput
+  viewings: ViewingUpdateManyWithoutHostsInput
+  bankDetails: BankDetailUpdateOneWithoutUserInput
+  inspections: InspectionUpdateManyWithoutInspectorInput
+  savedForms: SavedFormUpdateManyWithoutUserInput
+}
+
+input UserUpdateWithoutSavedFormsDataInput {
+  notes: String
+  dob: DateTime
+  firstName: String
+  lastName: String
+  phone: String
+  email: String
+  emailValidated: Boolean
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  confirmEmailToken: String
+  confirmEmailTokenExpiry: Float
+  photoIdType: PhotoIdType
+  identificationNumber: String
+  emergencyContactName: String
+  emergencyContactNumber: String
+  emergencyContactEmail: String
+  rehouserStamp: Boolean
+  acceptedSignupTerms: Boolean
+  acceptedTermsOfEngagement: Boolean
+  bondLodgementNumber: String
+  permissions: UserUpdatepermissionsInput
+  friends: UserUpdateManyInput
+  foreignLinks: ForeignLinkUpdateManyWithoutUserInput
+  friendRequests: FriendRequestUpdateManyWithoutAcceptingUserInput
+  awaitingFriends: FriendRequestUpdateManyWithoutRequestUserInput
+  properties: PropertyUpdateManyWithoutOwnersInput
+  managedProperties: PropertyUpdateManyWithoutAgentsInput
+  lesseeLeases: LesseeUpdateManyWithoutUserInput
+  lessorLeases: LessorUpdateManyWithoutUserInput
+  createdProperties: PropertyUpdateManyWithoutCreatorInput
+  photoIdentification: FileUpdateOneWithoutUserPhotoIdInput
+  profilePhoto: FileUpdateOneWithoutUserProfilePhotoInput
+  referees: RefereeUpdateManyWithoutUserInput
+  creditCards: CreditCardUpdateManyWithoutCardOwnerInput
+  primaryCreditCard: CreditCardUpdateOneInput
+  chats: ChatUpdateManyWithoutParticipantsInput
+  sentMessages: MessageUpdateManyWithoutSenderInput
+  recievedMessages: MessageUpdateManyWithoutRecipientInput
+  signature: FileUpdateOneWithoutUserSignatureInput
+  activity: ActivityUpdateManyWithoutUserInput
+  involvedActivity: ActivityUpdateManyWithoutInvolvedInput
+  rentalAppraisals: RentalAppraisalUpdateManyWithoutRequestedByInput
   appraisedApplications: RentalAppraisalUpdateManyWithoutAppraisedByInput
   currentAddress: AddressUpdateOneWithoutUserInput
   proofOfAddress: FileUpdateOneWithoutUserProofOfAddressInput
@@ -34249,6 +35044,7 @@ input UserUpdateWithoutSentMessagesDataInput {
   viewings: ViewingUpdateManyWithoutHostsInput
   bankDetails: BankDetailUpdateOneWithoutUserInput
   inspections: InspectionUpdateManyWithoutInspectorInput
+  savedForms: SavedFormUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutSignatureDataInput {
@@ -34301,6 +35097,7 @@ input UserUpdateWithoutSignatureDataInput {
   viewings: ViewingUpdateManyWithoutHostsInput
   bankDetails: BankDetailUpdateOneWithoutUserInput
   inspections: InspectionUpdateManyWithoutInspectorInput
+  savedForms: SavedFormUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutViewingsDataInput {
@@ -34353,6 +35150,7 @@ input UserUpdateWithoutViewingsDataInput {
   adminSettings: AdminSettingUpdateOneRequiredWithoutUserInput
   bankDetails: BankDetailUpdateOneWithoutUserInput
   inspections: InspectionUpdateManyWithoutInspectorInput
+  savedForms: SavedFormUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithWhereUniqueNestedInput {
@@ -34483,6 +35281,11 @@ input UserUpsertWithoutRefereesInput {
 input UserUpsertWithoutRentalAppraisalsInput {
   update: UserUpdateWithoutRentalAppraisalsDataInput!
   create: UserCreateWithoutRentalAppraisalsInput!
+}
+
+input UserUpsertWithoutSavedFormsInput {
+  update: UserUpdateWithoutSavedFormsDataInput!
+  create: UserCreateWithoutSavedFormsInput!
 }
 
 input UserUpsertWithoutSentMessagesInput {
@@ -35304,6 +36107,9 @@ input UserWhereInput {
   inspections_every: InspectionWhereInput
   inspections_some: InspectionWhereInput
   inspections_none: InspectionWhereInput
+  savedForms_every: SavedFormWhereInput
+  savedForms_some: SavedFormWhereInput
+  savedForms_none: SavedFormWhereInput
 }
 
 input UserWhereUniqueInput {

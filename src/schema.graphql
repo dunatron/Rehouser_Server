@@ -213,6 +213,7 @@ type Mutation {
     data: ForeignLinkUpdateInput!
     where: ForeignLinkWhereUniqueInput!
   ): ForeignLink
+  saveForm(data: SavedFormCreateInput!): SavedForm
 }
 
 type Subscription {
@@ -446,4 +447,5 @@ type Query {
   inspection(where: InspectionWhereUniqueInput!): Inspection
   propertyLeases(where: PropertyLeaseWhereInput): [PropertyLease]!
   charge(where: ChargeWhereUniqueInput!): Charge!
+  getSavedForm(where: SavedFormWhereUniqueInput!): SavedForm
 }
