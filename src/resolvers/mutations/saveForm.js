@@ -17,15 +17,11 @@ async function saveForm(parent, args, ctx, info) {
     data: { id, name, path, json, user, identifier },
   } = args;
 
-  console.log("SAVED FORM ARGS => ", args);
-  //   throw new Error("You must be logged in to Save Forms!");
-
   const loggedInUserId = ctx.request.userId;
-  //   const loggedInUserId = "rehouser-cto-id";
 
-  //   if (!loggedInUserId) {
-  //     throw new Error("You must be logged in to Save Forms!");
-  //   }
+  if (!loggedInUserId) {
+    throw new Error("You must be logged in to Save Forms!");
+  }
 
   const serverIdentifier = `${loggedInUserId}-${name}-${path}`;
 
@@ -36,17 +32,30 @@ async function saveForm(parent, args, ctx, info) {
     json: json,
   };
 
-  console.log("Shared Data => ", sharedData);
+  // try to get the form
+  const saveForm = await ctx.db.query.savedForm(
+    {
+      where: id
+        ? { id: id }
+        : {
+            identifier: serverIdentifier,
+          },
+    },
+    `{id, identifier}`
+  );
 
-  const newSavedForm = id
+  // saveForm can be null so we would create it instead
+  const newSavedForm = saveForm
     ? await ctx.db.mutation.updateSavedForm(
         {
           data: {
             ...sharedData,
           },
-          where: {
-            id: id,
-          },
+          where: id
+            ? { id: id }
+            : {
+                identifier: serverIdentifier,
+              },
         },
         info
       )
