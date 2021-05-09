@@ -6,7 +6,8 @@ const client = algoliasearch(
   process.env.ALGOLIA_APPLICATION_ID,
   process.env.ALGOLIA_API_KEY,
   {
-    timeout: 4000,
+    // timeout: 4000,
+    timeout: 10000,
   }
 );
 
