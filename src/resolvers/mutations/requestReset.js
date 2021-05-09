@@ -14,7 +14,7 @@ async function requestReset(parent, args, ctx, info) {
   const resetTokenExpiry = Date.now() + 3600000; // 1 hour from now
   const res = await ctx.db.mutation.updateUser({
     where: { email: args.email },
-    data: { resetToken, resetTokenExpiry }
+    data: { resetToken, resetTokenExpiry },
   });
   // 3. Email them that reset token
   const mailRes = await transport.sendMail({
@@ -26,7 +26,7 @@ async function requestReset(parent, args, ctx, info) {
       \n\n
       <a href="${process.env.FRONTEND_URL}/reset/password/${resetToken}">Click Here to Reset</a>`,
       res
-    )
+    ),
   });
 
   // 4. Return the message

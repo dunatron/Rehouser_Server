@@ -26,8 +26,8 @@ async function resendConfirmEmail(parent, args, ctx, info) {
     where: { email: user.email },
     data: {
       confirmEmailToken: confirmEmailToken,
-      confirmEmailTokenExpiry: confirmEmailTokenExpiry
-    }
+      confirmEmailTokenExpiry: confirmEmailTokenExpiry,
+    },
   });
 
   // 3. Email them that reset token
@@ -37,7 +37,7 @@ async function resendConfirmEmail(parent, args, ctx, info) {
     // to: user.email,
     from: process.env.MAIL_USER,
     to: user.email,
-    subject: "Your Password Reset Token",
+    subject: "Confirm Rehouser email",
     html: makeANiceEmail(
       `Rehouser confirm account!
       \n\n
@@ -52,7 +52,7 @@ async function resendConfirmEmail(parent, args, ctx, info) {
       )}</div>
       `,
       user
-    )
+    ),
   });
 
   // 4. Return the message
