@@ -117,6 +117,10 @@ const updatePropertySearchNode = async function({ property, propertyId, ctx }) {
       ...(data.images && {
         imageUrls: data.images.map((image) => image.url),
       }),
+      _geoloc: {
+        lat: data.locationLat,
+        lng: data.locationLng,
+      },
     },
   ];
 
