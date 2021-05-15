@@ -8,7 +8,7 @@ const requestAppraisalEmail = async function({
   appraisal,
 }) {
   return transport.sendMail({
-    priority: "high",
+    // priority: "high",
     // from: process.env.MAIL_USER,
     from: {
       name: "Rehouser Appraisal Recieved",
