@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/heath-dunlop-37e897/rehouser-service/dev
-# timestamp: Sun May 02 2021 13:35:19 GMT+1200 (New Zealand Standard Time)
+# timestamp: Sat May 15 2021 22:56:02 GMT+1200 (New Zealand Standard Time)
 
 type Accommodation implements Node {
   id: ID!
@@ -30775,6 +30775,7 @@ type User implements Node {
   rentalAppraisals(where: RentalAppraisalWhereInput, orderBy: RentalAppraisalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [RentalAppraisal!]
   appraisedApplications(where: RentalAppraisalWhereInput, orderBy: RentalAppraisalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [RentalAppraisal!]
   currentAddress: Address
+  billingAddress: String
   proofOfAddress: File
   acceptedSignupTerms: Boolean!
   adminSettings: AdminSetting!
@@ -30816,6 +30817,7 @@ input UserCreateInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean!
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -31020,6 +31022,7 @@ input UserCreateWithoutActivityInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean!
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -31074,6 +31077,7 @@ input UserCreateWithoutAdminSettingsInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean!
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -31128,6 +31132,7 @@ input UserCreateWithoutAppraisedApplicationsInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean!
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -31182,6 +31187,7 @@ input UserCreateWithoutAwaitingFriendsInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean!
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -31236,6 +31242,7 @@ input UserCreateWithoutBankDetailsInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean!
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -31290,6 +31297,7 @@ input UserCreateWithoutChatsInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean!
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -31344,6 +31352,7 @@ input UserCreateWithoutCreatedPropertiesInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean!
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -31398,6 +31407,7 @@ input UserCreateWithoutCreditCardsInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean!
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -31452,6 +31462,7 @@ input UserCreateWithoutCurrentAddressInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean!
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -31506,6 +31517,7 @@ input UserCreateWithoutForeignLinksInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean!
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -31560,6 +31572,7 @@ input UserCreateWithoutFriendRequestsInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean!
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -31614,6 +31627,7 @@ input UserCreateWithoutInspectionsInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean!
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -31668,6 +31682,7 @@ input UserCreateWithoutInvolvedActivityInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean!
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -31722,6 +31737,7 @@ input UserCreateWithoutLesseeLeasesInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean!
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -31776,6 +31792,7 @@ input UserCreateWithoutLessorLeasesInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean!
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -31830,6 +31847,7 @@ input UserCreateWithoutManagedPropertiesInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean!
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -31884,6 +31902,7 @@ input UserCreateWithoutPhotoIdentificationInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean!
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -31938,6 +31957,7 @@ input UserCreateWithoutProfilePhotoInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean!
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -31992,6 +32012,7 @@ input UserCreateWithoutProofOfAddressInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean!
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -32046,6 +32067,7 @@ input UserCreateWithoutPropertiesInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean!
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -32100,6 +32122,7 @@ input UserCreateWithoutRecievedMessagesInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean!
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -32154,6 +32177,7 @@ input UserCreateWithoutRefereesInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean!
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -32208,6 +32232,7 @@ input UserCreateWithoutRentalAppraisalsInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean!
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -32262,6 +32287,7 @@ input UserCreateWithoutSavedFormsInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean!
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -32316,6 +32342,7 @@ input UserCreateWithoutSentMessagesInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean!
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -32370,6 +32397,7 @@ input UserCreateWithoutSignatureInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean!
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -32424,6 +32452,7 @@ input UserCreateWithoutViewingsInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean!
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -32510,6 +32539,8 @@ enum UserOrderByInput {
   emergencyContactEmail_DESC
   rehouserStamp_ASC
   rehouserStamp_DESC
+  billingAddress_ASC
+  billingAddress_DESC
   acceptedSignupTerms_ASC
   acceptedSignupTerms_DESC
   acceptedTermsOfEngagement_ASC
@@ -32541,6 +32572,7 @@ type UserPreviousValues {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean!
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -33203,6 +33235,46 @@ input UserScalarWhereInput {
 
   """All values that are not equal to given value."""
   rehouserStamp_not: Boolean
+  billingAddress: String
+
+  """All values that are not equal to given value."""
+  billingAddress_not: String
+
+  """All values that are contained in given list."""
+  billingAddress_in: [String!]
+
+  """All values that are not contained in given list."""
+  billingAddress_not_in: [String!]
+
+  """All values less than the given value."""
+  billingAddress_lt: String
+
+  """All values less than or equal the given value."""
+  billingAddress_lte: String
+
+  """All values greater than the given value."""
+  billingAddress_gt: String
+
+  """All values greater than or equal the given value."""
+  billingAddress_gte: String
+
+  """All values containing the given string."""
+  billingAddress_contains: String
+
+  """All values not containing the given string."""
+  billingAddress_not_contains: String
+
+  """All values starting with the given string."""
+  billingAddress_starts_with: String
+
+  """All values not starting with the given string."""
+  billingAddress_not_starts_with: String
+
+  """All values ending with the given string."""
+  billingAddress_ends_with: String
+
+  """All values not ending with the given string."""
+  billingAddress_not_ends_with: String
   acceptedSignupTerms: Boolean
 
   """All values that are not equal to given value."""
@@ -33309,6 +33381,7 @@ input UserUpdateDataInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -33363,6 +33436,7 @@ input UserUpdateInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -33417,6 +33491,7 @@ input UserUpdateManyDataInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -33454,6 +33529,7 @@ input UserUpdateManyMutationInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -33741,6 +33817,7 @@ input UserUpdateWithoutActivityDataInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -33794,6 +33871,7 @@ input UserUpdateWithoutAdminSettingsDataInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -33847,6 +33925,7 @@ input UserUpdateWithoutAppraisedApplicationsDataInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -33900,6 +33979,7 @@ input UserUpdateWithoutAwaitingFriendsDataInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -33953,6 +34033,7 @@ input UserUpdateWithoutBankDetailsDataInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -34006,6 +34087,7 @@ input UserUpdateWithoutChatsDataInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -34059,6 +34141,7 @@ input UserUpdateWithoutCreatedPropertiesDataInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -34112,6 +34195,7 @@ input UserUpdateWithoutCreditCardsDataInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -34165,6 +34249,7 @@ input UserUpdateWithoutCurrentAddressDataInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -34218,6 +34303,7 @@ input UserUpdateWithoutForeignLinksDataInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -34271,6 +34357,7 @@ input UserUpdateWithoutFriendRequestsDataInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -34324,6 +34411,7 @@ input UserUpdateWithoutInspectionsDataInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -34377,6 +34465,7 @@ input UserUpdateWithoutInvolvedActivityDataInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -34430,6 +34519,7 @@ input UserUpdateWithoutLesseeLeasesDataInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -34483,6 +34573,7 @@ input UserUpdateWithoutLessorLeasesDataInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -34536,6 +34627,7 @@ input UserUpdateWithoutManagedPropertiesDataInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -34589,6 +34681,7 @@ input UserUpdateWithoutPhotoIdentificationDataInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -34642,6 +34735,7 @@ input UserUpdateWithoutProfilePhotoDataInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -34695,6 +34789,7 @@ input UserUpdateWithoutProofOfAddressDataInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -34748,6 +34843,7 @@ input UserUpdateWithoutPropertiesDataInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -34801,6 +34897,7 @@ input UserUpdateWithoutRecievedMessagesDataInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -34854,6 +34951,7 @@ input UserUpdateWithoutRefereesDataInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -34907,6 +35005,7 @@ input UserUpdateWithoutRentalAppraisalsDataInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -34960,6 +35059,7 @@ input UserUpdateWithoutSavedFormsDataInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -35013,6 +35113,7 @@ input UserUpdateWithoutSentMessagesDataInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -35066,6 +35167,7 @@ input UserUpdateWithoutSignatureDataInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -35119,6 +35221,7 @@ input UserUpdateWithoutViewingsDataInput {
   emergencyContactNumber: String
   emergencyContactEmail: String
   rehouserStamp: Boolean
+  billingAddress: String
   acceptedSignupTerms: Boolean
   acceptedTermsOfEngagement: Boolean
   bondLodgementNumber: String
@@ -35991,6 +36094,46 @@ input UserWhereInput {
 
   """All values that are not equal to given value."""
   rehouserStamp_not: Boolean
+  billingAddress: String
+
+  """All values that are not equal to given value."""
+  billingAddress_not: String
+
+  """All values that are contained in given list."""
+  billingAddress_in: [String!]
+
+  """All values that are not contained in given list."""
+  billingAddress_not_in: [String!]
+
+  """All values less than the given value."""
+  billingAddress_lt: String
+
+  """All values less than or equal the given value."""
+  billingAddress_lte: String
+
+  """All values greater than the given value."""
+  billingAddress_gt: String
+
+  """All values greater than or equal the given value."""
+  billingAddress_gte: String
+
+  """All values containing the given string."""
+  billingAddress_contains: String
+
+  """All values not containing the given string."""
+  billingAddress_not_contains: String
+
+  """All values starting with the given string."""
+  billingAddress_starts_with: String
+
+  """All values not starting with the given string."""
+  billingAddress_not_starts_with: String
+
+  """All values ending with the given string."""
+  billingAddress_ends_with: String
+
+  """All values not ending with the given string."""
+  billingAddress_not_ends_with: String
   acceptedSignupTerms: Boolean
 
   """All values that are not equal to given value."""

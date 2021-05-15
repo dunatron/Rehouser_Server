@@ -19,35 +19,13 @@ const { CEO_DETAILS, CTO_DETAILS } = require("../../const");
  * @param {*} info
  */
 async function confirmEmail(parent, args, ctx, info) {
-  // 1. Check if this is a real user
-  const loggedInUserId = ctx.request.userId;
-
-  if (!loggedInUserId) {
-    throw new Error("You must be logged in to confirm your email!");
-  }
-
-  const loggedInUser = await ctx.db.query.user(
-    {
-      where: {
-        id: loggedInUserId
-      }
-    },
-    info
-  );
-
-  if (loggedInUser.emailValidated) {
-    throw new Error(
-      `Account email has already been validated: ${loggedInUser.email}!`
-    );
-  }
-
   const [user] = await ctx.db.query.users(
     {
       where: {
-        email: loggedInUser.email,
+        email: args.email,
         confirmEmailToken: args.token,
-        confirmEmailTokenExpiry_gte: Date.now() - 3600000
-      }
+        confirmEmailTokenExpiry_gte: Date.now() - 3600000,
+      },
     },
     info
   );
@@ -57,7 +35,9 @@ async function confirmEmail(parent, args, ctx, info) {
   }
 
   if (!user.email) {
-    throw new Error("LOL IT does not have an email!");
+    throw new Error(
+      "This user has no email to validate. This is strange behaviour. Please contact support!"
+    );
   }
 
   // if (user.emailValidated) {
@@ -72,8 +52,8 @@ async function confirmEmail(parent, args, ctx, info) {
       data: {
         emailValidated: true,
         confirmEmailToken: null,
-        confirmEmailTokenExpiry: null
-      }
+        confirmEmailTokenExpiry: null,
+      },
     },
     info
   );
@@ -81,7 +61,7 @@ async function confirmEmail(parent, args, ctx, info) {
 
   congratulateEmailConfirmEmail({
     email: user.email,
-    user: user
+    user: user,
   });
 
   //create a chat betwen user and admin
@@ -95,12 +75,12 @@ async function confirmEmail(parent, args, ctx, info) {
           participants: {
             connect: [
               {
-                id: user.id
+                id: user.id,
               },
               {
-                id: CEO_DETAILS.id
-              }
-            ]
+                id: CEO_DETAILS.id,
+              },
+            ],
           },
           messages: {
             create: {
@@ -108,12 +88,12 @@ async function confirmEmail(parent, args, ctx, info) {
               content: "Welcome to rehouser",
               sender: {
                 connect: {
-                  id: CEO_DETAILS.id
-                }
-              }
-            }
-          }
-        }
+                  id: CEO_DETAILS.id,
+                },
+              },
+            },
+          },
+        },
       },
       ctx,
       info

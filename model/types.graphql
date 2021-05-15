@@ -60,6 +60,7 @@ type User {
     @relation(name: "UserAppraisalsAppraised")
   currentAddress: Address
     @relation(name: "CurrentUserAddress", link: TABLE, onDelete: CASCADE)
+  billingAddress: String
   proofOfAddress: File
     @relation(name: "UserProofOfAddress", link: TABLE, onDelete: CASCADE)
   acceptedSignupTerms: Boolean!

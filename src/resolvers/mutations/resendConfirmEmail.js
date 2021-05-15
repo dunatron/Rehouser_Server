@@ -6,14 +6,22 @@ const moment = require("moment");
 async function resendConfirmEmail(parent, args, ctx, info) {
   // throw new Error("Sorry business logic and security, needs to be 100");
   // 1. Check if this is a real user0
-  const loggedInUserId = ctx.request.userId;
+  // const loggedInUserId = ctx.request.userId;
 
-  if (!loggedInUserId) {
-    throw new Error("You must be logged in!");
-  }
-  const user = await ctx.db.query.user({ where: { id: loggedInUserId } });
+  // if (!loggedInUserId) {
+  //   throw new Error("You must be logged in!");
+  // }
+  const user = await ctx.db.query.user({ where: { email: args.email } });
   if (!user) {
-    throw new Error(`No such user found for id ${loggedInUserId}`);
+    throw new Error(
+      `No such user found for email ${args.email} try signing up`
+    );
+  }
+
+  if (user.emailValidated) {
+    throw new Error(
+      `email has already been validated for ${args.email} try logging in or resetting your password`
+    );
   }
   // 2. Set a reset token and expiry on that user
   const randomBytesPromiseified = promisify(randomBytes);
@@ -41,9 +49,9 @@ async function resendConfirmEmail(parent, args, ctx, info) {
     html: makeANiceEmail(
       `Rehouser confirm account!
       \n\n
-      <a href="${
-        process.env.FRONTEND_URL
-      }/account/confirm/${confirmEmailToken}">Click Here to confirm your rehouser account</a>
+      <a href="${process.env.FRONTEND_URL}/account/${
+        args.email
+      }/confirm/${confirmEmailToken}">Click Here to confirm your rehouser account</a>
       <div style="line-height: 18px;">
         Alternatively you can copy paste the token <span>${confirmEmailToken}</span>
       </div>
