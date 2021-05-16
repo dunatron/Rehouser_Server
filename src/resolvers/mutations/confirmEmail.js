@@ -3,7 +3,9 @@ const { promisify } = require("util");
 const { transport, makeANiceEmail } = require("../../lib/mail");
 const congratulateEmailConfirmEmail = require("../../lib/emails/congratulateEmailConfirmEmail");
 const createChat = require("./createChat");
-const { CEO_DETAILS, CTO_DETAILS } = require("../../const");
+const { CEO_DETAILS, CTO_DETAILS, rehouserCookieOpt } = require("../../const");
+const bcrypt = require("bcryptjs");
+const { createTokens } = require("../../auth");
 // const logUser = require("../../lib/logUser");
 
 /**
@@ -19,6 +21,27 @@ const { CEO_DETAILS, CTO_DETAILS } = require("../../const");
  * @param {*} info
  */
 async function confirmEmail(parent, args, ctx, info) {
+  const loggedInUserId = ctx.request.userId; // use this to autologin later
+
+  // get the user we are trying to validate
+  const userToValidate = await ctx.db.query.user(
+    {
+      where: {
+        email: args.email,
+      },
+    },
+    `{ id email emailValidated password permissions firstName lastName phone }`
+  );
+  console.log("User to validate right here => ", userToValidate);
+  if (!userToValidate) {
+    throw new Error(`No user found for ${args.email}`);
+  }
+
+  if (userToValidate.emailValidated === true) {
+    throw new Error(`email has already been validated for ${args.email}`);
+  }
+
+  // if we cant find a user with these params token is invalid or expired
   const [user] = await ctx.db.query.users(
     {
       where: {
@@ -34,10 +57,30 @@ async function confirmEmail(parent, args, ctx, info) {
     throw new Error("This token is either invalid or expired!");
   }
 
+  if (userToValidate.email !== user.email) {
+    throw new Error(
+      `For security reason we could not validate this token against ${args.email} try requesting another token`
+    );
+  }
+
   if (!user.email) {
     throw new Error(
       "This user has no email to validate. This is strange behaviour. Please contact support!"
     );
+  }
+
+  // now that we have validated credentials we if we have no ctx.userId we assume they are not logged in so we do that
+  if (!loggedInUserId) {
+    const { token } = await createTokens(
+      userToValidate,
+      userToValidate.password
+    );
+
+    const cookieOptions = rehouserCookieOpt();
+    ctx.response.cookie("token", token, {
+      ...cookieOptions,
+      maxAge: 1000 * 60 * 60 * 24 * 365,
+    });
   }
 
   // if (user.emailValidated) {
@@ -46,6 +89,7 @@ async function confirmEmail(parent, args, ctx, info) {
 
   // confirm the token is leget
   // make mutation to say
+  // SHould Log the user in
   const updatedUserRes = await ctx.db.mutation.updateUser(
     {
       where: { email: user.email },
@@ -71,7 +115,7 @@ async function confirmEmail(parent, args, ctx, info) {
       {
         data: {
           type: "GROUP",
-          name: "Rehouser Admin",
+          name: `${CEO_DETAILS.firstname} ${CEO_DETAILS.lastname} (Admin)`,
           participants: {
             connect: [
               {
@@ -83,25 +127,42 @@ async function confirmEmail(parent, args, ctx, info) {
             ],
           },
           messages: {
-            create: {
-              isMine: false,
-              content: "Welcome to rehouser",
-              sender: {
-                connect: {
-                  id: CEO_DETAILS.id,
+            create: [
+              {
+                isMine: false,
+                content: `Or email me at ${CEO_DETAILS.email}`,
+                sender: {
+                  connect: {
+                    id: CEO_DETAILS.id,
+                  },
                 },
               },
-            },
+              {
+                isMine: false,
+                content: `You can also call or text me on ${CEO_DETAILS.phone}`,
+                sender: {
+                  connect: {
+                    id: CEO_DETAILS.id,
+                  },
+                },
+              },
+              {
+                isMine: false,
+                content: `Welcome to Rehouser ${user.firstName}, if you have any questions do not hesitate to drop me a message`,
+                sender: {
+                  connect: {
+                    id: CEO_DETAILS.id,
+                  },
+                },
+              },
+            ],
           },
         },
       },
       ctx,
       info
     );
-    console.log("CHAT CREATED FORM CONFIRM EMAIL => ", theChat);
   }
-
-  // logUser("User confirmed email", updatedUserRes);
 
   // 4. Return the message
   return updatedUserRes;
