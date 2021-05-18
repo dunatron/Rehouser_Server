@@ -68,7 +68,7 @@ async function signup(parent, args, ctx, info) {
     db: ctx.db,
   });
 
-  const { token, refreshToken } = await createTokens(user, password);
+  const { token } = await createTokens(user, password);
   const cookieOptions = rehouserCookieOpt();
 
   ctx.response.cookie("token", token, {
@@ -115,7 +115,6 @@ async function signup(parent, args, ctx, info) {
   const userInfoWithToken = {
     ...user,
     token: token,
-    refreshToken: refreshToken,
   };
   // logUser("User Signed up", userInfoWithToken);
 
