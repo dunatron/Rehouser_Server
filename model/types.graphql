@@ -1,5 +1,8 @@
 type User {
   id: ID! @unique @id
+  bankAccounts: [BankAccount]
+    @relation(name: "BankAccountUsers", onDelete: SET_NULL) # bank accounts cant be deleted once added
+  primaryBankAccountId: String
   friends: [User!]!
   notes: String
   foreignLinks: [ForeignLink]
@@ -287,6 +290,9 @@ type File {
 
 type Property implements PropertyInfo {
   id: ID! @unique @id # google placesId is too looong look below
+  bankAccounts: [BankAccount]
+    @relation(name: "BankAccountProperties", onDelete: SET_NULL)
+  primaryBankAccountId: String
   placeId: String! @unique
   location: String!
   locationLat: Float!
@@ -592,4 +598,44 @@ type Payment {
   createdAt: DateTime! @createdAt
   description: String
   status: String
+}
+
+type BankAccount {
+  id: ID! @unique @id # 'there bank account number really isnt it',
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  amount: Float!
+  name: String
+  description: String
+  users: [User] @relation(name: "BankAccountUsers", link: TABLE)
+  properties: [Property] @relation(name: "BankAccountProperties", link: TABLE)
+  accountNumber: String #'Account Number' as complete number ie parseInt,
+  bankName: String
+  bankNumber: String
+  bankBranch: String
+  bankAccount: String
+  bankSuffix: String
+  transactions: [BankTransaction]
+    @relation(name: "BankAccountTransactions", link: TABLE)
+}
+
+type BankTransaction {
+  id: ID! @unique @id # 'Unique ID',
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  bankAccount: BankAccount! @relation(name: "BankAccountTransactions")
+  accountNumber: String #'Account Number',
+  date: DateTime # 'Date',
+  reference: String #'Reference',
+  amount: Float #'Amount',
+  txCode: String #'Transaction Code',
+  txType: String #'Transaction Type',
+  source: String #'Source',
+  otherPart: String #'Other Party',
+  particulars: String #'Particulars',
+  analysisCode: String #'Analysis (Code)',
+  serialNumber: String #'Serial Number',
+  accountCode: String #'Account Code',
+  uniqueBnkTxId: String # Unique ID
+  rehouserTransaction: Boolean # allows other transactions to be pulled in
 }

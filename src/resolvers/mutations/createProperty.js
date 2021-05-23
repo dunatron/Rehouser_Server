@@ -41,6 +41,7 @@ async function createProperty(parent, { data }, ctx, info) {
           rehouserManaged: true,
           isLeased: false,
           onTheMarket: false,
+          inspectionFrequency: "EVERY_3_MONTHS",
         },
       },
       info

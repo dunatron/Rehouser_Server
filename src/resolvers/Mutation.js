@@ -58,6 +58,7 @@ const createForeignLink = require("./mutations/createForeignLink");
 const updateForeignLink = require("./mutations/updateForeignLink");
 const saveForm = require("./mutations/saveForm");
 const syncPropertySearchState = require("./mutations/syncPropertySearchState");
+const processBankTransactions = require("./mutations/processBankTransactions");
 
 // a collection of our business logic mutations
 const mutations = {
@@ -120,6 +121,7 @@ const mutations = {
   updateForeignLink,
   saveForm,
   syncPropertySearchState,
+  processBankTransactions,
 };
 
 module.exports = mutations;

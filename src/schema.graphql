@@ -215,6 +215,9 @@ type Mutation {
   ): ForeignLink
   saveForm(data: SavedFormCreateInput!): SavedForm
   syncPropertySearchState(id: String!): SuccessMessage!
+  processBankTransactions(
+    data: [BankTransactionCreateInput]!
+  ): [BankTransaction]
 }
 
 type Subscription {
