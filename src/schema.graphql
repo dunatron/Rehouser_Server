@@ -448,6 +448,25 @@ type Query {
     first: Int
     last: Int
   ): FileConnection
+  bankAccountsConnection(
+    where: BankAccountWhereInput
+    orderBy: BankAccountOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): BankAccountConnection
+  bankTransactionConnection(
+    where: BankTransactionWhereInput
+    orderBy: BankTransactionOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): BankTransactionConnection
+
   inspection(where: InspectionWhereUniqueInput!): Inspection
   propertyLeases(where: PropertyLeaseWhereInput): [PropertyLease]!
   charge(where: ChargeWhereUniqueInput!): Charge!

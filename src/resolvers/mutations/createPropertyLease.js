@@ -11,7 +11,7 @@ async function createPropertyLease(parent, { data }, ctx, info) {
 
   // for safety/UX especially in the future we should try get a property lease with bankRef.
   // if it is not = to null// whatever empty is, generate another bankRef/nanoid
-  const bankRef = nanoid(7);
+  const bankRef = nanoid(12);
 
   const newLease = await ctx.db.mutation.createPropertyLease(
     {
@@ -20,10 +20,10 @@ async function createPropertyLease(parent, { data }, ctx, info) {
         ...recievedData,
         wallet: {
           create: {
-            amount: 0
-          }
-        }
-      }
+            amount: 0,
+          },
+        },
+      },
     },
     info
   );
@@ -31,8 +31,8 @@ async function createPropertyLease(parent, { data }, ctx, info) {
   const connectProperty = newLease.property
     ? {
         connect: {
-          id: newLease.property.id
-        }
+          id: newLease.property.id,
+        },
       }
     : null;
 
@@ -44,20 +44,20 @@ async function createPropertyLease(parent, { data }, ctx, info) {
       type: "CREATED_LEASE",
       // bankRef: newLease.bankRef,
       jsonObj: {
-        bankRef: newLease.bankRef
+        bankRef: newLease.bankRef,
       },
       propertyLease: {
         connect: {
-          id: newLease.id
-        }
+          id: newLease.id,
+        },
       },
       user: {
         connect: {
-          id: loggedInUserId
-        }
+          id: loggedInUserId,
+        },
       },
-      property: connectProperty
-    }
+      property: connectProperty,
+    },
   });
 
   return newLease;

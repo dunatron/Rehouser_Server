@@ -49,12 +49,8 @@ const doProcess = async ({ transaction, ctx, info }) => {
           bankAccQuery
         );
 
-  return {
-    ...transaction,
-    bankAccount: bankAccount,
-  };
-
   // 2. try and get the transaction first, it may have already been added
+
   const txFrmDb = await ctx.db.query.bankTransaction({
     where: {
       id: transaction.id,
@@ -62,24 +58,63 @@ const doProcess = async ({ transaction, ctx, info }) => {
   });
 
   if (txFrmDb !== null) {
-    // we already have this transaction
-    return;
+    // we already have this transaction. Dont trhow an error keep going
+    return {
+      ...transaction,
+      bankAccount: bankAccount,
+      errorMessage: "Transaction has already been added to the database",
+    };
   }
 
   // create the transaction
-  const tx = await ctx.db.query.bankTransaction(
+  // const tx = await ctx.db.mutation.bankTransaction(
+  //   {
+  //     data: {
+  //       ...transaction,
+  //       bankAccount: {
+  //         connect: {
+  //           id: bankAccount.id,
+  //         },
+  //       },
+  //     },
+  //   },
+  //   info
+  // );
+  // delete transaction.bankAccount as its a create statement
+  console.log("BANK ACCOUNT => ", bankAccount);
+  delete transaction.bankAccount;
+  const updatedBankAccount = await ctx.db.mutation.updateBankAccount(
     {
       data: {
-        ...transaction,
-        bankAccount: {
-          connect: {
-            id: bankAccount.id,
-          },
+        amount: bankAccount.amount + transaction.amount,
+        transactions: {
+          create: [
+            {
+              ...transaction,
+              id: transaction.id,
+              amount: transaction.amount,
+              date: transaction.date,
+            },
+          ],
         },
       },
+      where: {
+        id: bankAccount.id,
+      },
     },
-    info
+    `{ id amount }`
   );
+
+  return {
+    ...transaction,
+    bankAccount: updatedBankAccount,
+    errorMessage: "Transaction has already been added to the database",
+  };
+
+  // do any logic that needs to be done with the transaction
+
+  // query the transaction to get any info needed on it
+
   // 4. create the tx in the db
 
   // finally update the bank account with the new transaction
@@ -87,12 +122,30 @@ const doProcess = async ({ transaction, ctx, info }) => {
   // 2. process the transaction onto the Bank Account.
   // 3. A bank transaction could Also have some REFS on it to indicate to do other THINGS
 
-  console.log(" bank account from DB => ", bnkAccountFrmDb);
-  // 2. if we dont have a bank account then we need to create it!
-  // 3. we need to try and then get the transaction
-  // 4. if we have no transaction we create it on the bank account. we also do an additions or deductions against the bank account
+  // ToDo: get the property lease if it has a code === PLBR by the ref of bankRef === nanoid digits
+  // particulars, code, reference that all have 12 chars. use one for the type i.e our code. reference is the leaseID
+  // code => PLBR for property lease banking ref. then the reference is the leasebankingRef number
+  const updatedLeaseWithPayments = await ctx.db.query.propertyLease(
+    {
+      where: {
+        bankRef: bankRef,
+      },
+    },
+    info
+  );
 
-  return tx;
+  console.log(" bank account from DB => ", bnkAccountFrmDb);
+
+  const finalTx = await ctx.db.query.bankTransaction(
+    {
+      where: {
+        id: transaction.id,
+      },
+    },
+    info
+  );
+
+  return finalTx;
 };
 
 // {

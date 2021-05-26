@@ -10,6 +10,8 @@ const propertyLeasesConnection = require("./connections/propertyLeasesConnection
 const contactSubmissionsConnection = require("./connections/contactSubmissionsConnection");
 const foreignLinksConnection = require("./connections/foreignLinksConnections");
 const filesConnection = require("./connections/filesConnection");
+const bankAccountsConnection = require("./connections/bankAccountsConnection");
+const bankTransactionConnection = require("./connections/bankTransactionConnection");
 
 const Connection = {
   rentalApplicationsConnection,
@@ -23,7 +25,9 @@ const Connection = {
   propertyLeasesConnection,
   contactSubmissionsConnection,
   foreignLinksConnection,
-  filesConnection
+  filesConnection,
+  bankAccountsConnection,
+  bankTransactionConnection,
 };
 
 module.exports = Connection;
