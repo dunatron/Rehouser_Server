@@ -114,6 +114,7 @@ initialiseTasks();
 
 const allowedClientOrigins = [
   "http://localhost:7777",
+  "http://localhost:3000",
   "https://rehouser-next-prod.herokuapp.com",
   "http://app.rehouser.co.nz",
   "http://rehouser.co.nz",

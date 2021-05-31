@@ -74,6 +74,11 @@ async function signup(parent, args, ctx, info) {
   ctx.response.cookie("token", token, {
     ...cookieOptions,
   });
+
+  ctx.response.cookie("reAuthed", "Yes", {
+    ...cookieOptions,
+    httpOnly: false,
+  });
   // ctx.response.cookie("refresh-token", refreshToken, {
   //   ...cookieOptions,
   // });

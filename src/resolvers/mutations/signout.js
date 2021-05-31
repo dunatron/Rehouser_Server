@@ -11,6 +11,10 @@ async function signout(parent, args, ctx, info) {
   ctx.response.clearCookie("token", {
     ...cookieOptions,
   });
+  ctx.response.clearCookie("reAuthed", {
+    ...cookieOptions,
+    httpOnly: false,
+  });
   // ctx.response.clearCookie("refresh-token", {
   //   ...cookieOptions
   // });

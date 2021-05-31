@@ -56,6 +56,12 @@ async function signin(parent, { email, password, captchaToken }, ctx, info) {
     ...cookieOptions,
     maxAge: JWT_TOKEN_MAX_AGE,
   });
+  // this is to be read and is just a convienent indicator. It contains nothing
+  ctx.response.cookie("reAuthed", "Yes", {
+    ...cookieOptions,
+    httpOnly: false,
+    maxAge: JWT_TOKEN_MAX_AGE,
+  });
   // ctx.response.cookie("refresh-token", refreshToken, {
   //   ...cookieOptions,
   // });
