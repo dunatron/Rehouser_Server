@@ -78,12 +78,32 @@ exports.processUpload = async ({ upload, ctx, info, data = {} }) => {
 
   const cloudinaryFile = await cloudinaryUploadStream({ stream, data });
 
-  // combine cloudiary returned file data
+  // Make sure to explicitly add the keys
   const combinedFileData = {
-    filename,
-    mimetype,
-    encoding,
-    ...cloudinaryFile,
+    filename, // '000_1a03sb.83d8b095222.original.jpg'
+    mimetype, // 'image/jpeg'
+    encoding, // '7bit'
+    asset_id: cloudinaryFile.asset_id, // 'ee66c6d4639bd5a6a123ff81cbfb930e'
+    public_id: cloudinaryFile.public_id, // 'dev/properties/ChIJa4WaRxNJDW0RrOL-WZvO60A/images/f1tbkbjakeqd8cb1oymr'
+    version: cloudinaryFile.version, // 1622712954
+    version_id: cloudinaryFile.version_id, // '5e431562ca1fec7b32bebee455fb7fcb'
+    signature: cloudinaryFile.signature, // '865862eb44424b33aaa595bc00568f86225074cb'
+    width: cloudinaryFile.width, // 2886
+    height: cloudinaryFile.height, // 1924
+    format: cloudinaryFile.format, // 'jpg'
+    resource_type: cloudinaryFile.resource_type, // 'image'
+    created_at: cloudinaryFile.created_at, // '2021-06-03T09:35:54Z'
+    tags: cloudinaryFile.tags, // []
+    bytes: cloudinaryFile.bytes, // 845706
+    type: cloudinaryFile.type, // 'upload'
+    etag: cloudinaryFile.etag, // '1720a1c2db69a4fd28214e556eff3a79'
+    placeholder: cloudinaryFile.placeholder, // false
+    url: cloudinaryFile.secure_url, // making url secure_url => 'http://res.cloudinary.com/dkhe0hx1r/image/upload/v1622712954/dev/properties/ChIJa4WaRxNJDW0RrOL-WZvO60A/images/f1tbkbjakeqd8cb1oymr.jpg'
+    secure_url: cloudinaryFile.secure_url, // 'https://res.cloudinary.com/dkhe0hx1r/image/upload/v1622712954/dev/properties/ChIJa4WaRxNJDW0RrOL-WZvO60A/images/f1tbkbjakeqd8cb1oymr.jpg'
+    access_mode: cloudinaryFile.access_mode, // 'public'
+    original_filename: cloudinaryFile.original_filename, // 'file'
+    // api_key: cloudinaryFile.asset_id, // why i am explicitly adding as i don't want this, could delete it but would rather add
+    // ...cloudinaryFile,
   };
 
   // upload cloudinary result object to the database
