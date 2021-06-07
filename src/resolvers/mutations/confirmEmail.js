@@ -114,7 +114,7 @@ async function confirmEmail(parent, args, ctx, info) {
       parent,
       {
         data: {
-          type: "GROUP",
+          type: "PEER",
           name: `${CEO_DETAILS.firstname} ${CEO_DETAILS.lastname} (Admin)`,
           participants: {
             connect: [
@@ -130,7 +130,7 @@ async function confirmEmail(parent, args, ctx, info) {
             create: [
               {
                 isMine: false,
-                content: `Or email me at ${CEO_DETAILS.email}`,
+                content: `Welcome to ReHouser ${user.firstName}, if you have any questions do not hesitate to drop me a message`,
                 sender: {
                   connect: {
                     id: CEO_DETAILS.id,
@@ -148,7 +148,7 @@ async function confirmEmail(parent, args, ctx, info) {
               },
               {
                 isMine: false,
-                content: `Welcome to Rehouser ${user.firstName}, if you have any questions do not hesitate to drop me a message`,
+                content: `Or email me at ${CEO_DETAILS.email}`,
                 sender: {
                   connect: {
                     id: CEO_DETAILS.id,
