@@ -10,8 +10,8 @@ const file = require("./querys/file");
 const files = require("./querys/files");
 const myLeases = require("./querys/myLeases.js");
 const myLease = require("./querys/myLease.js");
-const payments = require("./querys/payments");
-const payment = require("./querys/payment");
+const walletTransactions = require("./querys/walletTransactions");
+const walletTransaction = require("./querys/walletTransaction");
 const rentalApplication = require("./querys/rentalApplication");
 const rentalApplications = require("./querys/rentalApplications");
 const myRentalApplications = require("./querys/myRentalApplications");
@@ -33,7 +33,6 @@ const viewings = require("./querys/viewings");
 const inspection = require("./querys/inspection");
 const propertyFiles = require("./querys/propertyFiles");
 const propertyLeases = require("./querys/propertyLeases");
-const charge = require("./querys/charge");
 const cloudinaryAccess = require("./querys/cloudinaryAccess");
 const getSavedForm = require("./querys/getSavedForm");
 
@@ -56,8 +55,8 @@ const Query = {
   myLeases,
   myLease,
   rentalApplication,
-  payments,
-  payment,
+  walletTransactions,
+  walletTransaction,
   findUsers,
   chats,
   chat,
@@ -70,7 +69,6 @@ const Query = {
   viewings,
   inspection,
   propertyLeases,
-  charge,
   cloudinaryAccess,
   getSavedForm,
 };

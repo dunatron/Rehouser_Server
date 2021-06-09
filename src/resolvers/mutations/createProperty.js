@@ -4,6 +4,8 @@ const {
 } = require("../../lib/algolia/propertySearchApi");
 const propertyCreatedEmail = require("../../lib/emails/propertyCreatedEmail");
 
+const nanoid = require("nanoid");
+
 var fs = require("fs"),
   path = require("path"),
   filePath = path.join(__dirname, "../lib/documents/test.docx");
@@ -14,10 +16,6 @@ async function createProperty(parent, { data }, ctx, info) {
   if (!loggedInUserId) {
     throw new Error("You must be logged in to create a property!");
   }
-
-  console.log("createProperty: data => ", data);
-
-  console.log("createProperty: info => ", info);
 
   const numberOfRooms = data.useAdvancedRent
     ? accommodation.length
@@ -30,10 +28,12 @@ async function createProperty(parent, { data }, ctx, info) {
   const highestRoomPrice = parseFloat(Math.max(...roomPrices));
 
   try {
+    const bankRef = nanoid(12);
     const property = await ctx.db.mutation.createProperty(
       {
         data: {
           ...data,
+          bankRef: bankRef,
           lowestRoomPrice,
           highestRoomPrice,
           rent: data.rent,
@@ -42,6 +42,11 @@ async function createProperty(parent, { data }, ctx, info) {
           isLeased: false,
           onTheMarket: false,
           inspectionFrequency: "EVERY_3_MONTHS",
+          wallet: {
+            create: {
+              amount: 0,
+            },
+          },
         },
       },
       info

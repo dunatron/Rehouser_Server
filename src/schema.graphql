@@ -171,7 +171,9 @@ type Mutation {
     data: PropertyLeaseUpdateInput!
     where: PropertyLeaseWhereUniqueInput!
   ): PropertyLease
-  createPayment(data: PaymentCreateInput!): Payment!
+  createWalletTransaction(
+    data: WalletTransactionCreateInput!
+  ): WalletTransaction!
   updateWallet(data: WalletUpdateInput!, where: WalletWhereUniqueInput!): Wallet
   createViewing(data: ViewingCreateInput!): Viewing!
   updateViewing(
@@ -202,7 +204,7 @@ type Mutation {
   inviteUser(data: InviteUserParams!): SuccessMessage!
   addBankTransferToLease(
     bankRef: String!
-    data: PaymentCreateInput!
+    data: BankTransactionCreateInput!
   ): PropertyLease!
   updateContactSubmission(
     data: ContactSubmissionUpdateInput!
@@ -231,8 +233,6 @@ type Subscription {
   propertyLeaseSub(
     where: PropertyLeaseSubscriptionWhereInput
   ): PropertyLeaseSubscriptionPayload
-  paymentSub(where: PaymentSubscriptionWhereInput): PaymentSubscriptionPayload
-  chargeSub(where: ChargeSubscriptionWhereInput): ChargeSubscriptionPayload
   rentalAppraisalSub(
     where: RentalAppraisalSubscriptionWhereInput
   ): RentalAppraisalSubscriptionPayload
@@ -246,6 +246,9 @@ type Subscription {
   rentalApplicationSub(
     where: RentalApplicationSubscriptionWhereInput
   ): RentalApplicationSubscriptionPayload
+  walletTransactionSub(
+    where: WalletTransactionSubscriptionWhereInput
+  ): WalletTransactionSubscriptionPayload
 }
 
 type Query {
@@ -355,34 +358,27 @@ type Query {
   myCreditCards(where: CreditCardWhereInput!): [CreditCard!]!
   myLeases(where: PropertyLeaseWhereInput): [PropertyLease!]!
   myLease(where: PropertyLeaseWhereUniqueInput!): PropertyLease!
-  payment(where: PaymentWhereUniqueInput!): Payment
-  payments(
-    where: PaymentWhereInput
-    orderBy: PaymentOrderByInput
+  walletTransaction(
+    where: WalletTransactionWhereUniqueInput!
+  ): WalletTransaction
+  walletTransactions(
+    where: WalletTransactionWhereInput
+    orderBy: WalletTransactionOrderByInput
     skip: Int
     after: String
     before: String
     first: Int
     last: Int
-  ): [Payment]!
-  paymentsConnection(
-    where: PaymentWhereInput
-    orderBy: PaymentOrderByInput
+  ): [WalletTransaction]!
+  walletTransactionsConnection(
+    where: WalletTransactionWhereInput
+    orderBy: WalletTransactionOrderByInput
     skip: Int
     after: String
     before: String
     first: Int
     last: Int
-  ): PaymentConnection!
-  chargesConnection(
-    where: ChargeWhereInput
-    orderBy: ChargeOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): ChargeConnection!
+  ): WalletTransactionConnection!
   contactSubmissionsConnection(
     where: ContactSubmissionWhereInput
     orderBy: ContactSubmissionOrderByInput
@@ -469,6 +465,5 @@ type Query {
 
   inspection(where: InspectionWhereUniqueInput!): Inspection
   propertyLeases(where: PropertyLeaseWhereInput): [PropertyLease]!
-  charge(where: ChargeWhereUniqueInput!): Charge!
   getSavedForm(where: SavedFormWhereUniqueInput!): SavedForm
 }

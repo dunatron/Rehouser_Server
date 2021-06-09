@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/heath-dunlop-37e897/rehouser-service/dev
-# timestamp: Mon May 24 2021 03:57:52 GMT+1200 (New Zealand Standard Time)
+# timestamp: Thu Jun 10 2021 02:13:19 GMT+1200 (New Zealand Standard Time)
 
 type Accommodation implements Node {
   id: ID!
@@ -1733,10 +1733,6 @@ type AggregateBankTransaction {
   count: Int!
 }
 
-type AggregateCharge {
-  count: Int!
-}
-
 type AggregateChat {
   count: Int!
 }
@@ -1786,10 +1782,6 @@ type AggregateLessor {
 }
 
 type AggregateMessage {
-  count: Int!
-}
-
-type AggregatePayment {
   count: Int!
 }
 
@@ -1850,6 +1842,10 @@ type AggregateViewing {
 }
 
 type AggregateWallet {
+  count: Int!
+}
+
+type AggregateWalletTransaction {
   count: Int!
 }
 
@@ -4997,466 +4993,6 @@ enum CeilingInsulationTypes {
   LOOSE_FILL
   OTHER
   NOT_ACCESSIBLE
-}
-
-type Charge implements Node {
-  id: ID!
-  createdAt: DateTime!
-  wallet: Wallet
-  reason: ChargeReason
-  amount: Float
-  description: String
-}
-
-"""A connection to a list of items."""
-type ChargeConnection {
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """A list of edges."""
-  edges: [ChargeEdge]!
-  aggregate: AggregateCharge!
-}
-
-input ChargeCreateInput {
-  id: ID
-  reason: ChargeReason
-  amount: Float
-  description: String
-  wallet: WalletCreateOneWithoutChargesInput
-}
-
-input ChargeCreateManyWithoutWalletInput {
-  create: [ChargeCreateWithoutWalletInput!]
-  connect: [ChargeWhereUniqueInput!]
-}
-
-input ChargeCreateWithoutWalletInput {
-  id: ID
-  reason: ChargeReason
-  amount: Float
-  description: String
-}
-
-"""An edge in a connection."""
-type ChargeEdge {
-  """The item at the end of the edge."""
-  node: Charge!
-
-  """A cursor for use in pagination."""
-  cursor: String!
-}
-
-enum ChargeOrderByInput {
-  id_ASC
-  id_DESC
-  createdAt_ASC
-  createdAt_DESC
-  reason_ASC
-  reason_DESC
-  amount_ASC
-  amount_DESC
-  description_ASC
-  description_DESC
-}
-
-type ChargePreviousValues {
-  id: ID!
-  createdAt: DateTime!
-  reason: ChargeReason
-  amount: Float
-  description: String
-}
-
-enum ChargeReason {
-  RENT
-  BOND
-  DAMAGES
-}
-
-input ChargeScalarWhereInput {
-  """Logical AND on all given filters."""
-  AND: [ChargeScalarWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [ChargeScalarWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [ChargeScalarWhereInput!]
-  id: ID
-
-  """All values that are not equal to given value."""
-  id_not: ID
-
-  """All values that are contained in given list."""
-  id_in: [ID!]
-
-  """All values that are not contained in given list."""
-  id_not_in: [ID!]
-
-  """All values less than the given value."""
-  id_lt: ID
-
-  """All values less than or equal the given value."""
-  id_lte: ID
-
-  """All values greater than the given value."""
-  id_gt: ID
-
-  """All values greater than or equal the given value."""
-  id_gte: ID
-
-  """All values containing the given string."""
-  id_contains: ID
-
-  """All values not containing the given string."""
-  id_not_contains: ID
-
-  """All values starting with the given string."""
-  id_starts_with: ID
-
-  """All values not starting with the given string."""
-  id_not_starts_with: ID
-
-  """All values ending with the given string."""
-  id_ends_with: ID
-
-  """All values not ending with the given string."""
-  id_not_ends_with: ID
-  createdAt: DateTime
-
-  """All values that are not equal to given value."""
-  createdAt_not: DateTime
-
-  """All values that are contained in given list."""
-  createdAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  createdAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  createdAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  createdAt_lte: DateTime
-
-  """All values greater than the given value."""
-  createdAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  createdAt_gte: DateTime
-  reason: ChargeReason
-
-  """All values that are not equal to given value."""
-  reason_not: ChargeReason
-
-  """All values that are contained in given list."""
-  reason_in: [ChargeReason!]
-
-  """All values that are not contained in given list."""
-  reason_not_in: [ChargeReason!]
-  amount: Float
-
-  """All values that are not equal to given value."""
-  amount_not: Float
-
-  """All values that are contained in given list."""
-  amount_in: [Float!]
-
-  """All values that are not contained in given list."""
-  amount_not_in: [Float!]
-
-  """All values less than the given value."""
-  amount_lt: Float
-
-  """All values less than or equal the given value."""
-  amount_lte: Float
-
-  """All values greater than the given value."""
-  amount_gt: Float
-
-  """All values greater than or equal the given value."""
-  amount_gte: Float
-  description: String
-
-  """All values that are not equal to given value."""
-  description_not: String
-
-  """All values that are contained in given list."""
-  description_in: [String!]
-
-  """All values that are not contained in given list."""
-  description_not_in: [String!]
-
-  """All values less than the given value."""
-  description_lt: String
-
-  """All values less than or equal the given value."""
-  description_lte: String
-
-  """All values greater than the given value."""
-  description_gt: String
-
-  """All values greater than or equal the given value."""
-  description_gte: String
-
-  """All values containing the given string."""
-  description_contains: String
-
-  """All values not containing the given string."""
-  description_not_contains: String
-
-  """All values starting with the given string."""
-  description_starts_with: String
-
-  """All values not starting with the given string."""
-  description_not_starts_with: String
-
-  """All values ending with the given string."""
-  description_ends_with: String
-
-  """All values not ending with the given string."""
-  description_not_ends_with: String
-}
-
-type ChargeSubscriptionPayload {
-  mutation: MutationType!
-  node: Charge
-  updatedFields: [String!]
-  previousValues: ChargePreviousValues
-}
-
-input ChargeSubscriptionWhereInput {
-  """Logical AND on all given filters."""
-  AND: [ChargeSubscriptionWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [ChargeSubscriptionWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [ChargeSubscriptionWhereInput!]
-
-  """The subscription event gets dispatched when it's listed in mutation_in"""
-  mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
-  updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
-  updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
-  updatedFields_contains_some: [String!]
-  node: ChargeWhereInput
-}
-
-input ChargeUpdateInput {
-  reason: ChargeReason
-  amount: Float
-  description: String
-  wallet: WalletUpdateOneWithoutChargesInput
-}
-
-input ChargeUpdateManyDataInput {
-  reason: ChargeReason
-  amount: Float
-  description: String
-}
-
-input ChargeUpdateManyMutationInput {
-  reason: ChargeReason
-  amount: Float
-  description: String
-}
-
-input ChargeUpdateManyWithoutWalletInput {
-  create: [ChargeCreateWithoutWalletInput!]
-  connect: [ChargeWhereUniqueInput!]
-  set: [ChargeWhereUniqueInput!]
-  disconnect: [ChargeWhereUniqueInput!]
-  delete: [ChargeWhereUniqueInput!]
-  update: [ChargeUpdateWithWhereUniqueWithoutWalletInput!]
-  updateMany: [ChargeUpdateManyWithWhereNestedInput!]
-  deleteMany: [ChargeScalarWhereInput!]
-  upsert: [ChargeUpsertWithWhereUniqueWithoutWalletInput!]
-}
-
-input ChargeUpdateManyWithWhereNestedInput {
-  where: ChargeScalarWhereInput!
-  data: ChargeUpdateManyDataInput!
-}
-
-input ChargeUpdateWithoutWalletDataInput {
-  reason: ChargeReason
-  amount: Float
-  description: String
-}
-
-input ChargeUpdateWithWhereUniqueWithoutWalletInput {
-  where: ChargeWhereUniqueInput!
-  data: ChargeUpdateWithoutWalletDataInput!
-}
-
-input ChargeUpsertWithWhereUniqueWithoutWalletInput {
-  where: ChargeWhereUniqueInput!
-  update: ChargeUpdateWithoutWalletDataInput!
-  create: ChargeCreateWithoutWalletInput!
-}
-
-input ChargeWhereInput {
-  """Logical AND on all given filters."""
-  AND: [ChargeWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [ChargeWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [ChargeWhereInput!]
-  id: ID
-
-  """All values that are not equal to given value."""
-  id_not: ID
-
-  """All values that are contained in given list."""
-  id_in: [ID!]
-
-  """All values that are not contained in given list."""
-  id_not_in: [ID!]
-
-  """All values less than the given value."""
-  id_lt: ID
-
-  """All values less than or equal the given value."""
-  id_lte: ID
-
-  """All values greater than the given value."""
-  id_gt: ID
-
-  """All values greater than or equal the given value."""
-  id_gte: ID
-
-  """All values containing the given string."""
-  id_contains: ID
-
-  """All values not containing the given string."""
-  id_not_contains: ID
-
-  """All values starting with the given string."""
-  id_starts_with: ID
-
-  """All values not starting with the given string."""
-  id_not_starts_with: ID
-
-  """All values ending with the given string."""
-  id_ends_with: ID
-
-  """All values not ending with the given string."""
-  id_not_ends_with: ID
-  createdAt: DateTime
-
-  """All values that are not equal to given value."""
-  createdAt_not: DateTime
-
-  """All values that are contained in given list."""
-  createdAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  createdAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  createdAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  createdAt_lte: DateTime
-
-  """All values greater than the given value."""
-  createdAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  createdAt_gte: DateTime
-  reason: ChargeReason
-
-  """All values that are not equal to given value."""
-  reason_not: ChargeReason
-
-  """All values that are contained in given list."""
-  reason_in: [ChargeReason!]
-
-  """All values that are not contained in given list."""
-  reason_not_in: [ChargeReason!]
-  amount: Float
-
-  """All values that are not equal to given value."""
-  amount_not: Float
-
-  """All values that are contained in given list."""
-  amount_in: [Float!]
-
-  """All values that are not contained in given list."""
-  amount_not_in: [Float!]
-
-  """All values less than the given value."""
-  amount_lt: Float
-
-  """All values less than or equal the given value."""
-  amount_lte: Float
-
-  """All values greater than the given value."""
-  amount_gt: Float
-
-  """All values greater than or equal the given value."""
-  amount_gte: Float
-  description: String
-
-  """All values that are not equal to given value."""
-  description_not: String
-
-  """All values that are contained in given list."""
-  description_in: [String!]
-
-  """All values that are not contained in given list."""
-  description_not_in: [String!]
-
-  """All values less than the given value."""
-  description_lt: String
-
-  """All values less than or equal the given value."""
-  description_lte: String
-
-  """All values greater than the given value."""
-  description_gt: String
-
-  """All values greater than or equal the given value."""
-  description_gte: String
-
-  """All values containing the given string."""
-  description_contains: String
-
-  """All values not containing the given string."""
-  description_not_contains: String
-
-  """All values starting with the given string."""
-  description_starts_with: String
-
-  """All values not starting with the given string."""
-  description_not_starts_with: String
-
-  """All values ending with the given string."""
-  description_ends_with: String
-
-  """All values not ending with the given string."""
-  description_not_ends_with: String
-  wallet: WalletWhereInput
-}
-
-input ChargeWhereUniqueInput {
-  id: ID
 }
 
 type Chat implements Node {
@@ -17164,14 +16700,13 @@ type Mutation {
   createRentalApplication(data: RentalApplicationCreateInput!): RentalApplication!
   createLessee(data: LesseeCreateInput!): Lessee!
   createLessor(data: LessorCreateInput!): Lessor!
-  createWallet(data: WalletCreateInput!): Wallet!
-  createCharge(data: ChargeCreateInput!): Charge!
-  createPayment(data: PaymentCreateInput!): Payment!
   createBankAccount(data: BankAccountCreateInput!): BankAccount!
   createBankTransaction(data: BankTransactionCreateInput!): BankTransaction!
   createPreTenancyForm(data: PreTenancyFormCreateInput!): PreTenancyForm!
+  createWalletTransaction(data: WalletTransactionCreateInput!): WalletTransaction!
   createInsulationForm(data: InsulationFormCreateInput!): InsulationForm!
   createUser(data: UserCreateInput!): User!
+  createWallet(data: WalletCreateInput!): Wallet!
   createCreditCard(data: CreditCardCreateInput!): CreditCard!
   createInspectionForm(data: InspectionFormCreateInput!): InspectionForm!
   updateSavedForm(data: SavedFormUpdateInput!, where: SavedFormWhereUniqueInput!): SavedForm
@@ -17200,14 +16735,13 @@ type Mutation {
   updateRentalApplication(data: RentalApplicationUpdateInput!, where: RentalApplicationWhereUniqueInput!): RentalApplication
   updateLessee(data: LesseeUpdateInput!, where: LesseeWhereUniqueInput!): Lessee
   updateLessor(data: LessorUpdateInput!, where: LessorWhereUniqueInput!): Lessor
-  updateWallet(data: WalletUpdateInput!, where: WalletWhereUniqueInput!): Wallet
-  updateCharge(data: ChargeUpdateInput!, where: ChargeWhereUniqueInput!): Charge
-  updatePayment(data: PaymentUpdateInput!, where: PaymentWhereUniqueInput!): Payment
   updateBankAccount(data: BankAccountUpdateInput!, where: BankAccountWhereUniqueInput!): BankAccount
   updateBankTransaction(data: BankTransactionUpdateInput!, where: BankTransactionWhereUniqueInput!): BankTransaction
   updatePreTenancyForm(data: PreTenancyFormUpdateInput!, where: PreTenancyFormWhereUniqueInput!): PreTenancyForm
+  updateWalletTransaction(data: WalletTransactionUpdateInput!, where: WalletTransactionWhereUniqueInput!): WalletTransaction
   updateInsulationForm(data: InsulationFormUpdateInput!, where: InsulationFormWhereUniqueInput!): InsulationForm
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  updateWallet(data: WalletUpdateInput!, where: WalletWhereUniqueInput!): Wallet
   updateCreditCard(data: CreditCardUpdateInput!, where: CreditCardWhereUniqueInput!): CreditCard
   updateInspectionForm(data: InspectionFormUpdateInput!, where: InspectionFormWhereUniqueInput!): InspectionForm
   deleteSavedForm(where: SavedFormWhereUniqueInput!): SavedForm
@@ -17237,14 +16771,13 @@ type Mutation {
   deleteRentalApplication(where: RentalApplicationWhereUniqueInput!): RentalApplication
   deleteLessee(where: LesseeWhereUniqueInput!): Lessee
   deleteLessor(where: LessorWhereUniqueInput!): Lessor
-  deleteWallet(where: WalletWhereUniqueInput!): Wallet
-  deleteCharge(where: ChargeWhereUniqueInput!): Charge
-  deletePayment(where: PaymentWhereUniqueInput!): Payment
   deleteBankAccount(where: BankAccountWhereUniqueInput!): BankAccount
   deleteBankTransaction(where: BankTransactionWhereUniqueInput!): BankTransaction
   deletePreTenancyForm(where: PreTenancyFormWhereUniqueInput!): PreTenancyForm
+  deleteWalletTransaction(where: WalletTransactionWhereUniqueInput!): WalletTransaction
   deleteInsulationForm(where: InsulationFormWhereUniqueInput!): InsulationForm
   deleteUser(where: UserWhereUniqueInput!): User
+  deleteWallet(where: WalletWhereUniqueInput!): Wallet
   deleteCreditCard(where: CreditCardWhereUniqueInput!): CreditCard
   deleteInspectionForm(where: InspectionFormWhereUniqueInput!): InspectionForm
   upsertSavedForm(where: SavedFormWhereUniqueInput!, create: SavedFormCreateInput!, update: SavedFormUpdateInput!): SavedForm!
@@ -17273,14 +16806,13 @@ type Mutation {
   upsertRentalApplication(where: RentalApplicationWhereUniqueInput!, create: RentalApplicationCreateInput!, update: RentalApplicationUpdateInput!): RentalApplication!
   upsertLessee(where: LesseeWhereUniqueInput!, create: LesseeCreateInput!, update: LesseeUpdateInput!): Lessee!
   upsertLessor(where: LessorWhereUniqueInput!, create: LessorCreateInput!, update: LessorUpdateInput!): Lessor!
-  upsertWallet(where: WalletWhereUniqueInput!, create: WalletCreateInput!, update: WalletUpdateInput!): Wallet!
-  upsertCharge(where: ChargeWhereUniqueInput!, create: ChargeCreateInput!, update: ChargeUpdateInput!): Charge!
-  upsertPayment(where: PaymentWhereUniqueInput!, create: PaymentCreateInput!, update: PaymentUpdateInput!): Payment!
   upsertBankAccount(where: BankAccountWhereUniqueInput!, create: BankAccountCreateInput!, update: BankAccountUpdateInput!): BankAccount!
   upsertBankTransaction(where: BankTransactionWhereUniqueInput!, create: BankTransactionCreateInput!, update: BankTransactionUpdateInput!): BankTransaction!
   upsertPreTenancyForm(where: PreTenancyFormWhereUniqueInput!, create: PreTenancyFormCreateInput!, update: PreTenancyFormUpdateInput!): PreTenancyForm!
+  upsertWalletTransaction(where: WalletTransactionWhereUniqueInput!, create: WalletTransactionCreateInput!, update: WalletTransactionUpdateInput!): WalletTransaction!
   upsertInsulationForm(where: InsulationFormWhereUniqueInput!, create: InsulationFormCreateInput!, update: InsulationFormUpdateInput!): InsulationForm!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  upsertWallet(where: WalletWhereUniqueInput!, create: WalletCreateInput!, update: WalletUpdateInput!): Wallet!
   upsertCreditCard(where: CreditCardWhereUniqueInput!, create: CreditCardCreateInput!, update: CreditCardUpdateInput!): CreditCard!
   upsertInspectionForm(where: InspectionFormWhereUniqueInput!, create: InspectionFormCreateInput!, update: InspectionFormUpdateInput!): InspectionForm!
   updateManySavedForms(data: SavedFormUpdateManyMutationInput!, where: SavedFormWhereInput): BatchPayload!
@@ -17307,14 +16839,13 @@ type Mutation {
   updateManyRentalApplications(data: RentalApplicationUpdateManyMutationInput!, where: RentalApplicationWhereInput): BatchPayload!
   updateManyLessees(data: LesseeUpdateManyMutationInput!, where: LesseeWhereInput): BatchPayload!
   updateManyLessors(data: LessorUpdateManyMutationInput!, where: LessorWhereInput): BatchPayload!
-  updateManyWallets(data: WalletUpdateManyMutationInput!, where: WalletWhereInput): BatchPayload!
-  updateManyCharges(data: ChargeUpdateManyMutationInput!, where: ChargeWhereInput): BatchPayload!
-  updateManyPayments(data: PaymentUpdateManyMutationInput!, where: PaymentWhereInput): BatchPayload!
   updateManyBankAccounts(data: BankAccountUpdateManyMutationInput!, where: BankAccountWhereInput): BatchPayload!
   updateManyBankTransactions(data: BankTransactionUpdateManyMutationInput!, where: BankTransactionWhereInput): BatchPayload!
   updateManyPreTenancyForms(data: PreTenancyFormUpdateManyMutationInput!, where: PreTenancyFormWhereInput): BatchPayload!
+  updateManyWalletTransactions(data: WalletTransactionUpdateManyMutationInput!, where: WalletTransactionWhereInput): BatchPayload!
   updateManyInsulationForms(data: InsulationFormUpdateManyMutationInput!, where: InsulationFormWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
+  updateManyWallets(data: WalletUpdateManyMutationInput!, where: WalletWhereInput): BatchPayload!
   updateManyCreditCards(data: CreditCardUpdateManyMutationInput!, where: CreditCardWhereInput): BatchPayload!
   updateManyInspectionForms(data: InspectionFormUpdateManyMutationInput!, where: InspectionFormWhereInput): BatchPayload!
   deleteManySavedForms(where: SavedFormWhereInput): BatchPayload!
@@ -17344,14 +16875,13 @@ type Mutation {
   deleteManyRentalApplications(where: RentalApplicationWhereInput): BatchPayload!
   deleteManyLessees(where: LesseeWhereInput): BatchPayload!
   deleteManyLessors(where: LessorWhereInput): BatchPayload!
-  deleteManyWallets(where: WalletWhereInput): BatchPayload!
-  deleteManyCharges(where: ChargeWhereInput): BatchPayload!
-  deleteManyPayments(where: PaymentWhereInput): BatchPayload!
   deleteManyBankAccounts(where: BankAccountWhereInput): BatchPayload!
   deleteManyBankTransactions(where: BankTransactionWhereInput): BatchPayload!
   deleteManyPreTenancyForms(where: PreTenancyFormWhereInput): BatchPayload!
+  deleteManyWalletTransactions(where: WalletTransactionWhereInput): BatchPayload!
   deleteManyInsulationForms(where: InsulationFormWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
+  deleteManyWallets(where: WalletWhereInput): BatchPayload!
   deleteManyCreditCards(where: CreditCardWhereInput): BatchPayload!
   deleteManyInspectionForms(where: InspectionFormWhereInput): BatchPayload!
 }
@@ -17396,1499 +16926,10 @@ enum PartyResponsible {
   REHOUSER
 }
 
-type Payment implements Node {
-  id: ID!
-  wallet: Wallet
-  userId: ID!
-  bankName: String
-  bankNumber: String
-  bankBranch: String
-  bankAccount: String
-  bankSuffix: String
-  bankRef: String
-  type: PaymentType
-  reason: PaymentReason
-  leaseId: ID
-  propertyId: ID
-  stripePaymentId: String
-  object: Json
-  amount: Float
-  createdAt: DateTime!
-  description: String
-  status: String
-}
-
-"""A connection to a list of items."""
-type PaymentConnection {
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """A list of edges."""
-  edges: [PaymentEdge]!
-  aggregate: AggregatePayment!
-}
-
-input PaymentCreateInput {
-  id: ID
-  userId: ID!
-  bankName: String
-  bankNumber: String
-  bankBranch: String
-  bankAccount: String
-  bankSuffix: String
-  bankRef: String
-  type: PaymentType
-  reason: PaymentReason
-  leaseId: ID
-  propertyId: ID
-  stripePaymentId: String
-  object: Json
-  amount: Float
-  description: String
-  status: String
-  wallet: WalletCreateOneWithoutPaymentsInput
-}
-
-input PaymentCreateManyWithoutWalletInput {
-  create: [PaymentCreateWithoutWalletInput!]
-  connect: [PaymentWhereUniqueInput!]
-}
-
-input PaymentCreateWithoutWalletInput {
-  id: ID
-  userId: ID!
-  bankName: String
-  bankNumber: String
-  bankBranch: String
-  bankAccount: String
-  bankSuffix: String
-  bankRef: String
-  type: PaymentType
-  reason: PaymentReason
-  leaseId: ID
-  propertyId: ID
-  stripePaymentId: String
-  object: Json
-  amount: Float
-  description: String
-  status: String
-}
-
-"""An edge in a connection."""
-type PaymentEdge {
-  """The item at the end of the edge."""
-  node: Payment!
-
-  """A cursor for use in pagination."""
-  cursor: String!
-}
-
-enum PaymentOrderByInput {
-  id_ASC
-  id_DESC
-  userId_ASC
-  userId_DESC
-  bankName_ASC
-  bankName_DESC
-  bankNumber_ASC
-  bankNumber_DESC
-  bankBranch_ASC
-  bankBranch_DESC
-  bankAccount_ASC
-  bankAccount_DESC
-  bankSuffix_ASC
-  bankSuffix_DESC
-  bankRef_ASC
-  bankRef_DESC
-  type_ASC
-  type_DESC
-  reason_ASC
-  reason_DESC
-  leaseId_ASC
-  leaseId_DESC
-  propertyId_ASC
-  propertyId_DESC
-  stripePaymentId_ASC
-  stripePaymentId_DESC
-  object_ASC
-  object_DESC
-  amount_ASC
-  amount_DESC
-  createdAt_ASC
-  createdAt_DESC
-  description_ASC
-  description_DESC
-  status_ASC
-  status_DESC
-}
-
-type PaymentPreviousValues {
-  id: ID!
-  userId: ID!
-  bankName: String
-  bankNumber: String
-  bankBranch: String
-  bankAccount: String
-  bankSuffix: String
-  bankRef: String
-  type: PaymentType
-  reason: PaymentReason
-  leaseId: ID
-  propertyId: ID
-  stripePaymentId: String
-  object: Json
-  amount: Float
-  createdAt: DateTime!
-  description: String
-  status: String
-}
-
-enum PaymentReason {
-  RENT
-  BOND
-}
-
-input PaymentScalarWhereInput {
-  """Logical AND on all given filters."""
-  AND: [PaymentScalarWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [PaymentScalarWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [PaymentScalarWhereInput!]
-  id: ID
-
-  """All values that are not equal to given value."""
-  id_not: ID
-
-  """All values that are contained in given list."""
-  id_in: [ID!]
-
-  """All values that are not contained in given list."""
-  id_not_in: [ID!]
-
-  """All values less than the given value."""
-  id_lt: ID
-
-  """All values less than or equal the given value."""
-  id_lte: ID
-
-  """All values greater than the given value."""
-  id_gt: ID
-
-  """All values greater than or equal the given value."""
-  id_gte: ID
-
-  """All values containing the given string."""
-  id_contains: ID
-
-  """All values not containing the given string."""
-  id_not_contains: ID
-
-  """All values starting with the given string."""
-  id_starts_with: ID
-
-  """All values not starting with the given string."""
-  id_not_starts_with: ID
-
-  """All values ending with the given string."""
-  id_ends_with: ID
-
-  """All values not ending with the given string."""
-  id_not_ends_with: ID
-  userId: ID
-
-  """All values that are not equal to given value."""
-  userId_not: ID
-
-  """All values that are contained in given list."""
-  userId_in: [ID!]
-
-  """All values that are not contained in given list."""
-  userId_not_in: [ID!]
-
-  """All values less than the given value."""
-  userId_lt: ID
-
-  """All values less than or equal the given value."""
-  userId_lte: ID
-
-  """All values greater than the given value."""
-  userId_gt: ID
-
-  """All values greater than or equal the given value."""
-  userId_gte: ID
-
-  """All values containing the given string."""
-  userId_contains: ID
-
-  """All values not containing the given string."""
-  userId_not_contains: ID
-
-  """All values starting with the given string."""
-  userId_starts_with: ID
-
-  """All values not starting with the given string."""
-  userId_not_starts_with: ID
-
-  """All values ending with the given string."""
-  userId_ends_with: ID
-
-  """All values not ending with the given string."""
-  userId_not_ends_with: ID
-  bankName: String
-
-  """All values that are not equal to given value."""
-  bankName_not: String
-
-  """All values that are contained in given list."""
-  bankName_in: [String!]
-
-  """All values that are not contained in given list."""
-  bankName_not_in: [String!]
-
-  """All values less than the given value."""
-  bankName_lt: String
-
-  """All values less than or equal the given value."""
-  bankName_lte: String
-
-  """All values greater than the given value."""
-  bankName_gt: String
-
-  """All values greater than or equal the given value."""
-  bankName_gte: String
-
-  """All values containing the given string."""
-  bankName_contains: String
-
-  """All values not containing the given string."""
-  bankName_not_contains: String
-
-  """All values starting with the given string."""
-  bankName_starts_with: String
-
-  """All values not starting with the given string."""
-  bankName_not_starts_with: String
-
-  """All values ending with the given string."""
-  bankName_ends_with: String
-
-  """All values not ending with the given string."""
-  bankName_not_ends_with: String
-  bankNumber: String
-
-  """All values that are not equal to given value."""
-  bankNumber_not: String
-
-  """All values that are contained in given list."""
-  bankNumber_in: [String!]
-
-  """All values that are not contained in given list."""
-  bankNumber_not_in: [String!]
-
-  """All values less than the given value."""
-  bankNumber_lt: String
-
-  """All values less than or equal the given value."""
-  bankNumber_lte: String
-
-  """All values greater than the given value."""
-  bankNumber_gt: String
-
-  """All values greater than or equal the given value."""
-  bankNumber_gte: String
-
-  """All values containing the given string."""
-  bankNumber_contains: String
-
-  """All values not containing the given string."""
-  bankNumber_not_contains: String
-
-  """All values starting with the given string."""
-  bankNumber_starts_with: String
-
-  """All values not starting with the given string."""
-  bankNumber_not_starts_with: String
-
-  """All values ending with the given string."""
-  bankNumber_ends_with: String
-
-  """All values not ending with the given string."""
-  bankNumber_not_ends_with: String
-  bankBranch: String
-
-  """All values that are not equal to given value."""
-  bankBranch_not: String
-
-  """All values that are contained in given list."""
-  bankBranch_in: [String!]
-
-  """All values that are not contained in given list."""
-  bankBranch_not_in: [String!]
-
-  """All values less than the given value."""
-  bankBranch_lt: String
-
-  """All values less than or equal the given value."""
-  bankBranch_lte: String
-
-  """All values greater than the given value."""
-  bankBranch_gt: String
-
-  """All values greater than or equal the given value."""
-  bankBranch_gte: String
-
-  """All values containing the given string."""
-  bankBranch_contains: String
-
-  """All values not containing the given string."""
-  bankBranch_not_contains: String
-
-  """All values starting with the given string."""
-  bankBranch_starts_with: String
-
-  """All values not starting with the given string."""
-  bankBranch_not_starts_with: String
-
-  """All values ending with the given string."""
-  bankBranch_ends_with: String
-
-  """All values not ending with the given string."""
-  bankBranch_not_ends_with: String
-  bankAccount: String
-
-  """All values that are not equal to given value."""
-  bankAccount_not: String
-
-  """All values that are contained in given list."""
-  bankAccount_in: [String!]
-
-  """All values that are not contained in given list."""
-  bankAccount_not_in: [String!]
-
-  """All values less than the given value."""
-  bankAccount_lt: String
-
-  """All values less than or equal the given value."""
-  bankAccount_lte: String
-
-  """All values greater than the given value."""
-  bankAccount_gt: String
-
-  """All values greater than or equal the given value."""
-  bankAccount_gte: String
-
-  """All values containing the given string."""
-  bankAccount_contains: String
-
-  """All values not containing the given string."""
-  bankAccount_not_contains: String
-
-  """All values starting with the given string."""
-  bankAccount_starts_with: String
-
-  """All values not starting with the given string."""
-  bankAccount_not_starts_with: String
-
-  """All values ending with the given string."""
-  bankAccount_ends_with: String
-
-  """All values not ending with the given string."""
-  bankAccount_not_ends_with: String
-  bankSuffix: String
-
-  """All values that are not equal to given value."""
-  bankSuffix_not: String
-
-  """All values that are contained in given list."""
-  bankSuffix_in: [String!]
-
-  """All values that are not contained in given list."""
-  bankSuffix_not_in: [String!]
-
-  """All values less than the given value."""
-  bankSuffix_lt: String
-
-  """All values less than or equal the given value."""
-  bankSuffix_lte: String
-
-  """All values greater than the given value."""
-  bankSuffix_gt: String
-
-  """All values greater than or equal the given value."""
-  bankSuffix_gte: String
-
-  """All values containing the given string."""
-  bankSuffix_contains: String
-
-  """All values not containing the given string."""
-  bankSuffix_not_contains: String
-
-  """All values starting with the given string."""
-  bankSuffix_starts_with: String
-
-  """All values not starting with the given string."""
-  bankSuffix_not_starts_with: String
-
-  """All values ending with the given string."""
-  bankSuffix_ends_with: String
-
-  """All values not ending with the given string."""
-  bankSuffix_not_ends_with: String
-  bankRef: String
-
-  """All values that are not equal to given value."""
-  bankRef_not: String
-
-  """All values that are contained in given list."""
-  bankRef_in: [String!]
-
-  """All values that are not contained in given list."""
-  bankRef_not_in: [String!]
-
-  """All values less than the given value."""
-  bankRef_lt: String
-
-  """All values less than or equal the given value."""
-  bankRef_lte: String
-
-  """All values greater than the given value."""
-  bankRef_gt: String
-
-  """All values greater than or equal the given value."""
-  bankRef_gte: String
-
-  """All values containing the given string."""
-  bankRef_contains: String
-
-  """All values not containing the given string."""
-  bankRef_not_contains: String
-
-  """All values starting with the given string."""
-  bankRef_starts_with: String
-
-  """All values not starting with the given string."""
-  bankRef_not_starts_with: String
-
-  """All values ending with the given string."""
-  bankRef_ends_with: String
-
-  """All values not ending with the given string."""
-  bankRef_not_ends_with: String
-  type: PaymentType
-
-  """All values that are not equal to given value."""
-  type_not: PaymentType
-
-  """All values that are contained in given list."""
-  type_in: [PaymentType!]
-
-  """All values that are not contained in given list."""
-  type_not_in: [PaymentType!]
-  reason: PaymentReason
-
-  """All values that are not equal to given value."""
-  reason_not: PaymentReason
-
-  """All values that are contained in given list."""
-  reason_in: [PaymentReason!]
-
-  """All values that are not contained in given list."""
-  reason_not_in: [PaymentReason!]
-  leaseId: ID
-
-  """All values that are not equal to given value."""
-  leaseId_not: ID
-
-  """All values that are contained in given list."""
-  leaseId_in: [ID!]
-
-  """All values that are not contained in given list."""
-  leaseId_not_in: [ID!]
-
-  """All values less than the given value."""
-  leaseId_lt: ID
-
-  """All values less than or equal the given value."""
-  leaseId_lte: ID
-
-  """All values greater than the given value."""
-  leaseId_gt: ID
-
-  """All values greater than or equal the given value."""
-  leaseId_gte: ID
-
-  """All values containing the given string."""
-  leaseId_contains: ID
-
-  """All values not containing the given string."""
-  leaseId_not_contains: ID
-
-  """All values starting with the given string."""
-  leaseId_starts_with: ID
-
-  """All values not starting with the given string."""
-  leaseId_not_starts_with: ID
-
-  """All values ending with the given string."""
-  leaseId_ends_with: ID
-
-  """All values not ending with the given string."""
-  leaseId_not_ends_with: ID
-  propertyId: ID
-
-  """All values that are not equal to given value."""
-  propertyId_not: ID
-
-  """All values that are contained in given list."""
-  propertyId_in: [ID!]
-
-  """All values that are not contained in given list."""
-  propertyId_not_in: [ID!]
-
-  """All values less than the given value."""
-  propertyId_lt: ID
-
-  """All values less than or equal the given value."""
-  propertyId_lte: ID
-
-  """All values greater than the given value."""
-  propertyId_gt: ID
-
-  """All values greater than or equal the given value."""
-  propertyId_gte: ID
-
-  """All values containing the given string."""
-  propertyId_contains: ID
-
-  """All values not containing the given string."""
-  propertyId_not_contains: ID
-
-  """All values starting with the given string."""
-  propertyId_starts_with: ID
-
-  """All values not starting with the given string."""
-  propertyId_not_starts_with: ID
-
-  """All values ending with the given string."""
-  propertyId_ends_with: ID
-
-  """All values not ending with the given string."""
-  propertyId_not_ends_with: ID
-  stripePaymentId: String
-
-  """All values that are not equal to given value."""
-  stripePaymentId_not: String
-
-  """All values that are contained in given list."""
-  stripePaymentId_in: [String!]
-
-  """All values that are not contained in given list."""
-  stripePaymentId_not_in: [String!]
-
-  """All values less than the given value."""
-  stripePaymentId_lt: String
-
-  """All values less than or equal the given value."""
-  stripePaymentId_lte: String
-
-  """All values greater than the given value."""
-  stripePaymentId_gt: String
-
-  """All values greater than or equal the given value."""
-  stripePaymentId_gte: String
-
-  """All values containing the given string."""
-  stripePaymentId_contains: String
-
-  """All values not containing the given string."""
-  stripePaymentId_not_contains: String
-
-  """All values starting with the given string."""
-  stripePaymentId_starts_with: String
-
-  """All values not starting with the given string."""
-  stripePaymentId_not_starts_with: String
-
-  """All values ending with the given string."""
-  stripePaymentId_ends_with: String
-
-  """All values not ending with the given string."""
-  stripePaymentId_not_ends_with: String
-  amount: Float
-
-  """All values that are not equal to given value."""
-  amount_not: Float
-
-  """All values that are contained in given list."""
-  amount_in: [Float!]
-
-  """All values that are not contained in given list."""
-  amount_not_in: [Float!]
-
-  """All values less than the given value."""
-  amount_lt: Float
-
-  """All values less than or equal the given value."""
-  amount_lte: Float
-
-  """All values greater than the given value."""
-  amount_gt: Float
-
-  """All values greater than or equal the given value."""
-  amount_gte: Float
-  createdAt: DateTime
-
-  """All values that are not equal to given value."""
-  createdAt_not: DateTime
-
-  """All values that are contained in given list."""
-  createdAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  createdAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  createdAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  createdAt_lte: DateTime
-
-  """All values greater than the given value."""
-  createdAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  createdAt_gte: DateTime
-  description: String
-
-  """All values that are not equal to given value."""
-  description_not: String
-
-  """All values that are contained in given list."""
-  description_in: [String!]
-
-  """All values that are not contained in given list."""
-  description_not_in: [String!]
-
-  """All values less than the given value."""
-  description_lt: String
-
-  """All values less than or equal the given value."""
-  description_lte: String
-
-  """All values greater than the given value."""
-  description_gt: String
-
-  """All values greater than or equal the given value."""
-  description_gte: String
-
-  """All values containing the given string."""
-  description_contains: String
-
-  """All values not containing the given string."""
-  description_not_contains: String
-
-  """All values starting with the given string."""
-  description_starts_with: String
-
-  """All values not starting with the given string."""
-  description_not_starts_with: String
-
-  """All values ending with the given string."""
-  description_ends_with: String
-
-  """All values not ending with the given string."""
-  description_not_ends_with: String
-  status: String
-
-  """All values that are not equal to given value."""
-  status_not: String
-
-  """All values that are contained in given list."""
-  status_in: [String!]
-
-  """All values that are not contained in given list."""
-  status_not_in: [String!]
-
-  """All values less than the given value."""
-  status_lt: String
-
-  """All values less than or equal the given value."""
-  status_lte: String
-
-  """All values greater than the given value."""
-  status_gt: String
-
-  """All values greater than or equal the given value."""
-  status_gte: String
-
-  """All values containing the given string."""
-  status_contains: String
-
-  """All values not containing the given string."""
-  status_not_contains: String
-
-  """All values starting with the given string."""
-  status_starts_with: String
-
-  """All values not starting with the given string."""
-  status_not_starts_with: String
-
-  """All values ending with the given string."""
-  status_ends_with: String
-
-  """All values not ending with the given string."""
-  status_not_ends_with: String
-}
-
-type PaymentSubscriptionPayload {
-  mutation: MutationType!
-  node: Payment
-  updatedFields: [String!]
-  previousValues: PaymentPreviousValues
-}
-
-input PaymentSubscriptionWhereInput {
-  """Logical AND on all given filters."""
-  AND: [PaymentSubscriptionWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [PaymentSubscriptionWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [PaymentSubscriptionWhereInput!]
-
-  """The subscription event gets dispatched when it's listed in mutation_in"""
-  mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
-  updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
-  updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
-  updatedFields_contains_some: [String!]
-  node: PaymentWhereInput
-}
-
 enum PaymentType {
   STRIPE
   SYSTEM
   MANUAL_BANK_TRANSFER
-}
-
-input PaymentUpdateInput {
-  userId: ID
-  bankName: String
-  bankNumber: String
-  bankBranch: String
-  bankAccount: String
-  bankSuffix: String
-  bankRef: String
-  type: PaymentType
-  reason: PaymentReason
-  leaseId: ID
-  propertyId: ID
-  stripePaymentId: String
-  object: Json
-  amount: Float
-  description: String
-  status: String
-  wallet: WalletUpdateOneWithoutPaymentsInput
-}
-
-input PaymentUpdateManyDataInput {
-  userId: ID
-  bankName: String
-  bankNumber: String
-  bankBranch: String
-  bankAccount: String
-  bankSuffix: String
-  bankRef: String
-  type: PaymentType
-  reason: PaymentReason
-  leaseId: ID
-  propertyId: ID
-  stripePaymentId: String
-  object: Json
-  amount: Float
-  description: String
-  status: String
-}
-
-input PaymentUpdateManyMutationInput {
-  userId: ID
-  bankName: String
-  bankNumber: String
-  bankBranch: String
-  bankAccount: String
-  bankSuffix: String
-  bankRef: String
-  type: PaymentType
-  reason: PaymentReason
-  leaseId: ID
-  propertyId: ID
-  stripePaymentId: String
-  object: Json
-  amount: Float
-  description: String
-  status: String
-}
-
-input PaymentUpdateManyWithoutWalletInput {
-  create: [PaymentCreateWithoutWalletInput!]
-  connect: [PaymentWhereUniqueInput!]
-  set: [PaymentWhereUniqueInput!]
-  disconnect: [PaymentWhereUniqueInput!]
-  delete: [PaymentWhereUniqueInput!]
-  update: [PaymentUpdateWithWhereUniqueWithoutWalletInput!]
-  updateMany: [PaymentUpdateManyWithWhereNestedInput!]
-  deleteMany: [PaymentScalarWhereInput!]
-  upsert: [PaymentUpsertWithWhereUniqueWithoutWalletInput!]
-}
-
-input PaymentUpdateManyWithWhereNestedInput {
-  where: PaymentScalarWhereInput!
-  data: PaymentUpdateManyDataInput!
-}
-
-input PaymentUpdateWithoutWalletDataInput {
-  userId: ID
-  bankName: String
-  bankNumber: String
-  bankBranch: String
-  bankAccount: String
-  bankSuffix: String
-  bankRef: String
-  type: PaymentType
-  reason: PaymentReason
-  leaseId: ID
-  propertyId: ID
-  stripePaymentId: String
-  object: Json
-  amount: Float
-  description: String
-  status: String
-}
-
-input PaymentUpdateWithWhereUniqueWithoutWalletInput {
-  where: PaymentWhereUniqueInput!
-  data: PaymentUpdateWithoutWalletDataInput!
-}
-
-input PaymentUpsertWithWhereUniqueWithoutWalletInput {
-  where: PaymentWhereUniqueInput!
-  update: PaymentUpdateWithoutWalletDataInput!
-  create: PaymentCreateWithoutWalletInput!
-}
-
-input PaymentWhereInput {
-  """Logical AND on all given filters."""
-  AND: [PaymentWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [PaymentWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [PaymentWhereInput!]
-  id: ID
-
-  """All values that are not equal to given value."""
-  id_not: ID
-
-  """All values that are contained in given list."""
-  id_in: [ID!]
-
-  """All values that are not contained in given list."""
-  id_not_in: [ID!]
-
-  """All values less than the given value."""
-  id_lt: ID
-
-  """All values less than or equal the given value."""
-  id_lte: ID
-
-  """All values greater than the given value."""
-  id_gt: ID
-
-  """All values greater than or equal the given value."""
-  id_gte: ID
-
-  """All values containing the given string."""
-  id_contains: ID
-
-  """All values not containing the given string."""
-  id_not_contains: ID
-
-  """All values starting with the given string."""
-  id_starts_with: ID
-
-  """All values not starting with the given string."""
-  id_not_starts_with: ID
-
-  """All values ending with the given string."""
-  id_ends_with: ID
-
-  """All values not ending with the given string."""
-  id_not_ends_with: ID
-  userId: ID
-
-  """All values that are not equal to given value."""
-  userId_not: ID
-
-  """All values that are contained in given list."""
-  userId_in: [ID!]
-
-  """All values that are not contained in given list."""
-  userId_not_in: [ID!]
-
-  """All values less than the given value."""
-  userId_lt: ID
-
-  """All values less than or equal the given value."""
-  userId_lte: ID
-
-  """All values greater than the given value."""
-  userId_gt: ID
-
-  """All values greater than or equal the given value."""
-  userId_gte: ID
-
-  """All values containing the given string."""
-  userId_contains: ID
-
-  """All values not containing the given string."""
-  userId_not_contains: ID
-
-  """All values starting with the given string."""
-  userId_starts_with: ID
-
-  """All values not starting with the given string."""
-  userId_not_starts_with: ID
-
-  """All values ending with the given string."""
-  userId_ends_with: ID
-
-  """All values not ending with the given string."""
-  userId_not_ends_with: ID
-  bankName: String
-
-  """All values that are not equal to given value."""
-  bankName_not: String
-
-  """All values that are contained in given list."""
-  bankName_in: [String!]
-
-  """All values that are not contained in given list."""
-  bankName_not_in: [String!]
-
-  """All values less than the given value."""
-  bankName_lt: String
-
-  """All values less than or equal the given value."""
-  bankName_lte: String
-
-  """All values greater than the given value."""
-  bankName_gt: String
-
-  """All values greater than or equal the given value."""
-  bankName_gte: String
-
-  """All values containing the given string."""
-  bankName_contains: String
-
-  """All values not containing the given string."""
-  bankName_not_contains: String
-
-  """All values starting with the given string."""
-  bankName_starts_with: String
-
-  """All values not starting with the given string."""
-  bankName_not_starts_with: String
-
-  """All values ending with the given string."""
-  bankName_ends_with: String
-
-  """All values not ending with the given string."""
-  bankName_not_ends_with: String
-  bankNumber: String
-
-  """All values that are not equal to given value."""
-  bankNumber_not: String
-
-  """All values that are contained in given list."""
-  bankNumber_in: [String!]
-
-  """All values that are not contained in given list."""
-  bankNumber_not_in: [String!]
-
-  """All values less than the given value."""
-  bankNumber_lt: String
-
-  """All values less than or equal the given value."""
-  bankNumber_lte: String
-
-  """All values greater than the given value."""
-  bankNumber_gt: String
-
-  """All values greater than or equal the given value."""
-  bankNumber_gte: String
-
-  """All values containing the given string."""
-  bankNumber_contains: String
-
-  """All values not containing the given string."""
-  bankNumber_not_contains: String
-
-  """All values starting with the given string."""
-  bankNumber_starts_with: String
-
-  """All values not starting with the given string."""
-  bankNumber_not_starts_with: String
-
-  """All values ending with the given string."""
-  bankNumber_ends_with: String
-
-  """All values not ending with the given string."""
-  bankNumber_not_ends_with: String
-  bankBranch: String
-
-  """All values that are not equal to given value."""
-  bankBranch_not: String
-
-  """All values that are contained in given list."""
-  bankBranch_in: [String!]
-
-  """All values that are not contained in given list."""
-  bankBranch_not_in: [String!]
-
-  """All values less than the given value."""
-  bankBranch_lt: String
-
-  """All values less than or equal the given value."""
-  bankBranch_lte: String
-
-  """All values greater than the given value."""
-  bankBranch_gt: String
-
-  """All values greater than or equal the given value."""
-  bankBranch_gte: String
-
-  """All values containing the given string."""
-  bankBranch_contains: String
-
-  """All values not containing the given string."""
-  bankBranch_not_contains: String
-
-  """All values starting with the given string."""
-  bankBranch_starts_with: String
-
-  """All values not starting with the given string."""
-  bankBranch_not_starts_with: String
-
-  """All values ending with the given string."""
-  bankBranch_ends_with: String
-
-  """All values not ending with the given string."""
-  bankBranch_not_ends_with: String
-  bankAccount: String
-
-  """All values that are not equal to given value."""
-  bankAccount_not: String
-
-  """All values that are contained in given list."""
-  bankAccount_in: [String!]
-
-  """All values that are not contained in given list."""
-  bankAccount_not_in: [String!]
-
-  """All values less than the given value."""
-  bankAccount_lt: String
-
-  """All values less than or equal the given value."""
-  bankAccount_lte: String
-
-  """All values greater than the given value."""
-  bankAccount_gt: String
-
-  """All values greater than or equal the given value."""
-  bankAccount_gte: String
-
-  """All values containing the given string."""
-  bankAccount_contains: String
-
-  """All values not containing the given string."""
-  bankAccount_not_contains: String
-
-  """All values starting with the given string."""
-  bankAccount_starts_with: String
-
-  """All values not starting with the given string."""
-  bankAccount_not_starts_with: String
-
-  """All values ending with the given string."""
-  bankAccount_ends_with: String
-
-  """All values not ending with the given string."""
-  bankAccount_not_ends_with: String
-  bankSuffix: String
-
-  """All values that are not equal to given value."""
-  bankSuffix_not: String
-
-  """All values that are contained in given list."""
-  bankSuffix_in: [String!]
-
-  """All values that are not contained in given list."""
-  bankSuffix_not_in: [String!]
-
-  """All values less than the given value."""
-  bankSuffix_lt: String
-
-  """All values less than or equal the given value."""
-  bankSuffix_lte: String
-
-  """All values greater than the given value."""
-  bankSuffix_gt: String
-
-  """All values greater than or equal the given value."""
-  bankSuffix_gte: String
-
-  """All values containing the given string."""
-  bankSuffix_contains: String
-
-  """All values not containing the given string."""
-  bankSuffix_not_contains: String
-
-  """All values starting with the given string."""
-  bankSuffix_starts_with: String
-
-  """All values not starting with the given string."""
-  bankSuffix_not_starts_with: String
-
-  """All values ending with the given string."""
-  bankSuffix_ends_with: String
-
-  """All values not ending with the given string."""
-  bankSuffix_not_ends_with: String
-  bankRef: String
-
-  """All values that are not equal to given value."""
-  bankRef_not: String
-
-  """All values that are contained in given list."""
-  bankRef_in: [String!]
-
-  """All values that are not contained in given list."""
-  bankRef_not_in: [String!]
-
-  """All values less than the given value."""
-  bankRef_lt: String
-
-  """All values less than or equal the given value."""
-  bankRef_lte: String
-
-  """All values greater than the given value."""
-  bankRef_gt: String
-
-  """All values greater than or equal the given value."""
-  bankRef_gte: String
-
-  """All values containing the given string."""
-  bankRef_contains: String
-
-  """All values not containing the given string."""
-  bankRef_not_contains: String
-
-  """All values starting with the given string."""
-  bankRef_starts_with: String
-
-  """All values not starting with the given string."""
-  bankRef_not_starts_with: String
-
-  """All values ending with the given string."""
-  bankRef_ends_with: String
-
-  """All values not ending with the given string."""
-  bankRef_not_ends_with: String
-  type: PaymentType
-
-  """All values that are not equal to given value."""
-  type_not: PaymentType
-
-  """All values that are contained in given list."""
-  type_in: [PaymentType!]
-
-  """All values that are not contained in given list."""
-  type_not_in: [PaymentType!]
-  reason: PaymentReason
-
-  """All values that are not equal to given value."""
-  reason_not: PaymentReason
-
-  """All values that are contained in given list."""
-  reason_in: [PaymentReason!]
-
-  """All values that are not contained in given list."""
-  reason_not_in: [PaymentReason!]
-  leaseId: ID
-
-  """All values that are not equal to given value."""
-  leaseId_not: ID
-
-  """All values that are contained in given list."""
-  leaseId_in: [ID!]
-
-  """All values that are not contained in given list."""
-  leaseId_not_in: [ID!]
-
-  """All values less than the given value."""
-  leaseId_lt: ID
-
-  """All values less than or equal the given value."""
-  leaseId_lte: ID
-
-  """All values greater than the given value."""
-  leaseId_gt: ID
-
-  """All values greater than or equal the given value."""
-  leaseId_gte: ID
-
-  """All values containing the given string."""
-  leaseId_contains: ID
-
-  """All values not containing the given string."""
-  leaseId_not_contains: ID
-
-  """All values starting with the given string."""
-  leaseId_starts_with: ID
-
-  """All values not starting with the given string."""
-  leaseId_not_starts_with: ID
-
-  """All values ending with the given string."""
-  leaseId_ends_with: ID
-
-  """All values not ending with the given string."""
-  leaseId_not_ends_with: ID
-  propertyId: ID
-
-  """All values that are not equal to given value."""
-  propertyId_not: ID
-
-  """All values that are contained in given list."""
-  propertyId_in: [ID!]
-
-  """All values that are not contained in given list."""
-  propertyId_not_in: [ID!]
-
-  """All values less than the given value."""
-  propertyId_lt: ID
-
-  """All values less than or equal the given value."""
-  propertyId_lte: ID
-
-  """All values greater than the given value."""
-  propertyId_gt: ID
-
-  """All values greater than or equal the given value."""
-  propertyId_gte: ID
-
-  """All values containing the given string."""
-  propertyId_contains: ID
-
-  """All values not containing the given string."""
-  propertyId_not_contains: ID
-
-  """All values starting with the given string."""
-  propertyId_starts_with: ID
-
-  """All values not starting with the given string."""
-  propertyId_not_starts_with: ID
-
-  """All values ending with the given string."""
-  propertyId_ends_with: ID
-
-  """All values not ending with the given string."""
-  propertyId_not_ends_with: ID
-  stripePaymentId: String
-
-  """All values that are not equal to given value."""
-  stripePaymentId_not: String
-
-  """All values that are contained in given list."""
-  stripePaymentId_in: [String!]
-
-  """All values that are not contained in given list."""
-  stripePaymentId_not_in: [String!]
-
-  """All values less than the given value."""
-  stripePaymentId_lt: String
-
-  """All values less than or equal the given value."""
-  stripePaymentId_lte: String
-
-  """All values greater than the given value."""
-  stripePaymentId_gt: String
-
-  """All values greater than or equal the given value."""
-  stripePaymentId_gte: String
-
-  """All values containing the given string."""
-  stripePaymentId_contains: String
-
-  """All values not containing the given string."""
-  stripePaymentId_not_contains: String
-
-  """All values starting with the given string."""
-  stripePaymentId_starts_with: String
-
-  """All values not starting with the given string."""
-  stripePaymentId_not_starts_with: String
-
-  """All values ending with the given string."""
-  stripePaymentId_ends_with: String
-
-  """All values not ending with the given string."""
-  stripePaymentId_not_ends_with: String
-  amount: Float
-
-  """All values that are not equal to given value."""
-  amount_not: Float
-
-  """All values that are contained in given list."""
-  amount_in: [Float!]
-
-  """All values that are not contained in given list."""
-  amount_not_in: [Float!]
-
-  """All values less than the given value."""
-  amount_lt: Float
-
-  """All values less than or equal the given value."""
-  amount_lte: Float
-
-  """All values greater than the given value."""
-  amount_gt: Float
-
-  """All values greater than or equal the given value."""
-  amount_gte: Float
-  createdAt: DateTime
-
-  """All values that are not equal to given value."""
-  createdAt_not: DateTime
-
-  """All values that are contained in given list."""
-  createdAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  createdAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  createdAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  createdAt_lte: DateTime
-
-  """All values greater than the given value."""
-  createdAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  createdAt_gte: DateTime
-  description: String
-
-  """All values that are not equal to given value."""
-  description_not: String
-
-  """All values that are contained in given list."""
-  description_in: [String!]
-
-  """All values that are not contained in given list."""
-  description_not_in: [String!]
-
-  """All values less than the given value."""
-  description_lt: String
-
-  """All values less than or equal the given value."""
-  description_lte: String
-
-  """All values greater than the given value."""
-  description_gt: String
-
-  """All values greater than or equal the given value."""
-  description_gte: String
-
-  """All values containing the given string."""
-  description_contains: String
-
-  """All values not containing the given string."""
-  description_not_contains: String
-
-  """All values starting with the given string."""
-  description_starts_with: String
-
-  """All values not starting with the given string."""
-  description_not_starts_with: String
-
-  """All values ending with the given string."""
-  description_ends_with: String
-
-  """All values not ending with the given string."""
-  description_not_ends_with: String
-  status: String
-
-  """All values that are not equal to given value."""
-  status_not: String
-
-  """All values that are contained in given list."""
-  status_in: [String!]
-
-  """All values that are not contained in given list."""
-  status_not_in: [String!]
-
-  """All values less than the given value."""
-  status_lt: String
-
-  """All values less than or equal the given value."""
-  status_lte: String
-
-  """All values greater than the given value."""
-  status_gt: String
-
-  """All values greater than or equal the given value."""
-  status_gte: String
-
-  """All values containing the given string."""
-  status_contains: String
-
-  """All values not containing the given string."""
-  status_not_contains: String
-
-  """All values starting with the given string."""
-  status_starts_with: String
-
-  """All values not starting with the given string."""
-  status_not_starts_with: String
-
-  """All values ending with the given string."""
-  status_ends_with: String
-
-  """All values not ending with the given string."""
-  status_not_ends_with: String
-  wallet: WalletWhereInput
-}
-
-input PaymentWhereUniqueInput {
-  id: ID
 }
 
 enum Permission {
@@ -20235,6 +18276,7 @@ input PreTenancyFormWhereUniqueInput {
 
 type Property implements Node {
   id: ID!
+  bankRef: String
   bankAccounts(where: BankAccountWhereInput, orderBy: BankAccountOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BankAccount!]
   primaryBankAccountId: String
   placeId: String!
@@ -20312,6 +18354,7 @@ type Property implements Node {
   rehouserHandlesBills: Boolean
   rehouserAssist: PropertyAssist
   rehouserManaged: Boolean
+  wallet: Wallet
 }
 
 type PropertyAdvertisement implements Node {
@@ -20738,6 +18781,7 @@ input PropertyCreateindoorFeaturesInput {
 
 input PropertyCreateInput {
   id: ID
+  bankRef: String
   primaryBankAccountId: String
   placeId: String!
   location: String!
@@ -20813,6 +18857,7 @@ input PropertyCreateInput {
   files: PropertyFilesCreateOneWithoutPropertyInput
   inspections: InspectionCreateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistCreateOneWithoutPropertyInput
+  wallet: WalletCreateOneWithoutPropertyInput
 }
 
 input PropertyCreateManyWithoutAgentsInput {
@@ -20905,6 +18950,11 @@ input PropertyCreateOneWithoutViewingsInput {
   connect: PropertyWhereUniqueInput
 }
 
+input PropertyCreateOneWithoutWalletInput {
+  create: PropertyCreateWithoutWalletInput
+  connect: PropertyWhereUniqueInput
+}
+
 input PropertyCreateoutdoorFeaturesInput {
   set: [OutdoorFeature!]
 }
@@ -20915,6 +18965,7 @@ input PropertyCreatepetsInput {
 
 input PropertyCreateWithoutAccommodationInput {
   id: ID
+  bankRef: String
   primaryBankAccountId: String
   placeId: String!
   location: String!
@@ -20989,10 +19040,12 @@ input PropertyCreateWithoutAccommodationInput {
   files: PropertyFilesCreateOneWithoutPropertyInput
   inspections: InspectionCreateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistCreateOneWithoutPropertyInput
+  wallet: WalletCreateOneWithoutPropertyInput
 }
 
 input PropertyCreateWithoutActivityInput {
   id: ID
+  bankRef: String
   primaryBankAccountId: String
   placeId: String!
   location: String!
@@ -21067,10 +19120,12 @@ input PropertyCreateWithoutActivityInput {
   files: PropertyFilesCreateOneWithoutPropertyInput
   inspections: InspectionCreateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistCreateOneWithoutPropertyInput
+  wallet: WalletCreateOneWithoutPropertyInput
 }
 
 input PropertyCreateWithoutAgentsInput {
   id: ID
+  bankRef: String
   primaryBankAccountId: String
   placeId: String!
   location: String!
@@ -21145,10 +19200,12 @@ input PropertyCreateWithoutAgentsInput {
   files: PropertyFilesCreateOneWithoutPropertyInput
   inspections: InspectionCreateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistCreateOneWithoutPropertyInput
+  wallet: WalletCreateOneWithoutPropertyInput
 }
 
 input PropertyCreateWithoutAppraisalsInput {
   id: ID
+  bankRef: String
   primaryBankAccountId: String
   placeId: String!
   location: String!
@@ -21223,10 +19280,12 @@ input PropertyCreateWithoutAppraisalsInput {
   files: PropertyFilesCreateOneWithoutPropertyInput
   inspections: InspectionCreateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistCreateOneWithoutPropertyInput
+  wallet: WalletCreateOneWithoutPropertyInput
 }
 
 input PropertyCreateWithoutBankAccountsInput {
   id: ID
+  bankRef: String
   primaryBankAccountId: String
   placeId: String!
   location: String!
@@ -21301,10 +19360,12 @@ input PropertyCreateWithoutBankAccountsInput {
   files: PropertyFilesCreateOneWithoutPropertyInput
   inspections: InspectionCreateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistCreateOneWithoutPropertyInput
+  wallet: WalletCreateOneWithoutPropertyInput
 }
 
 input PropertyCreateWithoutBankDetailsInput {
   id: ID
+  bankRef: String
   primaryBankAccountId: String
   placeId: String!
   location: String!
@@ -21379,10 +19440,12 @@ input PropertyCreateWithoutBankDetailsInput {
   files: PropertyFilesCreateOneWithoutPropertyInput
   inspections: InspectionCreateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistCreateOneWithoutPropertyInput
+  wallet: WalletCreateOneWithoutPropertyInput
 }
 
 input PropertyCreateWithoutCreatorInput {
   id: ID
+  bankRef: String
   primaryBankAccountId: String
   placeId: String!
   location: String!
@@ -21457,10 +19520,12 @@ input PropertyCreateWithoutCreatorInput {
   files: PropertyFilesCreateOneWithoutPropertyInput
   inspections: InspectionCreateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistCreateOneWithoutPropertyInput
+  wallet: WalletCreateOneWithoutPropertyInput
 }
 
 input PropertyCreateWithoutFilesInput {
   id: ID
+  bankRef: String
   primaryBankAccountId: String
   placeId: String!
   location: String!
@@ -21535,10 +19600,12 @@ input PropertyCreateWithoutFilesInput {
   viewings: ViewingCreateManyWithoutPropertyInput
   inspections: InspectionCreateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistCreateOneWithoutPropertyInput
+  wallet: WalletCreateOneWithoutPropertyInput
 }
 
 input PropertyCreateWithoutForeignLinksInput {
   id: ID
+  bankRef: String
   primaryBankAccountId: String
   placeId: String!
   location: String!
@@ -21613,10 +19680,12 @@ input PropertyCreateWithoutForeignLinksInput {
   files: PropertyFilesCreateOneWithoutPropertyInput
   inspections: InspectionCreateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistCreateOneWithoutPropertyInput
+  wallet: WalletCreateOneWithoutPropertyInput
 }
 
 input PropertyCreateWithoutImagesInput {
   id: ID
+  bankRef: String
   primaryBankAccountId: String
   placeId: String!
   location: String!
@@ -21691,10 +19760,12 @@ input PropertyCreateWithoutImagesInput {
   files: PropertyFilesCreateOneWithoutPropertyInput
   inspections: InspectionCreateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistCreateOneWithoutPropertyInput
+  wallet: WalletCreateOneWithoutPropertyInput
 }
 
 input PropertyCreateWithoutInspectionsInput {
   id: ID
+  bankRef: String
   primaryBankAccountId: String
   placeId: String!
   location: String!
@@ -21769,10 +19840,12 @@ input PropertyCreateWithoutInspectionsInput {
   viewings: ViewingCreateManyWithoutPropertyInput
   files: PropertyFilesCreateOneWithoutPropertyInput
   rehouserAssist: PropertyAssistCreateOneWithoutPropertyInput
+  wallet: WalletCreateOneWithoutPropertyInput
 }
 
 input PropertyCreateWithoutInsulationStatementFileInput {
   id: ID
+  bankRef: String
   primaryBankAccountId: String
   placeId: String!
   location: String!
@@ -21847,10 +19920,12 @@ input PropertyCreateWithoutInsulationStatementFileInput {
   files: PropertyFilesCreateOneWithoutPropertyInput
   inspections: InspectionCreateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistCreateOneWithoutPropertyInput
+  wallet: WalletCreateOneWithoutPropertyInput
 }
 
 input PropertyCreateWithoutLeasesInput {
   id: ID
+  bankRef: String
   primaryBankAccountId: String
   placeId: String!
   location: String!
@@ -21925,10 +20000,12 @@ input PropertyCreateWithoutLeasesInput {
   files: PropertyFilesCreateOneWithoutPropertyInput
   inspections: InspectionCreateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistCreateOneWithoutPropertyInput
+  wallet: WalletCreateOneWithoutPropertyInput
 }
 
 input PropertyCreateWithoutOwnersInput {
   id: ID
+  bankRef: String
   primaryBankAccountId: String
   placeId: String!
   location: String!
@@ -22003,10 +20080,12 @@ input PropertyCreateWithoutOwnersInput {
   files: PropertyFilesCreateOneWithoutPropertyInput
   inspections: InspectionCreateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistCreateOneWithoutPropertyInput
+  wallet: WalletCreateOneWithoutPropertyInput
 }
 
 input PropertyCreateWithoutProofOfOwnershipInput {
   id: ID
+  bankRef: String
   primaryBankAccountId: String
   placeId: String!
   location: String!
@@ -22081,10 +20160,12 @@ input PropertyCreateWithoutProofOfOwnershipInput {
   files: PropertyFilesCreateOneWithoutPropertyInput
   inspections: InspectionCreateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistCreateOneWithoutPropertyInput
+  wallet: WalletCreateOneWithoutPropertyInput
 }
 
 input PropertyCreateWithoutRehouserAssistInput {
   id: ID
+  bankRef: String
   primaryBankAccountId: String
   placeId: String!
   location: String!
@@ -22159,10 +20240,12 @@ input PropertyCreateWithoutRehouserAssistInput {
   viewings: ViewingCreateManyWithoutPropertyInput
   files: PropertyFilesCreateOneWithoutPropertyInput
   inspections: InspectionCreateManyWithoutPropertyInput
+  wallet: WalletCreateOneWithoutPropertyInput
 }
 
 input PropertyCreateWithoutRentalApplicationsInput {
   id: ID
+  bankRef: String
   primaryBankAccountId: String
   placeId: String!
   location: String!
@@ -22237,10 +20320,12 @@ input PropertyCreateWithoutRentalApplicationsInput {
   files: PropertyFilesCreateOneWithoutPropertyInput
   inspections: InspectionCreateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistCreateOneWithoutPropertyInput
+  wallet: WalletCreateOneWithoutPropertyInput
 }
 
 input PropertyCreateWithoutViewingsInput {
   id: ID
+  bankRef: String
   primaryBankAccountId: String
   placeId: String!
   location: String!
@@ -22312,6 +20397,87 @@ input PropertyCreateWithoutViewingsInput {
   leases: PropertyLeaseCreateManyWithoutPropertyInput
   activity: ActivityCreateManyWithoutPropertyInput
   appraisals: RentalAppraisalCreateManyWithoutPropertyInput
+  files: PropertyFilesCreateOneWithoutPropertyInput
+  inspections: InspectionCreateManyWithoutPropertyInput
+  rehouserAssist: PropertyAssistCreateOneWithoutPropertyInput
+  wallet: WalletCreateOneWithoutPropertyInput
+}
+
+input PropertyCreateWithoutWalletInput {
+  id: ID
+  bankRef: String
+  primaryBankAccountId: String
+  placeId: String!
+  location: String!
+  locationLat: Float!
+  locationLng: Float!
+  administrative_area_level_1: String
+  country: String
+  locality: String
+  postal_code: String
+  route: String
+  street_number: String
+  titleType: PropertyTitleType!
+  type: PropertyType
+  fixedLength: TenancyFixedLength
+  headline: String
+  rooms: Int!
+  maximumOccupants: Int
+  rent: Float!
+  tenancyType: TenancyType
+  bondType: BondType
+  lowestRoomPrice: Float
+  highestRoomPrice: Float
+  useAdvancedRent: Boolean
+  bathrooms: Int
+  garageSpaces: Int!
+  carportSpaces: Int!
+  offStreetSpaces: Int!
+  insulationProof: InsulationProof
+  moveInDate: DateTime
+  expiryDate: DateTime
+  leaseLengthInMonths: Int
+  onTheMarket: Boolean
+  acceptedTerms: Boolean
+  isLeased: Boolean
+  lastLeaseId: String
+  leaseExpiryDate: DateTime
+  rehouserStamp: Boolean
+  petsAllowed: Boolean
+  manholeLocation: String
+  gardenToMaintain: Boolean
+  gardenResponsible: PartyResponsible
+  maintenanceResponsible: PartyResponsible
+  landlordProtectionCover: Boolean
+  freeGlassCover: Boolean
+  workingAlarms: Boolean
+  inHallway3mOfEachBedroom: Boolean
+  tenYearPhotoelectricAlarms: Boolean
+  alarmsEachLevel: Boolean
+  inspectionFrequency: InspectionFrequency
+  rehouserHandlesBills: Boolean
+  rehouserManaged: Boolean
+  indoorFeatures: PropertyCreateindoorFeaturesInput
+  outdoorFeatures: PropertyCreateoutdoorFeaturesInput
+  heatSources: PropertyCreateheatSourcesInput
+  pets: PropertyCreatepetsInput
+  chattels: PropertyCreatechattelsInput
+  bankAccounts: BankAccountCreateManyWithoutPropertiesInput
+  foreignLinks: ForeignLinkCreateManyWithoutPropertyInput
+  bankDetails: BankDetailCreateOneWithoutPropertyInput
+  accommodation: AccommodationCreateManyWithoutPropertyInput
+  insulationForm: InsulationFormCreateOneInput
+  insulationStatementFile: FileCreateOneWithoutPropertyInsulationFileInput
+  owners: UserCreateManyWithoutPropertiesInput
+  agents: UserCreateManyWithoutManagedPropertiesInput
+  creator: UserCreateOneWithoutCreatedPropertiesInput!
+  images: FileCreateManyWithoutPropertyImagesInput
+  proofOfOwnership: FileCreateOneWithoutPropertyOwnershipProofInput
+  rentalApplications: RentalApplicationCreateManyWithoutPropertyInput
+  leases: PropertyLeaseCreateManyWithoutPropertyInput
+  activity: ActivityCreateManyWithoutPropertyInput
+  appraisals: RentalAppraisalCreateManyWithoutPropertyInput
+  viewings: ViewingCreateManyWithoutPropertyInput
   files: PropertyFilesCreateOneWithoutPropertyInput
   inspections: InspectionCreateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistCreateOneWithoutPropertyInput
@@ -24667,6 +22833,8 @@ input PropertyLeaseWhereUniqueInput {
 enum PropertyOrderByInput {
   id_ASC
   id_DESC
+  bankRef_ASC
+  bankRef_DESC
   primaryBankAccountId_ASC
   primaryBankAccountId_DESC
   placeId_ASC
@@ -24777,6 +22945,7 @@ enum PropertyOrderByInput {
 
 type PropertyPreviousValues {
   id: ID!
+  bankRef: String
   primaryBankAccountId: String
   placeId: String!
   location: String!
@@ -24886,6 +23055,46 @@ input PropertyScalarWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  bankRef: String
+
+  """All values that are not equal to given value."""
+  bankRef_not: String
+
+  """All values that are contained in given list."""
+  bankRef_in: [String!]
+
+  """All values that are not contained in given list."""
+  bankRef_not_in: [String!]
+
+  """All values less than the given value."""
+  bankRef_lt: String
+
+  """All values less than or equal the given value."""
+  bankRef_lte: String
+
+  """All values greater than the given value."""
+  bankRef_gt: String
+
+  """All values greater than or equal the given value."""
+  bankRef_gte: String
+
+  """All values containing the given string."""
+  bankRef_contains: String
+
+  """All values not containing the given string."""
+  bankRef_not_contains: String
+
+  """All values starting with the given string."""
+  bankRef_starts_with: String
+
+  """All values not starting with the given string."""
+  bankRef_not_starts_with: String
+
+  """All values ending with the given string."""
+  bankRef_ends_with: String
+
+  """All values not ending with the given string."""
+  bankRef_not_ends_with: String
   primaryBankAccountId: String
 
   """All values that are not equal to given value."""
@@ -25962,6 +24171,7 @@ input PropertyUpdateindoorFeaturesInput {
 }
 
 input PropertyUpdateInput {
+  bankRef: String
   primaryBankAccountId: String
   placeId: String
   location: String
@@ -26037,9 +24247,11 @@ input PropertyUpdateInput {
   files: PropertyFilesUpdateOneWithoutPropertyInput
   inspections: InspectionUpdateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistUpdateOneWithoutPropertyInput
+  wallet: WalletUpdateOneWithoutPropertyInput
 }
 
 input PropertyUpdateManyDataInput {
+  bankRef: String
   primaryBankAccountId: String
   placeId: String
   location: String
@@ -26099,6 +24311,7 @@ input PropertyUpdateManyDataInput {
 }
 
 input PropertyUpdateManyMutationInput {
+  bankRef: String
   primaryBankAccountId: String
   placeId: String
   location: String
@@ -26328,6 +24541,15 @@ input PropertyUpdateOneWithoutRehouserAssistInput {
   upsert: PropertyUpsertWithoutRehouserAssistInput
 }
 
+input PropertyUpdateOneWithoutWalletInput {
+  create: PropertyCreateWithoutWalletInput
+  connect: PropertyWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: PropertyUpdateWithoutWalletDataInput
+  upsert: PropertyUpsertWithoutWalletInput
+}
+
 input PropertyUpdateoutdoorFeaturesInput {
   set: [OutdoorFeature!]
 }
@@ -26337,6 +24559,7 @@ input PropertyUpdatepetsInput {
 }
 
 input PropertyUpdateWithoutAccommodationDataInput {
+  bankRef: String
   primaryBankAccountId: String
   placeId: String
   location: String
@@ -26411,9 +24634,11 @@ input PropertyUpdateWithoutAccommodationDataInput {
   files: PropertyFilesUpdateOneWithoutPropertyInput
   inspections: InspectionUpdateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistUpdateOneWithoutPropertyInput
+  wallet: WalletUpdateOneWithoutPropertyInput
 }
 
 input PropertyUpdateWithoutActivityDataInput {
+  bankRef: String
   primaryBankAccountId: String
   placeId: String
   location: String
@@ -26488,9 +24713,11 @@ input PropertyUpdateWithoutActivityDataInput {
   files: PropertyFilesUpdateOneWithoutPropertyInput
   inspections: InspectionUpdateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistUpdateOneWithoutPropertyInput
+  wallet: WalletUpdateOneWithoutPropertyInput
 }
 
 input PropertyUpdateWithoutAgentsDataInput {
+  bankRef: String
   primaryBankAccountId: String
   placeId: String
   location: String
@@ -26565,9 +24792,11 @@ input PropertyUpdateWithoutAgentsDataInput {
   files: PropertyFilesUpdateOneWithoutPropertyInput
   inspections: InspectionUpdateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistUpdateOneWithoutPropertyInput
+  wallet: WalletUpdateOneWithoutPropertyInput
 }
 
 input PropertyUpdateWithoutAppraisalsDataInput {
+  bankRef: String
   primaryBankAccountId: String
   placeId: String
   location: String
@@ -26642,9 +24871,11 @@ input PropertyUpdateWithoutAppraisalsDataInput {
   files: PropertyFilesUpdateOneWithoutPropertyInput
   inspections: InspectionUpdateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistUpdateOneWithoutPropertyInput
+  wallet: WalletUpdateOneWithoutPropertyInput
 }
 
 input PropertyUpdateWithoutBankAccountsDataInput {
+  bankRef: String
   primaryBankAccountId: String
   placeId: String
   location: String
@@ -26719,9 +24950,11 @@ input PropertyUpdateWithoutBankAccountsDataInput {
   files: PropertyFilesUpdateOneWithoutPropertyInput
   inspections: InspectionUpdateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistUpdateOneWithoutPropertyInput
+  wallet: WalletUpdateOneWithoutPropertyInput
 }
 
 input PropertyUpdateWithoutBankDetailsDataInput {
+  bankRef: String
   primaryBankAccountId: String
   placeId: String
   location: String
@@ -26796,9 +25029,11 @@ input PropertyUpdateWithoutBankDetailsDataInput {
   files: PropertyFilesUpdateOneWithoutPropertyInput
   inspections: InspectionUpdateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistUpdateOneWithoutPropertyInput
+  wallet: WalletUpdateOneWithoutPropertyInput
 }
 
 input PropertyUpdateWithoutCreatorDataInput {
+  bankRef: String
   primaryBankAccountId: String
   placeId: String
   location: String
@@ -26873,9 +25108,11 @@ input PropertyUpdateWithoutCreatorDataInput {
   files: PropertyFilesUpdateOneWithoutPropertyInput
   inspections: InspectionUpdateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistUpdateOneWithoutPropertyInput
+  wallet: WalletUpdateOneWithoutPropertyInput
 }
 
 input PropertyUpdateWithoutFilesDataInput {
+  bankRef: String
   primaryBankAccountId: String
   placeId: String
   location: String
@@ -26950,9 +25187,11 @@ input PropertyUpdateWithoutFilesDataInput {
   viewings: ViewingUpdateManyWithoutPropertyInput
   inspections: InspectionUpdateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistUpdateOneWithoutPropertyInput
+  wallet: WalletUpdateOneWithoutPropertyInput
 }
 
 input PropertyUpdateWithoutForeignLinksDataInput {
+  bankRef: String
   primaryBankAccountId: String
   placeId: String
   location: String
@@ -27027,9 +25266,11 @@ input PropertyUpdateWithoutForeignLinksDataInput {
   files: PropertyFilesUpdateOneWithoutPropertyInput
   inspections: InspectionUpdateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistUpdateOneWithoutPropertyInput
+  wallet: WalletUpdateOneWithoutPropertyInput
 }
 
 input PropertyUpdateWithoutImagesDataInput {
+  bankRef: String
   primaryBankAccountId: String
   placeId: String
   location: String
@@ -27104,9 +25345,11 @@ input PropertyUpdateWithoutImagesDataInput {
   files: PropertyFilesUpdateOneWithoutPropertyInput
   inspections: InspectionUpdateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistUpdateOneWithoutPropertyInput
+  wallet: WalletUpdateOneWithoutPropertyInput
 }
 
 input PropertyUpdateWithoutInspectionsDataInput {
+  bankRef: String
   primaryBankAccountId: String
   placeId: String
   location: String
@@ -27181,9 +25424,11 @@ input PropertyUpdateWithoutInspectionsDataInput {
   viewings: ViewingUpdateManyWithoutPropertyInput
   files: PropertyFilesUpdateOneWithoutPropertyInput
   rehouserAssist: PropertyAssistUpdateOneWithoutPropertyInput
+  wallet: WalletUpdateOneWithoutPropertyInput
 }
 
 input PropertyUpdateWithoutInsulationStatementFileDataInput {
+  bankRef: String
   primaryBankAccountId: String
   placeId: String
   location: String
@@ -27258,9 +25503,11 @@ input PropertyUpdateWithoutInsulationStatementFileDataInput {
   files: PropertyFilesUpdateOneWithoutPropertyInput
   inspections: InspectionUpdateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistUpdateOneWithoutPropertyInput
+  wallet: WalletUpdateOneWithoutPropertyInput
 }
 
 input PropertyUpdateWithoutLeasesDataInput {
+  bankRef: String
   primaryBankAccountId: String
   placeId: String
   location: String
@@ -27335,9 +25582,11 @@ input PropertyUpdateWithoutLeasesDataInput {
   files: PropertyFilesUpdateOneWithoutPropertyInput
   inspections: InspectionUpdateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistUpdateOneWithoutPropertyInput
+  wallet: WalletUpdateOneWithoutPropertyInput
 }
 
 input PropertyUpdateWithoutOwnersDataInput {
+  bankRef: String
   primaryBankAccountId: String
   placeId: String
   location: String
@@ -27412,9 +25661,11 @@ input PropertyUpdateWithoutOwnersDataInput {
   files: PropertyFilesUpdateOneWithoutPropertyInput
   inspections: InspectionUpdateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistUpdateOneWithoutPropertyInput
+  wallet: WalletUpdateOneWithoutPropertyInput
 }
 
 input PropertyUpdateWithoutProofOfOwnershipDataInput {
+  bankRef: String
   primaryBankAccountId: String
   placeId: String
   location: String
@@ -27489,9 +25740,11 @@ input PropertyUpdateWithoutProofOfOwnershipDataInput {
   files: PropertyFilesUpdateOneWithoutPropertyInput
   inspections: InspectionUpdateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistUpdateOneWithoutPropertyInput
+  wallet: WalletUpdateOneWithoutPropertyInput
 }
 
 input PropertyUpdateWithoutRehouserAssistDataInput {
+  bankRef: String
   primaryBankAccountId: String
   placeId: String
   location: String
@@ -27566,9 +25819,11 @@ input PropertyUpdateWithoutRehouserAssistDataInput {
   viewings: ViewingUpdateManyWithoutPropertyInput
   files: PropertyFilesUpdateOneWithoutPropertyInput
   inspections: InspectionUpdateManyWithoutPropertyInput
+  wallet: WalletUpdateOneWithoutPropertyInput
 }
 
 input PropertyUpdateWithoutRentalApplicationsDataInput {
+  bankRef: String
   primaryBankAccountId: String
   placeId: String
   location: String
@@ -27643,9 +25898,11 @@ input PropertyUpdateWithoutRentalApplicationsDataInput {
   files: PropertyFilesUpdateOneWithoutPropertyInput
   inspections: InspectionUpdateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistUpdateOneWithoutPropertyInput
+  wallet: WalletUpdateOneWithoutPropertyInput
 }
 
 input PropertyUpdateWithoutViewingsDataInput {
+  bankRef: String
   primaryBankAccountId: String
   placeId: String
   location: String
@@ -27717,6 +25974,86 @@ input PropertyUpdateWithoutViewingsDataInput {
   leases: PropertyLeaseUpdateManyWithoutPropertyInput
   activity: ActivityUpdateManyWithoutPropertyInput
   appraisals: RentalAppraisalUpdateManyWithoutPropertyInput
+  files: PropertyFilesUpdateOneWithoutPropertyInput
+  inspections: InspectionUpdateManyWithoutPropertyInput
+  rehouserAssist: PropertyAssistUpdateOneWithoutPropertyInput
+  wallet: WalletUpdateOneWithoutPropertyInput
+}
+
+input PropertyUpdateWithoutWalletDataInput {
+  bankRef: String
+  primaryBankAccountId: String
+  placeId: String
+  location: String
+  locationLat: Float
+  locationLng: Float
+  administrative_area_level_1: String
+  country: String
+  locality: String
+  postal_code: String
+  route: String
+  street_number: String
+  titleType: PropertyTitleType
+  type: PropertyType
+  fixedLength: TenancyFixedLength
+  headline: String
+  rooms: Int
+  maximumOccupants: Int
+  rent: Float
+  tenancyType: TenancyType
+  bondType: BondType
+  lowestRoomPrice: Float
+  highestRoomPrice: Float
+  useAdvancedRent: Boolean
+  bathrooms: Int
+  garageSpaces: Int
+  carportSpaces: Int
+  offStreetSpaces: Int
+  insulationProof: InsulationProof
+  moveInDate: DateTime
+  expiryDate: DateTime
+  leaseLengthInMonths: Int
+  onTheMarket: Boolean
+  acceptedTerms: Boolean
+  isLeased: Boolean
+  lastLeaseId: String
+  leaseExpiryDate: DateTime
+  rehouserStamp: Boolean
+  petsAllowed: Boolean
+  manholeLocation: String
+  gardenToMaintain: Boolean
+  gardenResponsible: PartyResponsible
+  maintenanceResponsible: PartyResponsible
+  landlordProtectionCover: Boolean
+  freeGlassCover: Boolean
+  workingAlarms: Boolean
+  inHallway3mOfEachBedroom: Boolean
+  tenYearPhotoelectricAlarms: Boolean
+  alarmsEachLevel: Boolean
+  inspectionFrequency: InspectionFrequency
+  rehouserHandlesBills: Boolean
+  rehouserManaged: Boolean
+  indoorFeatures: PropertyUpdateindoorFeaturesInput
+  outdoorFeatures: PropertyUpdateoutdoorFeaturesInput
+  heatSources: PropertyUpdateheatSourcesInput
+  pets: PropertyUpdatepetsInput
+  chattels: PropertyUpdatechattelsInput
+  bankAccounts: BankAccountUpdateManyWithoutPropertiesInput
+  foreignLinks: ForeignLinkUpdateManyWithoutPropertyInput
+  bankDetails: BankDetailUpdateOneWithoutPropertyInput
+  accommodation: AccommodationUpdateManyWithoutPropertyInput
+  insulationForm: InsulationFormUpdateOneInput
+  insulationStatementFile: FileUpdateOneWithoutPropertyInsulationFileInput
+  owners: UserUpdateManyWithoutPropertiesInput
+  agents: UserUpdateManyWithoutManagedPropertiesInput
+  creator: UserUpdateOneRequiredWithoutCreatedPropertiesInput
+  images: FileUpdateManyWithoutPropertyImagesInput
+  proofOfOwnership: FileUpdateOneWithoutPropertyOwnershipProofInput
+  rentalApplications: RentalApplicationUpdateManyWithoutPropertyInput
+  leases: PropertyLeaseUpdateManyWithoutPropertyInput
+  activity: ActivityUpdateManyWithoutPropertyInput
+  appraisals: RentalAppraisalUpdateManyWithoutPropertyInput
+  viewings: ViewingUpdateManyWithoutPropertyInput
   files: PropertyFilesUpdateOneWithoutPropertyInput
   inspections: InspectionUpdateManyWithoutPropertyInput
   rehouserAssist: PropertyAssistUpdateOneWithoutPropertyInput
@@ -27812,6 +26149,11 @@ input PropertyUpsertWithoutViewingsInput {
   create: PropertyCreateWithoutViewingsInput!
 }
 
+input PropertyUpsertWithoutWalletInput {
+  update: PropertyUpdateWithoutWalletDataInput!
+  create: PropertyCreateWithoutWalletInput!
+}
+
 input PropertyUpsertWithWhereUniqueWithoutAgentsInput {
   where: PropertyWhereUniqueInput!
   update: PropertyUpdateWithoutAgentsDataInput!
@@ -27885,6 +26227,46 @@ input PropertyWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  bankRef: String
+
+  """All values that are not equal to given value."""
+  bankRef_not: String
+
+  """All values that are contained in given list."""
+  bankRef_in: [String!]
+
+  """All values that are not contained in given list."""
+  bankRef_not_in: [String!]
+
+  """All values less than the given value."""
+  bankRef_lt: String
+
+  """All values less than or equal the given value."""
+  bankRef_lte: String
+
+  """All values greater than the given value."""
+  bankRef_gt: String
+
+  """All values greater than or equal the given value."""
+  bankRef_gte: String
+
+  """All values containing the given string."""
+  bankRef_contains: String
+
+  """All values not containing the given string."""
+  bankRef_not_contains: String
+
+  """All values starting with the given string."""
+  bankRef_starts_with: String
+
+  """All values not starting with the given string."""
+  bankRef_not_starts_with: String
+
+  """All values ending with the given string."""
+  bankRef_ends_with: String
+
+  """All values not ending with the given string."""
+  bankRef_not_ends_with: String
   primaryBankAccountId: String
 
   """All values that are not equal to given value."""
@@ -28932,10 +27314,12 @@ input PropertyWhereInput {
   inspections_some: InspectionWhereInput
   inspections_none: InspectionWhereInput
   rehouserAssist: PropertyAssistWhereInput
+  wallet: WalletWhereInput
 }
 
 input PropertyWhereUniqueInput {
   id: ID
+  bankRef: String
   placeId: String
 }
 
@@ -28967,14 +27351,13 @@ type Query {
   rentalApplications(where: RentalApplicationWhereInput, orderBy: RentalApplicationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [RentalApplication]!
   lessees(where: LesseeWhereInput, orderBy: LesseeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Lessee]!
   lessors(where: LessorWhereInput, orderBy: LessorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Lessor]!
-  wallets(where: WalletWhereInput, orderBy: WalletOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Wallet]!
-  charges(where: ChargeWhereInput, orderBy: ChargeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Charge]!
-  payments(where: PaymentWhereInput, orderBy: PaymentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Payment]!
   bankAccounts(where: BankAccountWhereInput, orderBy: BankAccountOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BankAccount]!
   bankTransactions(where: BankTransactionWhereInput, orderBy: BankTransactionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BankTransaction]!
   preTenancyForms(where: PreTenancyFormWhereInput, orderBy: PreTenancyFormOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PreTenancyForm]!
+  walletTransactions(where: WalletTransactionWhereInput, orderBy: WalletTransactionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [WalletTransaction]!
   insulationForms(where: InsulationFormWhereInput, orderBy: InsulationFormOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [InsulationForm]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  wallets(where: WalletWhereInput, orderBy: WalletOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Wallet]!
   creditCards(where: CreditCardWhereInput, orderBy: CreditCardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CreditCard]!
   inspectionForms(where: InspectionFormWhereInput, orderBy: InspectionFormOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [InspectionForm]!
   savedForm(where: SavedFormWhereUniqueInput!): SavedForm
@@ -29004,14 +27387,13 @@ type Query {
   rentalApplication(where: RentalApplicationWhereUniqueInput!): RentalApplication
   lessee(where: LesseeWhereUniqueInput!): Lessee
   lessor(where: LessorWhereUniqueInput!): Lessor
-  wallet(where: WalletWhereUniqueInput!): Wallet
-  charge(where: ChargeWhereUniqueInput!): Charge
-  payment(where: PaymentWhereUniqueInput!): Payment
   bankAccount(where: BankAccountWhereUniqueInput!): BankAccount
   bankTransaction(where: BankTransactionWhereUniqueInput!): BankTransaction
   preTenancyForm(where: PreTenancyFormWhereUniqueInput!): PreTenancyForm
+  walletTransaction(where: WalletTransactionWhereUniqueInput!): WalletTransaction
   insulationForm(where: InsulationFormWhereUniqueInput!): InsulationForm
   user(where: UserWhereUniqueInput!): User
+  wallet(where: WalletWhereUniqueInput!): Wallet
   creditCard(where: CreditCardWhereUniqueInput!): CreditCard
   inspectionForm(where: InspectionFormWhereUniqueInput!): InspectionForm
   savedFormsConnection(where: SavedFormWhereInput, orderBy: SavedFormOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SavedFormConnection!
@@ -29041,14 +27423,13 @@ type Query {
   rentalApplicationsConnection(where: RentalApplicationWhereInput, orderBy: RentalApplicationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RentalApplicationConnection!
   lesseesConnection(where: LesseeWhereInput, orderBy: LesseeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LesseeConnection!
   lessorsConnection(where: LessorWhereInput, orderBy: LessorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LessorConnection!
-  walletsConnection(where: WalletWhereInput, orderBy: WalletOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): WalletConnection!
-  chargesConnection(where: ChargeWhereInput, orderBy: ChargeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ChargeConnection!
-  paymentsConnection(where: PaymentWhereInput, orderBy: PaymentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PaymentConnection!
   bankAccountsConnection(where: BankAccountWhereInput, orderBy: BankAccountOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BankAccountConnection!
   bankTransactionsConnection(where: BankTransactionWhereInput, orderBy: BankTransactionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BankTransactionConnection!
   preTenancyFormsConnection(where: PreTenancyFormWhereInput, orderBy: PreTenancyFormOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PreTenancyFormConnection!
+  walletTransactionsConnection(where: WalletTransactionWhereInput, orderBy: WalletTransactionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): WalletTransactionConnection!
   insulationFormsConnection(where: InsulationFormWhereInput, orderBy: InsulationFormOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): InsulationFormConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  walletsConnection(where: WalletWhereInput, orderBy: WalletOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): WalletConnection!
   creditCardsConnection(where: CreditCardWhereInput, orderBy: CreditCardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CreditCardConnection!
   inspectionFormsConnection(where: InspectionFormWhereInput, orderBy: InspectionFormOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): InspectionFormConnection!
 
@@ -33736,14 +32117,13 @@ type Subscription {
   rentalApplication(where: RentalApplicationSubscriptionWhereInput): RentalApplicationSubscriptionPayload
   lessee(where: LesseeSubscriptionWhereInput): LesseeSubscriptionPayload
   lessor(where: LessorSubscriptionWhereInput): LessorSubscriptionPayload
-  wallet(where: WalletSubscriptionWhereInput): WalletSubscriptionPayload
-  charge(where: ChargeSubscriptionWhereInput): ChargeSubscriptionPayload
-  payment(where: PaymentSubscriptionWhereInput): PaymentSubscriptionPayload
   bankAccount(where: BankAccountSubscriptionWhereInput): BankAccountSubscriptionPayload
   bankTransaction(where: BankTransactionSubscriptionWhereInput): BankTransactionSubscriptionPayload
   preTenancyForm(where: PreTenancyFormSubscriptionWhereInput): PreTenancyFormSubscriptionPayload
+  walletTransaction(where: WalletTransactionSubscriptionWhereInput): WalletTransactionSubscriptionPayload
   insulationForm(where: InsulationFormSubscriptionWhereInput): InsulationFormSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  wallet(where: WalletSubscriptionWhereInput): WalletSubscriptionPayload
   creditCard(where: CreditCardSubscriptionWhereInput): CreditCardSubscriptionPayload
   inspectionForm(where: InspectionFormSubscriptionWhereInput): InspectionFormSubscriptionPayload
 }
@@ -33758,6 +32138,20 @@ enum TenancyFixedLength {
 enum TenancyType {
   PERIODIC
   FIXED
+}
+
+enum TransactionCode {
+  PLRP
+  PLBC
+  PLDC
+  PLDP
+  RCSP
+  RCSC
+}
+
+enum TransactionType {
+  CHARGE
+  PAYMENT
 }
 
 enum UnderfloorInsulationTypes {
@@ -40283,9 +38677,9 @@ enum VisibilityLevel {
 type Wallet implements Node {
   id: ID!
   lease: PropertyLease
+  property: Property
   amount: Float
-  charges(where: ChargeWhereInput, orderBy: ChargeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Charge!]
-  payments(where: PaymentWhereInput, orderBy: PaymentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Payment!]
+  transactions(where: WalletTransactionWhereInput, orderBy: WalletTransactionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [WalletTransaction!]
 }
 
 """A connection to a list of items."""
@@ -40302,12 +38696,12 @@ input WalletCreateInput {
   id: ID
   amount: Float
   lease: PropertyLeaseCreateOneWithoutWalletInput
-  charges: ChargeCreateManyWithoutWalletInput
-  payments: PaymentCreateManyWithoutWalletInput
+  property: PropertyCreateOneWithoutWalletInput
+  transactions: WalletTransactionCreateManyInput
 }
 
-input WalletCreateOneWithoutChargesInput {
-  create: WalletCreateWithoutChargesInput
+input WalletCreateOneInput {
+  create: WalletCreateInput
   connect: WalletWhereUniqueInput
 }
 
@@ -40316,30 +38710,23 @@ input WalletCreateOneWithoutLeaseInput {
   connect: WalletWhereUniqueInput
 }
 
-input WalletCreateOneWithoutPaymentsInput {
-  create: WalletCreateWithoutPaymentsInput
+input WalletCreateOneWithoutPropertyInput {
+  create: WalletCreateWithoutPropertyInput
   connect: WalletWhereUniqueInput
-}
-
-input WalletCreateWithoutChargesInput {
-  id: ID
-  amount: Float
-  lease: PropertyLeaseCreateOneWithoutWalletInput
-  payments: PaymentCreateManyWithoutWalletInput
 }
 
 input WalletCreateWithoutLeaseInput {
   id: ID
   amount: Float
-  charges: ChargeCreateManyWithoutWalletInput
-  payments: PaymentCreateManyWithoutWalletInput
+  property: PropertyCreateOneWithoutWalletInput
+  transactions: WalletTransactionCreateManyInput
 }
 
-input WalletCreateWithoutPaymentsInput {
+input WalletCreateWithoutPropertyInput {
   id: ID
   amount: Float
   lease: PropertyLeaseCreateOneWithoutWalletInput
-  charges: ChargeCreateManyWithoutWalletInput
+  transactions: WalletTransactionCreateManyInput
 }
 
 """An edge in a connection."""
@@ -40400,24 +38787,1562 @@ input WalletSubscriptionWhereInput {
   node: WalletWhereInput
 }
 
+type WalletTransaction implements Node {
+  id: ID!
+  type: PaymentType
+  transactionType: TransactionType
+  reason: WalletTransactionReason
+  txCode: TransactionCode!
+  wallet: Wallet
+  amount: Float
+  userId: ID
+  bankName: String
+  bankNumber: String
+  bankBranch: String
+  bankAccount: String
+  bankSuffix: String
+  bankRef: String
+  leaseId: ID
+  propertyId: ID
+  stripePaymentId: String
+  object: Json
+  createdAt: DateTime!
+  description: String
+  status: String
+}
+
+"""A connection to a list of items."""
+type WalletTransactionConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [WalletTransactionEdge]!
+  aggregate: AggregateWalletTransaction!
+}
+
+input WalletTransactionCreateInput {
+  id: ID
+  type: PaymentType
+  transactionType: TransactionType
+  reason: WalletTransactionReason
+  txCode: TransactionCode!
+  amount: Float
+  userId: ID
+  bankName: String
+  bankNumber: String
+  bankBranch: String
+  bankAccount: String
+  bankSuffix: String
+  bankRef: String
+  leaseId: ID
+  propertyId: ID
+  stripePaymentId: String
+  object: Json
+  description: String
+  status: String
+  wallet: WalletCreateOneInput
+}
+
+input WalletTransactionCreateManyInput {
+  create: [WalletTransactionCreateInput!]
+  connect: [WalletTransactionWhereUniqueInput!]
+}
+
+"""An edge in a connection."""
+type WalletTransactionEdge {
+  """The item at the end of the edge."""
+  node: WalletTransaction!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum WalletTransactionOrderByInput {
+  id_ASC
+  id_DESC
+  type_ASC
+  type_DESC
+  transactionType_ASC
+  transactionType_DESC
+  reason_ASC
+  reason_DESC
+  txCode_ASC
+  txCode_DESC
+  amount_ASC
+  amount_DESC
+  userId_ASC
+  userId_DESC
+  bankName_ASC
+  bankName_DESC
+  bankNumber_ASC
+  bankNumber_DESC
+  bankBranch_ASC
+  bankBranch_DESC
+  bankAccount_ASC
+  bankAccount_DESC
+  bankSuffix_ASC
+  bankSuffix_DESC
+  bankRef_ASC
+  bankRef_DESC
+  leaseId_ASC
+  leaseId_DESC
+  propertyId_ASC
+  propertyId_DESC
+  stripePaymentId_ASC
+  stripePaymentId_DESC
+  object_ASC
+  object_DESC
+  createdAt_ASC
+  createdAt_DESC
+  description_ASC
+  description_DESC
+  status_ASC
+  status_DESC
+}
+
+type WalletTransactionPreviousValues {
+  id: ID!
+  type: PaymentType
+  transactionType: TransactionType
+  reason: WalletTransactionReason
+  txCode: TransactionCode!
+  amount: Float
+  userId: ID
+  bankName: String
+  bankNumber: String
+  bankBranch: String
+  bankAccount: String
+  bankSuffix: String
+  bankRef: String
+  leaseId: ID
+  propertyId: ID
+  stripePaymentId: String
+  object: Json
+  createdAt: DateTime!
+  description: String
+  status: String
+}
+
+enum WalletTransactionReason {
+  RENT_CHARGED
+  BOND_CHARGED
+  DAMAGES_CHARGED
+  COMPANY_SERVICE
+  PAYMENT_RECEIVED
+}
+
+input WalletTransactionScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [WalletTransactionScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [WalletTransactionScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [WalletTransactionScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  type: PaymentType
+
+  """All values that are not equal to given value."""
+  type_not: PaymentType
+
+  """All values that are contained in given list."""
+  type_in: [PaymentType!]
+
+  """All values that are not contained in given list."""
+  type_not_in: [PaymentType!]
+  transactionType: TransactionType
+
+  """All values that are not equal to given value."""
+  transactionType_not: TransactionType
+
+  """All values that are contained in given list."""
+  transactionType_in: [TransactionType!]
+
+  """All values that are not contained in given list."""
+  transactionType_not_in: [TransactionType!]
+  reason: WalletTransactionReason
+
+  """All values that are not equal to given value."""
+  reason_not: WalletTransactionReason
+
+  """All values that are contained in given list."""
+  reason_in: [WalletTransactionReason!]
+
+  """All values that are not contained in given list."""
+  reason_not_in: [WalletTransactionReason!]
+  txCode: TransactionCode
+
+  """All values that are not equal to given value."""
+  txCode_not: TransactionCode
+
+  """All values that are contained in given list."""
+  txCode_in: [TransactionCode!]
+
+  """All values that are not contained in given list."""
+  txCode_not_in: [TransactionCode!]
+  amount: Float
+
+  """All values that are not equal to given value."""
+  amount_not: Float
+
+  """All values that are contained in given list."""
+  amount_in: [Float!]
+
+  """All values that are not contained in given list."""
+  amount_not_in: [Float!]
+
+  """All values less than the given value."""
+  amount_lt: Float
+
+  """All values less than or equal the given value."""
+  amount_lte: Float
+
+  """All values greater than the given value."""
+  amount_gt: Float
+
+  """All values greater than or equal the given value."""
+  amount_gte: Float
+  userId: ID
+
+  """All values that are not equal to given value."""
+  userId_not: ID
+
+  """All values that are contained in given list."""
+  userId_in: [ID!]
+
+  """All values that are not contained in given list."""
+  userId_not_in: [ID!]
+
+  """All values less than the given value."""
+  userId_lt: ID
+
+  """All values less than or equal the given value."""
+  userId_lte: ID
+
+  """All values greater than the given value."""
+  userId_gt: ID
+
+  """All values greater than or equal the given value."""
+  userId_gte: ID
+
+  """All values containing the given string."""
+  userId_contains: ID
+
+  """All values not containing the given string."""
+  userId_not_contains: ID
+
+  """All values starting with the given string."""
+  userId_starts_with: ID
+
+  """All values not starting with the given string."""
+  userId_not_starts_with: ID
+
+  """All values ending with the given string."""
+  userId_ends_with: ID
+
+  """All values not ending with the given string."""
+  userId_not_ends_with: ID
+  bankName: String
+
+  """All values that are not equal to given value."""
+  bankName_not: String
+
+  """All values that are contained in given list."""
+  bankName_in: [String!]
+
+  """All values that are not contained in given list."""
+  bankName_not_in: [String!]
+
+  """All values less than the given value."""
+  bankName_lt: String
+
+  """All values less than or equal the given value."""
+  bankName_lte: String
+
+  """All values greater than the given value."""
+  bankName_gt: String
+
+  """All values greater than or equal the given value."""
+  bankName_gte: String
+
+  """All values containing the given string."""
+  bankName_contains: String
+
+  """All values not containing the given string."""
+  bankName_not_contains: String
+
+  """All values starting with the given string."""
+  bankName_starts_with: String
+
+  """All values not starting with the given string."""
+  bankName_not_starts_with: String
+
+  """All values ending with the given string."""
+  bankName_ends_with: String
+
+  """All values not ending with the given string."""
+  bankName_not_ends_with: String
+  bankNumber: String
+
+  """All values that are not equal to given value."""
+  bankNumber_not: String
+
+  """All values that are contained in given list."""
+  bankNumber_in: [String!]
+
+  """All values that are not contained in given list."""
+  bankNumber_not_in: [String!]
+
+  """All values less than the given value."""
+  bankNumber_lt: String
+
+  """All values less than or equal the given value."""
+  bankNumber_lte: String
+
+  """All values greater than the given value."""
+  bankNumber_gt: String
+
+  """All values greater than or equal the given value."""
+  bankNumber_gte: String
+
+  """All values containing the given string."""
+  bankNumber_contains: String
+
+  """All values not containing the given string."""
+  bankNumber_not_contains: String
+
+  """All values starting with the given string."""
+  bankNumber_starts_with: String
+
+  """All values not starting with the given string."""
+  bankNumber_not_starts_with: String
+
+  """All values ending with the given string."""
+  bankNumber_ends_with: String
+
+  """All values not ending with the given string."""
+  bankNumber_not_ends_with: String
+  bankBranch: String
+
+  """All values that are not equal to given value."""
+  bankBranch_not: String
+
+  """All values that are contained in given list."""
+  bankBranch_in: [String!]
+
+  """All values that are not contained in given list."""
+  bankBranch_not_in: [String!]
+
+  """All values less than the given value."""
+  bankBranch_lt: String
+
+  """All values less than or equal the given value."""
+  bankBranch_lte: String
+
+  """All values greater than the given value."""
+  bankBranch_gt: String
+
+  """All values greater than or equal the given value."""
+  bankBranch_gte: String
+
+  """All values containing the given string."""
+  bankBranch_contains: String
+
+  """All values not containing the given string."""
+  bankBranch_not_contains: String
+
+  """All values starting with the given string."""
+  bankBranch_starts_with: String
+
+  """All values not starting with the given string."""
+  bankBranch_not_starts_with: String
+
+  """All values ending with the given string."""
+  bankBranch_ends_with: String
+
+  """All values not ending with the given string."""
+  bankBranch_not_ends_with: String
+  bankAccount: String
+
+  """All values that are not equal to given value."""
+  bankAccount_not: String
+
+  """All values that are contained in given list."""
+  bankAccount_in: [String!]
+
+  """All values that are not contained in given list."""
+  bankAccount_not_in: [String!]
+
+  """All values less than the given value."""
+  bankAccount_lt: String
+
+  """All values less than or equal the given value."""
+  bankAccount_lte: String
+
+  """All values greater than the given value."""
+  bankAccount_gt: String
+
+  """All values greater than or equal the given value."""
+  bankAccount_gte: String
+
+  """All values containing the given string."""
+  bankAccount_contains: String
+
+  """All values not containing the given string."""
+  bankAccount_not_contains: String
+
+  """All values starting with the given string."""
+  bankAccount_starts_with: String
+
+  """All values not starting with the given string."""
+  bankAccount_not_starts_with: String
+
+  """All values ending with the given string."""
+  bankAccount_ends_with: String
+
+  """All values not ending with the given string."""
+  bankAccount_not_ends_with: String
+  bankSuffix: String
+
+  """All values that are not equal to given value."""
+  bankSuffix_not: String
+
+  """All values that are contained in given list."""
+  bankSuffix_in: [String!]
+
+  """All values that are not contained in given list."""
+  bankSuffix_not_in: [String!]
+
+  """All values less than the given value."""
+  bankSuffix_lt: String
+
+  """All values less than or equal the given value."""
+  bankSuffix_lte: String
+
+  """All values greater than the given value."""
+  bankSuffix_gt: String
+
+  """All values greater than or equal the given value."""
+  bankSuffix_gte: String
+
+  """All values containing the given string."""
+  bankSuffix_contains: String
+
+  """All values not containing the given string."""
+  bankSuffix_not_contains: String
+
+  """All values starting with the given string."""
+  bankSuffix_starts_with: String
+
+  """All values not starting with the given string."""
+  bankSuffix_not_starts_with: String
+
+  """All values ending with the given string."""
+  bankSuffix_ends_with: String
+
+  """All values not ending with the given string."""
+  bankSuffix_not_ends_with: String
+  bankRef: String
+
+  """All values that are not equal to given value."""
+  bankRef_not: String
+
+  """All values that are contained in given list."""
+  bankRef_in: [String!]
+
+  """All values that are not contained in given list."""
+  bankRef_not_in: [String!]
+
+  """All values less than the given value."""
+  bankRef_lt: String
+
+  """All values less than or equal the given value."""
+  bankRef_lte: String
+
+  """All values greater than the given value."""
+  bankRef_gt: String
+
+  """All values greater than or equal the given value."""
+  bankRef_gte: String
+
+  """All values containing the given string."""
+  bankRef_contains: String
+
+  """All values not containing the given string."""
+  bankRef_not_contains: String
+
+  """All values starting with the given string."""
+  bankRef_starts_with: String
+
+  """All values not starting with the given string."""
+  bankRef_not_starts_with: String
+
+  """All values ending with the given string."""
+  bankRef_ends_with: String
+
+  """All values not ending with the given string."""
+  bankRef_not_ends_with: String
+  leaseId: ID
+
+  """All values that are not equal to given value."""
+  leaseId_not: ID
+
+  """All values that are contained in given list."""
+  leaseId_in: [ID!]
+
+  """All values that are not contained in given list."""
+  leaseId_not_in: [ID!]
+
+  """All values less than the given value."""
+  leaseId_lt: ID
+
+  """All values less than or equal the given value."""
+  leaseId_lte: ID
+
+  """All values greater than the given value."""
+  leaseId_gt: ID
+
+  """All values greater than or equal the given value."""
+  leaseId_gte: ID
+
+  """All values containing the given string."""
+  leaseId_contains: ID
+
+  """All values not containing the given string."""
+  leaseId_not_contains: ID
+
+  """All values starting with the given string."""
+  leaseId_starts_with: ID
+
+  """All values not starting with the given string."""
+  leaseId_not_starts_with: ID
+
+  """All values ending with the given string."""
+  leaseId_ends_with: ID
+
+  """All values not ending with the given string."""
+  leaseId_not_ends_with: ID
+  propertyId: ID
+
+  """All values that are not equal to given value."""
+  propertyId_not: ID
+
+  """All values that are contained in given list."""
+  propertyId_in: [ID!]
+
+  """All values that are not contained in given list."""
+  propertyId_not_in: [ID!]
+
+  """All values less than the given value."""
+  propertyId_lt: ID
+
+  """All values less than or equal the given value."""
+  propertyId_lte: ID
+
+  """All values greater than the given value."""
+  propertyId_gt: ID
+
+  """All values greater than or equal the given value."""
+  propertyId_gte: ID
+
+  """All values containing the given string."""
+  propertyId_contains: ID
+
+  """All values not containing the given string."""
+  propertyId_not_contains: ID
+
+  """All values starting with the given string."""
+  propertyId_starts_with: ID
+
+  """All values not starting with the given string."""
+  propertyId_not_starts_with: ID
+
+  """All values ending with the given string."""
+  propertyId_ends_with: ID
+
+  """All values not ending with the given string."""
+  propertyId_not_ends_with: ID
+  stripePaymentId: String
+
+  """All values that are not equal to given value."""
+  stripePaymentId_not: String
+
+  """All values that are contained in given list."""
+  stripePaymentId_in: [String!]
+
+  """All values that are not contained in given list."""
+  stripePaymentId_not_in: [String!]
+
+  """All values less than the given value."""
+  stripePaymentId_lt: String
+
+  """All values less than or equal the given value."""
+  stripePaymentId_lte: String
+
+  """All values greater than the given value."""
+  stripePaymentId_gt: String
+
+  """All values greater than or equal the given value."""
+  stripePaymentId_gte: String
+
+  """All values containing the given string."""
+  stripePaymentId_contains: String
+
+  """All values not containing the given string."""
+  stripePaymentId_not_contains: String
+
+  """All values starting with the given string."""
+  stripePaymentId_starts_with: String
+
+  """All values not starting with the given string."""
+  stripePaymentId_not_starts_with: String
+
+  """All values ending with the given string."""
+  stripePaymentId_ends_with: String
+
+  """All values not ending with the given string."""
+  stripePaymentId_not_ends_with: String
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  description: String
+
+  """All values that are not equal to given value."""
+  description_not: String
+
+  """All values that are contained in given list."""
+  description_in: [String!]
+
+  """All values that are not contained in given list."""
+  description_not_in: [String!]
+
+  """All values less than the given value."""
+  description_lt: String
+
+  """All values less than or equal the given value."""
+  description_lte: String
+
+  """All values greater than the given value."""
+  description_gt: String
+
+  """All values greater than or equal the given value."""
+  description_gte: String
+
+  """All values containing the given string."""
+  description_contains: String
+
+  """All values not containing the given string."""
+  description_not_contains: String
+
+  """All values starting with the given string."""
+  description_starts_with: String
+
+  """All values not starting with the given string."""
+  description_not_starts_with: String
+
+  """All values ending with the given string."""
+  description_ends_with: String
+
+  """All values not ending with the given string."""
+  description_not_ends_with: String
+  status: String
+
+  """All values that are not equal to given value."""
+  status_not: String
+
+  """All values that are contained in given list."""
+  status_in: [String!]
+
+  """All values that are not contained in given list."""
+  status_not_in: [String!]
+
+  """All values less than the given value."""
+  status_lt: String
+
+  """All values less than or equal the given value."""
+  status_lte: String
+
+  """All values greater than the given value."""
+  status_gt: String
+
+  """All values greater than or equal the given value."""
+  status_gte: String
+
+  """All values containing the given string."""
+  status_contains: String
+
+  """All values not containing the given string."""
+  status_not_contains: String
+
+  """All values starting with the given string."""
+  status_starts_with: String
+
+  """All values not starting with the given string."""
+  status_not_starts_with: String
+
+  """All values ending with the given string."""
+  status_ends_with: String
+
+  """All values not ending with the given string."""
+  status_not_ends_with: String
+}
+
+type WalletTransactionSubscriptionPayload {
+  mutation: MutationType!
+  node: WalletTransaction
+  updatedFields: [String!]
+  previousValues: WalletTransactionPreviousValues
+}
+
+input WalletTransactionSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [WalletTransactionSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [WalletTransactionSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [WalletTransactionSubscriptionWhereInput!]
+
+  """The subscription event gets dispatched when it's listed in mutation_in"""
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: WalletTransactionWhereInput
+}
+
+input WalletTransactionUpdateDataInput {
+  type: PaymentType
+  transactionType: TransactionType
+  reason: WalletTransactionReason
+  txCode: TransactionCode
+  amount: Float
+  userId: ID
+  bankName: String
+  bankNumber: String
+  bankBranch: String
+  bankAccount: String
+  bankSuffix: String
+  bankRef: String
+  leaseId: ID
+  propertyId: ID
+  stripePaymentId: String
+  object: Json
+  description: String
+  status: String
+  wallet: WalletUpdateOneInput
+}
+
+input WalletTransactionUpdateInput {
+  type: PaymentType
+  transactionType: TransactionType
+  reason: WalletTransactionReason
+  txCode: TransactionCode
+  amount: Float
+  userId: ID
+  bankName: String
+  bankNumber: String
+  bankBranch: String
+  bankAccount: String
+  bankSuffix: String
+  bankRef: String
+  leaseId: ID
+  propertyId: ID
+  stripePaymentId: String
+  object: Json
+  description: String
+  status: String
+  wallet: WalletUpdateOneInput
+}
+
+input WalletTransactionUpdateManyDataInput {
+  type: PaymentType
+  transactionType: TransactionType
+  reason: WalletTransactionReason
+  txCode: TransactionCode
+  amount: Float
+  userId: ID
+  bankName: String
+  bankNumber: String
+  bankBranch: String
+  bankAccount: String
+  bankSuffix: String
+  bankRef: String
+  leaseId: ID
+  propertyId: ID
+  stripePaymentId: String
+  object: Json
+  description: String
+  status: String
+}
+
+input WalletTransactionUpdateManyInput {
+  create: [WalletTransactionCreateInput!]
+  connect: [WalletTransactionWhereUniqueInput!]
+  set: [WalletTransactionWhereUniqueInput!]
+  disconnect: [WalletTransactionWhereUniqueInput!]
+  delete: [WalletTransactionWhereUniqueInput!]
+  update: [WalletTransactionUpdateWithWhereUniqueNestedInput!]
+  updateMany: [WalletTransactionUpdateManyWithWhereNestedInput!]
+  deleteMany: [WalletTransactionScalarWhereInput!]
+  upsert: [WalletTransactionUpsertWithWhereUniqueNestedInput!]
+}
+
+input WalletTransactionUpdateManyMutationInput {
+  type: PaymentType
+  transactionType: TransactionType
+  reason: WalletTransactionReason
+  txCode: TransactionCode
+  amount: Float
+  userId: ID
+  bankName: String
+  bankNumber: String
+  bankBranch: String
+  bankAccount: String
+  bankSuffix: String
+  bankRef: String
+  leaseId: ID
+  propertyId: ID
+  stripePaymentId: String
+  object: Json
+  description: String
+  status: String
+}
+
+input WalletTransactionUpdateManyWithWhereNestedInput {
+  where: WalletTransactionScalarWhereInput!
+  data: WalletTransactionUpdateManyDataInput!
+}
+
+input WalletTransactionUpdateWithWhereUniqueNestedInput {
+  where: WalletTransactionWhereUniqueInput!
+  data: WalletTransactionUpdateDataInput!
+}
+
+input WalletTransactionUpsertWithWhereUniqueNestedInput {
+  where: WalletTransactionWhereUniqueInput!
+  update: WalletTransactionUpdateDataInput!
+  create: WalletTransactionCreateInput!
+}
+
+input WalletTransactionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [WalletTransactionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [WalletTransactionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [WalletTransactionWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  type: PaymentType
+
+  """All values that are not equal to given value."""
+  type_not: PaymentType
+
+  """All values that are contained in given list."""
+  type_in: [PaymentType!]
+
+  """All values that are not contained in given list."""
+  type_not_in: [PaymentType!]
+  transactionType: TransactionType
+
+  """All values that are not equal to given value."""
+  transactionType_not: TransactionType
+
+  """All values that are contained in given list."""
+  transactionType_in: [TransactionType!]
+
+  """All values that are not contained in given list."""
+  transactionType_not_in: [TransactionType!]
+  reason: WalletTransactionReason
+
+  """All values that are not equal to given value."""
+  reason_not: WalletTransactionReason
+
+  """All values that are contained in given list."""
+  reason_in: [WalletTransactionReason!]
+
+  """All values that are not contained in given list."""
+  reason_not_in: [WalletTransactionReason!]
+  txCode: TransactionCode
+
+  """All values that are not equal to given value."""
+  txCode_not: TransactionCode
+
+  """All values that are contained in given list."""
+  txCode_in: [TransactionCode!]
+
+  """All values that are not contained in given list."""
+  txCode_not_in: [TransactionCode!]
+  amount: Float
+
+  """All values that are not equal to given value."""
+  amount_not: Float
+
+  """All values that are contained in given list."""
+  amount_in: [Float!]
+
+  """All values that are not contained in given list."""
+  amount_not_in: [Float!]
+
+  """All values less than the given value."""
+  amount_lt: Float
+
+  """All values less than or equal the given value."""
+  amount_lte: Float
+
+  """All values greater than the given value."""
+  amount_gt: Float
+
+  """All values greater than or equal the given value."""
+  amount_gte: Float
+  userId: ID
+
+  """All values that are not equal to given value."""
+  userId_not: ID
+
+  """All values that are contained in given list."""
+  userId_in: [ID!]
+
+  """All values that are not contained in given list."""
+  userId_not_in: [ID!]
+
+  """All values less than the given value."""
+  userId_lt: ID
+
+  """All values less than or equal the given value."""
+  userId_lte: ID
+
+  """All values greater than the given value."""
+  userId_gt: ID
+
+  """All values greater than or equal the given value."""
+  userId_gte: ID
+
+  """All values containing the given string."""
+  userId_contains: ID
+
+  """All values not containing the given string."""
+  userId_not_contains: ID
+
+  """All values starting with the given string."""
+  userId_starts_with: ID
+
+  """All values not starting with the given string."""
+  userId_not_starts_with: ID
+
+  """All values ending with the given string."""
+  userId_ends_with: ID
+
+  """All values not ending with the given string."""
+  userId_not_ends_with: ID
+  bankName: String
+
+  """All values that are not equal to given value."""
+  bankName_not: String
+
+  """All values that are contained in given list."""
+  bankName_in: [String!]
+
+  """All values that are not contained in given list."""
+  bankName_not_in: [String!]
+
+  """All values less than the given value."""
+  bankName_lt: String
+
+  """All values less than or equal the given value."""
+  bankName_lte: String
+
+  """All values greater than the given value."""
+  bankName_gt: String
+
+  """All values greater than or equal the given value."""
+  bankName_gte: String
+
+  """All values containing the given string."""
+  bankName_contains: String
+
+  """All values not containing the given string."""
+  bankName_not_contains: String
+
+  """All values starting with the given string."""
+  bankName_starts_with: String
+
+  """All values not starting with the given string."""
+  bankName_not_starts_with: String
+
+  """All values ending with the given string."""
+  bankName_ends_with: String
+
+  """All values not ending with the given string."""
+  bankName_not_ends_with: String
+  bankNumber: String
+
+  """All values that are not equal to given value."""
+  bankNumber_not: String
+
+  """All values that are contained in given list."""
+  bankNumber_in: [String!]
+
+  """All values that are not contained in given list."""
+  bankNumber_not_in: [String!]
+
+  """All values less than the given value."""
+  bankNumber_lt: String
+
+  """All values less than or equal the given value."""
+  bankNumber_lte: String
+
+  """All values greater than the given value."""
+  bankNumber_gt: String
+
+  """All values greater than or equal the given value."""
+  bankNumber_gte: String
+
+  """All values containing the given string."""
+  bankNumber_contains: String
+
+  """All values not containing the given string."""
+  bankNumber_not_contains: String
+
+  """All values starting with the given string."""
+  bankNumber_starts_with: String
+
+  """All values not starting with the given string."""
+  bankNumber_not_starts_with: String
+
+  """All values ending with the given string."""
+  bankNumber_ends_with: String
+
+  """All values not ending with the given string."""
+  bankNumber_not_ends_with: String
+  bankBranch: String
+
+  """All values that are not equal to given value."""
+  bankBranch_not: String
+
+  """All values that are contained in given list."""
+  bankBranch_in: [String!]
+
+  """All values that are not contained in given list."""
+  bankBranch_not_in: [String!]
+
+  """All values less than the given value."""
+  bankBranch_lt: String
+
+  """All values less than or equal the given value."""
+  bankBranch_lte: String
+
+  """All values greater than the given value."""
+  bankBranch_gt: String
+
+  """All values greater than or equal the given value."""
+  bankBranch_gte: String
+
+  """All values containing the given string."""
+  bankBranch_contains: String
+
+  """All values not containing the given string."""
+  bankBranch_not_contains: String
+
+  """All values starting with the given string."""
+  bankBranch_starts_with: String
+
+  """All values not starting with the given string."""
+  bankBranch_not_starts_with: String
+
+  """All values ending with the given string."""
+  bankBranch_ends_with: String
+
+  """All values not ending with the given string."""
+  bankBranch_not_ends_with: String
+  bankAccount: String
+
+  """All values that are not equal to given value."""
+  bankAccount_not: String
+
+  """All values that are contained in given list."""
+  bankAccount_in: [String!]
+
+  """All values that are not contained in given list."""
+  bankAccount_not_in: [String!]
+
+  """All values less than the given value."""
+  bankAccount_lt: String
+
+  """All values less than or equal the given value."""
+  bankAccount_lte: String
+
+  """All values greater than the given value."""
+  bankAccount_gt: String
+
+  """All values greater than or equal the given value."""
+  bankAccount_gte: String
+
+  """All values containing the given string."""
+  bankAccount_contains: String
+
+  """All values not containing the given string."""
+  bankAccount_not_contains: String
+
+  """All values starting with the given string."""
+  bankAccount_starts_with: String
+
+  """All values not starting with the given string."""
+  bankAccount_not_starts_with: String
+
+  """All values ending with the given string."""
+  bankAccount_ends_with: String
+
+  """All values not ending with the given string."""
+  bankAccount_not_ends_with: String
+  bankSuffix: String
+
+  """All values that are not equal to given value."""
+  bankSuffix_not: String
+
+  """All values that are contained in given list."""
+  bankSuffix_in: [String!]
+
+  """All values that are not contained in given list."""
+  bankSuffix_not_in: [String!]
+
+  """All values less than the given value."""
+  bankSuffix_lt: String
+
+  """All values less than or equal the given value."""
+  bankSuffix_lte: String
+
+  """All values greater than the given value."""
+  bankSuffix_gt: String
+
+  """All values greater than or equal the given value."""
+  bankSuffix_gte: String
+
+  """All values containing the given string."""
+  bankSuffix_contains: String
+
+  """All values not containing the given string."""
+  bankSuffix_not_contains: String
+
+  """All values starting with the given string."""
+  bankSuffix_starts_with: String
+
+  """All values not starting with the given string."""
+  bankSuffix_not_starts_with: String
+
+  """All values ending with the given string."""
+  bankSuffix_ends_with: String
+
+  """All values not ending with the given string."""
+  bankSuffix_not_ends_with: String
+  bankRef: String
+
+  """All values that are not equal to given value."""
+  bankRef_not: String
+
+  """All values that are contained in given list."""
+  bankRef_in: [String!]
+
+  """All values that are not contained in given list."""
+  bankRef_not_in: [String!]
+
+  """All values less than the given value."""
+  bankRef_lt: String
+
+  """All values less than or equal the given value."""
+  bankRef_lte: String
+
+  """All values greater than the given value."""
+  bankRef_gt: String
+
+  """All values greater than or equal the given value."""
+  bankRef_gte: String
+
+  """All values containing the given string."""
+  bankRef_contains: String
+
+  """All values not containing the given string."""
+  bankRef_not_contains: String
+
+  """All values starting with the given string."""
+  bankRef_starts_with: String
+
+  """All values not starting with the given string."""
+  bankRef_not_starts_with: String
+
+  """All values ending with the given string."""
+  bankRef_ends_with: String
+
+  """All values not ending with the given string."""
+  bankRef_not_ends_with: String
+  leaseId: ID
+
+  """All values that are not equal to given value."""
+  leaseId_not: ID
+
+  """All values that are contained in given list."""
+  leaseId_in: [ID!]
+
+  """All values that are not contained in given list."""
+  leaseId_not_in: [ID!]
+
+  """All values less than the given value."""
+  leaseId_lt: ID
+
+  """All values less than or equal the given value."""
+  leaseId_lte: ID
+
+  """All values greater than the given value."""
+  leaseId_gt: ID
+
+  """All values greater than or equal the given value."""
+  leaseId_gte: ID
+
+  """All values containing the given string."""
+  leaseId_contains: ID
+
+  """All values not containing the given string."""
+  leaseId_not_contains: ID
+
+  """All values starting with the given string."""
+  leaseId_starts_with: ID
+
+  """All values not starting with the given string."""
+  leaseId_not_starts_with: ID
+
+  """All values ending with the given string."""
+  leaseId_ends_with: ID
+
+  """All values not ending with the given string."""
+  leaseId_not_ends_with: ID
+  propertyId: ID
+
+  """All values that are not equal to given value."""
+  propertyId_not: ID
+
+  """All values that are contained in given list."""
+  propertyId_in: [ID!]
+
+  """All values that are not contained in given list."""
+  propertyId_not_in: [ID!]
+
+  """All values less than the given value."""
+  propertyId_lt: ID
+
+  """All values less than or equal the given value."""
+  propertyId_lte: ID
+
+  """All values greater than the given value."""
+  propertyId_gt: ID
+
+  """All values greater than or equal the given value."""
+  propertyId_gte: ID
+
+  """All values containing the given string."""
+  propertyId_contains: ID
+
+  """All values not containing the given string."""
+  propertyId_not_contains: ID
+
+  """All values starting with the given string."""
+  propertyId_starts_with: ID
+
+  """All values not starting with the given string."""
+  propertyId_not_starts_with: ID
+
+  """All values ending with the given string."""
+  propertyId_ends_with: ID
+
+  """All values not ending with the given string."""
+  propertyId_not_ends_with: ID
+  stripePaymentId: String
+
+  """All values that are not equal to given value."""
+  stripePaymentId_not: String
+
+  """All values that are contained in given list."""
+  stripePaymentId_in: [String!]
+
+  """All values that are not contained in given list."""
+  stripePaymentId_not_in: [String!]
+
+  """All values less than the given value."""
+  stripePaymentId_lt: String
+
+  """All values less than or equal the given value."""
+  stripePaymentId_lte: String
+
+  """All values greater than the given value."""
+  stripePaymentId_gt: String
+
+  """All values greater than or equal the given value."""
+  stripePaymentId_gte: String
+
+  """All values containing the given string."""
+  stripePaymentId_contains: String
+
+  """All values not containing the given string."""
+  stripePaymentId_not_contains: String
+
+  """All values starting with the given string."""
+  stripePaymentId_starts_with: String
+
+  """All values not starting with the given string."""
+  stripePaymentId_not_starts_with: String
+
+  """All values ending with the given string."""
+  stripePaymentId_ends_with: String
+
+  """All values not ending with the given string."""
+  stripePaymentId_not_ends_with: String
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  description: String
+
+  """All values that are not equal to given value."""
+  description_not: String
+
+  """All values that are contained in given list."""
+  description_in: [String!]
+
+  """All values that are not contained in given list."""
+  description_not_in: [String!]
+
+  """All values less than the given value."""
+  description_lt: String
+
+  """All values less than or equal the given value."""
+  description_lte: String
+
+  """All values greater than the given value."""
+  description_gt: String
+
+  """All values greater than or equal the given value."""
+  description_gte: String
+
+  """All values containing the given string."""
+  description_contains: String
+
+  """All values not containing the given string."""
+  description_not_contains: String
+
+  """All values starting with the given string."""
+  description_starts_with: String
+
+  """All values not starting with the given string."""
+  description_not_starts_with: String
+
+  """All values ending with the given string."""
+  description_ends_with: String
+
+  """All values not ending with the given string."""
+  description_not_ends_with: String
+  status: String
+
+  """All values that are not equal to given value."""
+  status_not: String
+
+  """All values that are contained in given list."""
+  status_in: [String!]
+
+  """All values that are not contained in given list."""
+  status_not_in: [String!]
+
+  """All values less than the given value."""
+  status_lt: String
+
+  """All values less than or equal the given value."""
+  status_lte: String
+
+  """All values greater than the given value."""
+  status_gt: String
+
+  """All values greater than or equal the given value."""
+  status_gte: String
+
+  """All values containing the given string."""
+  status_contains: String
+
+  """All values not containing the given string."""
+  status_not_contains: String
+
+  """All values starting with the given string."""
+  status_starts_with: String
+
+  """All values not starting with the given string."""
+  status_not_starts_with: String
+
+  """All values ending with the given string."""
+  status_ends_with: String
+
+  """All values not ending with the given string."""
+  status_not_ends_with: String
+  wallet: WalletWhereInput
+}
+
+input WalletTransactionWhereUniqueInput {
+  id: ID
+}
+
+input WalletUpdateDataInput {
+  amount: Float
+  lease: PropertyLeaseUpdateOneWithoutWalletInput
+  property: PropertyUpdateOneWithoutWalletInput
+  transactions: WalletTransactionUpdateManyInput
+}
+
 input WalletUpdateInput {
   amount: Float
   lease: PropertyLeaseUpdateOneWithoutWalletInput
-  charges: ChargeUpdateManyWithoutWalletInput
-  payments: PaymentUpdateManyWithoutWalletInput
+  property: PropertyUpdateOneWithoutWalletInput
+  transactions: WalletTransactionUpdateManyInput
 }
 
 input WalletUpdateManyMutationInput {
   amount: Float
 }
 
-input WalletUpdateOneWithoutChargesInput {
-  create: WalletCreateWithoutChargesInput
+input WalletUpdateOneInput {
+  create: WalletCreateInput
   connect: WalletWhereUniqueInput
   disconnect: Boolean
   delete: Boolean
-  update: WalletUpdateWithoutChargesDataInput
-  upsert: WalletUpsertWithoutChargesInput
+  update: WalletUpdateDataInput
+  upsert: WalletUpsertNestedInput
 }
 
 input WalletUpdateOneWithoutLeaseInput {
@@ -40429,36 +40354,30 @@ input WalletUpdateOneWithoutLeaseInput {
   upsert: WalletUpsertWithoutLeaseInput
 }
 
-input WalletUpdateOneWithoutPaymentsInput {
-  create: WalletCreateWithoutPaymentsInput
+input WalletUpdateOneWithoutPropertyInput {
+  create: WalletCreateWithoutPropertyInput
   connect: WalletWhereUniqueInput
   disconnect: Boolean
   delete: Boolean
-  update: WalletUpdateWithoutPaymentsDataInput
-  upsert: WalletUpsertWithoutPaymentsInput
-}
-
-input WalletUpdateWithoutChargesDataInput {
-  amount: Float
-  lease: PropertyLeaseUpdateOneWithoutWalletInput
-  payments: PaymentUpdateManyWithoutWalletInput
+  update: WalletUpdateWithoutPropertyDataInput
+  upsert: WalletUpsertWithoutPropertyInput
 }
 
 input WalletUpdateWithoutLeaseDataInput {
   amount: Float
-  charges: ChargeUpdateManyWithoutWalletInput
-  payments: PaymentUpdateManyWithoutWalletInput
+  property: PropertyUpdateOneWithoutWalletInput
+  transactions: WalletTransactionUpdateManyInput
 }
 
-input WalletUpdateWithoutPaymentsDataInput {
+input WalletUpdateWithoutPropertyDataInput {
   amount: Float
   lease: PropertyLeaseUpdateOneWithoutWalletInput
-  charges: ChargeUpdateManyWithoutWalletInput
+  transactions: WalletTransactionUpdateManyInput
 }
 
-input WalletUpsertWithoutChargesInput {
-  update: WalletUpdateWithoutChargesDataInput!
-  create: WalletCreateWithoutChargesInput!
+input WalletUpsertNestedInput {
+  update: WalletUpdateDataInput!
+  create: WalletCreateInput!
 }
 
 input WalletUpsertWithoutLeaseInput {
@@ -40466,9 +40385,9 @@ input WalletUpsertWithoutLeaseInput {
   create: WalletCreateWithoutLeaseInput!
 }
 
-input WalletUpsertWithoutPaymentsInput {
-  update: WalletUpdateWithoutPaymentsDataInput!
-  create: WalletCreateWithoutPaymentsInput!
+input WalletUpsertWithoutPropertyInput {
+  update: WalletUpdateWithoutPropertyDataInput!
+  create: WalletCreateWithoutPropertyInput!
 }
 
 input WalletWhereInput {
@@ -40543,12 +40462,10 @@ input WalletWhereInput {
   """All values greater than or equal the given value."""
   amount_gte: Float
   lease: PropertyLeaseWhereInput
-  charges_every: ChargeWhereInput
-  charges_some: ChargeWhereInput
-  charges_none: ChargeWhereInput
-  payments_every: PaymentWhereInput
-  payments_some: PaymentWhereInput
-  payments_none: PaymentWhereInput
+  property: PropertyWhereInput
+  transactions_every: WalletTransactionWhereInput
+  transactions_some: WalletTransactionWhereInput
+  transactions_none: WalletTransactionWhereInput
 }
 
 input WalletWhereUniqueInput {

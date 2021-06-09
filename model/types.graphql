@@ -290,6 +290,7 @@ type File {
 
 type Property implements PropertyInfo {
   id: ID! @unique @id # google placesId is too looong look below
+  bankRef: String @unique # nanoid (12) fro bank accounts to ref it
   bankAccounts: [BankAccount]
     @relation(name: "BankAccountProperties", onDelete: SET_NULL)
   primaryBankAccountId: String
@@ -372,6 +373,7 @@ type Property implements PropertyInfo {
   rehouserHandlesBills: Boolean @default(value: false)
   rehouserAssist: PropertyAssist @relation(name: "PropertyAssists", link: TABLE)
   rehouserManaged: Boolean @default(value: true)
+  wallet: Wallet @relation(name: "PropertyWallet", link: INLINE)
 }
 
 type PropertyFiles {
@@ -560,41 +562,31 @@ type Lessor {
 type Wallet {
   id: ID! @unique @id
   lease: PropertyLease @relation(name: "LeaseWallet")
+  property: Property @relation(name: "PropertyWallet")
   amount: Float
-  charges: [Charge] @relation(name: "WalletCharges", link: TABLE)
-  payments: [Payment] @relation(name: "WalletPayments", link: TABLE)
+  transactions: [WalletTransaction]
+    @relation(name: "WalletTransactions", link: TABLE)
 }
 
-type Charge {
+type WalletTransaction {
   id: ID! @unique @id
-  createdAt: DateTime! @createdAt
-  wallet: Wallet @relation(name: "WalletCharges")
-  reason: ChargeReason
-  amount: Float
-  description: String
-}
-# bankNumber: String
-#   branchNumber: String
-#   accountNumber: String
-# ToDo add Payment model to the wallet and display wallet on the front end
-# Probably best to link the payment to a user
-type Payment {
-  id: ID! @unique @id
+  type: PaymentType
+  transactionType: TransactionType
+  reason: WalletTransactionReason
+  txCode: TransactionCode! # every wallet and bank transaction will have a transaction code. these will be short and will record every transaction option we have
   wallet: Wallet @relation(name: "WalletPayments")
-  userId: ID!
+  amount: Float
+  userId: ID
   bankName: String
   bankNumber: String
   bankBranch: String
   bankAccount: String
   bankSuffix: String
-  bankRef: String
-  type: PaymentType
-  reason: PaymentReason
+  bankRef: String # in a BankTransaction the reference will have the lease or property id
   leaseId: ID
   propertyId: ID
   stripePaymentId: String
   object: Json
-  amount: Float
   createdAt: DateTime! @createdAt
   description: String
   status: String
@@ -628,7 +620,7 @@ type BankTransaction {
   date: DateTime # 'Date',
   reference: String #'Reference',
   amount: Float #'Amount',
-  txCode: String #'Transaction Code',
+  txCode: String #'Transaction Code', TransactionCode types but let anything come through here
   txType: String #'Transaction Type',
   source: String #'Source',
   otherPart: String #'Other Party',

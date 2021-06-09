@@ -38,7 +38,7 @@ const createPreTenancyForm = require("./mutations/createPreTenancyForm");
 const createRentalAppraisal = require("./mutations/createRentalAppraisal");
 const offerRentalAppraisal = require("./mutations/offerRentalAppraisal");
 const uploadSignature = require("./mutations/uploadSignature");
-const createPayment = require("./mutations/createPayment");
+const createWalletTransaction = require("./mutations/createWalletTransaction");
 const updateWallet = require("./mutations/updateWallet");
 const createViewing = require("./mutations/createViewing");
 const updateViewing = require("./mutations/updateViewing");
@@ -102,7 +102,7 @@ const mutations = {
   createRentalAppraisal,
   offerRentalAppraisal,
   uploadSignature,
-  createPayment,
+  createWalletTransaction,
   updateWallet,
   createViewing,
   updateViewing,

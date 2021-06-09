@@ -11,7 +11,7 @@ async function rentalApplicationCreatedSubscription(
   );
 }
 const rentalApplicationCreatedSub = {
-  subscribe: rentalApplicationCreatedSubscription
+  subscribe: rentalApplicationCreatedSubscription,
 };
 
 // rentalApplication update subscription
@@ -28,7 +28,7 @@ async function rentalApplicationUpdateSubscription(
   return sub;
 }
 const rentalApplicationUpdateSub = {
-  subscribe: rentalApplicationUpdateSubscription
+  subscribe: rentalApplicationUpdateSubscription,
 };
 
 // rentalApplication Pending SUbscription
@@ -44,7 +44,7 @@ async function rentalApplicationCompletedSubscription(
   );
 }
 const rentalApplicationCompletedSub = {
-  subscribe: rentalApplicationCompletedSubscription
+  subscribe: rentalApplicationCompletedSubscription,
 };
 
 // New messages Subscription
@@ -52,14 +52,14 @@ async function message(parent, args, context, info) {
   return context.db.subscription.message({ ...args }, info);
 }
 const messageSub = {
-  subscribe: message
+  subscribe: message,
 };
 
 async function chat(parent, args, context, info) {
   return context.db.subscription.chat({ ...args }, info);
 }
 const chatSub = {
-  subscribe: chat
+  subscribe: chat,
 };
 
 // wallet subscription
@@ -68,7 +68,7 @@ async function wallet(parent, args, context, info) {
 }
 
 const walletSub = {
-  subscribe: wallet
+  subscribe: wallet,
 };
 
 async function propertyLease(parent, args, context, info) {
@@ -76,23 +76,15 @@ async function propertyLease(parent, args, context, info) {
 }
 
 const propertyLeaseSub = {
-  subscribe: propertyLease
+  subscribe: propertyLease,
 };
 
-async function payment(parent, args, context, info) {
-  return context.db.subscription.payment({ ...args }, info);
+async function walletTransaction(parent, args, context, info) {
+  return context.db.subscription.walletTransaction({ ...args }, info);
 }
 
-const paymentSub = {
-  subscribe: payment
-};
-
-async function charge(parent, args, context, info) {
-  return context.db.subscription.charge({ ...args }, info);
-}
-
-const chargeSub = {
-  subscribe: charge
+const walletTransactionSub = {
+  subscribe: walletTransaction,
 };
 
 async function rentalAppraisal(parent, args, context, info) {
@@ -100,7 +92,7 @@ async function rentalAppraisal(parent, args, context, info) {
 }
 
 const rentalAppraisalSub = {
-  subscribe: rentalAppraisal
+  subscribe: rentalAppraisal,
 };
 
 async function property(parent, args, context, info) {
@@ -108,7 +100,7 @@ async function property(parent, args, context, info) {
 }
 
 const propertySub = {
-  subscribe: property
+  subscribe: property,
 };
 
 async function user(parent, args, context, info) {
@@ -116,7 +108,7 @@ async function user(parent, args, context, info) {
 }
 
 const userSub = {
-  subscribe: user
+  subscribe: user,
 };
 
 async function inspection(parent, args, context, info) {
@@ -124,7 +116,7 @@ async function inspection(parent, args, context, info) {
 }
 
 const inspectionSub = {
-  subscribe: inspection
+  subscribe: inspection,
 };
 
 async function rentalApplication(parent, args, context, info) {
@@ -132,11 +124,8 @@ async function rentalApplication(parent, args, context, info) {
 }
 
 const rentalApplicationSub = {
-  subscribe: rentalApplication
+  subscribe: rentalApplication,
 };
-
-
-
 
 module.exports = {
   rentalApplicationCreatedSub,
@@ -145,11 +134,10 @@ module.exports = {
   messageSub,
   walletSub,
   propertyLeaseSub,
-  paymentSub,
-  chargeSub,
+  walletTransactionSub,
   rentalAppraisalSub,
   propertySub,
   userSub,
   inspectionSub,
-  rentalApplicationSub
+  rentalApplicationSub,
 };

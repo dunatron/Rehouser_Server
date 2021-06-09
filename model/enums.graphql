@@ -33,15 +33,26 @@ enum PaymentType {
   MANUAL_BANK_TRANSFER
 }
 
-enum ChargeReason {
-  RENT
-  BOND
-  DAMAGES
+enum TransactionType {
+  CHARGE
+  PAYMENT
 }
 
-enum PaymentReason {
-  RENT
-  BOND
+enum WalletTransactionReason {
+  RENT_CHARGED
+  BOND_CHARGED
+  DAMAGES_CHARGED
+  COMPANY_SERVICE
+  PAYMENT_RECEIVED
+}
+
+enum TransactionCode {
+  PLRP # property lease rental payment.
+  PLBC # property lease bond charged
+  PLDC # property lease damage charge
+  PLDP # property lease damage payment
+  RCSP # rehouser company service payment. ie an owner could pay this to us
+  RCSC # rehouser company service charge. this can be added to the system to charge a property for a rehouser service
 }
 
 enum VisibilityLevel {
