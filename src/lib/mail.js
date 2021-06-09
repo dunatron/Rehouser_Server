@@ -1,54 +1,60 @@
 const nodemailer = require("nodemailer");
 const moment = require("moment");
 const { CEO_DETAILS } = require("../const");
+const cto_signature = require("../lib/emails/templates/cto_signature");
+
+const primaryColor = "#0276e8";
+const textColor = "#3e3e3e";
+const body1TextStyle = `color="${textColor}" font-size="medium" style="margin: 0px 0px 16px 0px; color: ${textColor}; font-size: 16px; line-height: 22px;"`;
+const body2TextStyle = `color="${textColor}" font-size="medium" style="margin: 0px 0px 16px 0px; color: ${textColor}; font-size: 14px; line-height: 22px;"`;
+const subTextStyle = `color="${textColor}" font-size="small" style="font-size: 12px; line-height: 18px; color: ${textColor};"`;
 
 // https://my.sendinblue.com/users/settings
 const transport = nodemailer.createTransport({
   host: process.env.MAIL_HOST,
   port: process.env.MAIL_PORT,
   auth: {
-    user: process.env.MAIL_LOGIN, // replace with your Mailtrap credentials
-    pass: process.env.MAIL_PASS
+    user: process.env.MAIL_LOGIN,
+    pass: process.env.MAIL_PASS,
   },
-  // debug: process.env.STAGE === "dev" ? true : false, // show debug output
-  // logger: process.env.STAGE === "dev" ? true : false // log information in console
-  // debug: process.env.STAGE === "prod" ? false : true, // show debug output
-  // logger: process.env.STAGE === "prod" ? false : true // log information in console
-  debug: false, // show debug output
-  logger: false // log information in console
+  debug: false,
+  logger: false,
 });
 
-const makeANiceEmail = (text, user) => {
+const makeANiceEmail = (text, user, { adminSignature = true }) => {
   var today = moment().format("dddd, MMMM Do YYYY");
-  var primaryColor = "#d0a85c";
-  var secondaryColor = "#002443";
 
   var hasName = user.firstName || user.lastName;
 
   var dearUserSection = hasName
-    ? `<div style="margin-bottom: 16px;">
-        To ${user && user.firstName} ${user && user.lastName}
+    ? `<div  style="margin-bottom: 16px;">
+        <p ${body1TextStyle}>To ${user && user.firstName} ${user &&
+        user.lastName}</p>
       </div>`
     : "";
 
+  const signature = adminSignature ? cto_signature : "";
+
   return `
   <div className="email" style="
-    border: 2px solid ${primaryColor};
     padding: 20px;
     font-family: sans-serif;
     line-height: 2;
     font-size: 16px;
+    max-width: 640px;
+    color: ${textColor};
   ">
-    <!-- heading -->
-    <h2 style="color: ${secondaryColor}; border-bottom: 3px solid ${primaryColor}; font-size: 26px">Rehouser Property Management Ltd</h2>
-    <!-- adress details -->
-    <div style="font-size: 12px; line-height: 18px;">
-      <div>Rehouser</div>
-      <div>${CEO_DETAILS.phone}</div>
-      <div>${CEO_DETAILS.email}</div>
+  <div style="height: 80px; text-align: center;"><img src="https://drive.google.com/uc?id=1AQPW9l1QSw-6N3c_DzLj_ETzD_vHMYaV" style="" role="presentation" height="80" margin: 0 auto; display: block;"></div>
+  <!-- heading -->
+  <h2 style="color: ${textColor}; border-bottom: 3px solid ${primaryColor}; font-size: 26px; text-align: center;">ReHouser Property Management Ltd</h2>
+    <!-- address details -->
+    <div>
+      <div ${subTextStyle}>ReHouser</div>
+      <div ${subTextStyle}>${CEO_DETAILS.phone}</div>
+      <div ${subTextStyle}>${CEO_DETAILS.email}</div>
     </div>
     <!-- date -->
-    <div style="margin: 16px 0;">${today}</div>
+    <p ${subTextStyle}>${today}</p>
     <!-- dear -->
     ${dearUserSection}
     <!-- content/text -->
@@ -56,17 +62,9 @@ const makeANiceEmail = (text, user) => {
     <!-- regards -->
     <div style="margin-top: 32px; line-height: 22px;">
       <div style="margin-bottom: 32px;">
-         With Kind Regards,
+         <p ${body1TextStyle}>With Kind Regards,</p>
       </div>
-      <div>
-        ${CEO_DETAILS.firstname} ${CEO_DETAILS.lastname}
-      </div>
-      <div>
-        Rehouser Property Manager
-      </div>
-      <div>
-        ${CEO_DETAILS.phone}
-      </div>
+      ${signature}
     </div>
   </div>
   `;
@@ -74,3 +72,9 @@ const makeANiceEmail = (text, user) => {
 
 exports.transport = transport;
 exports.makeANiceEmail = makeANiceEmail;
+
+// text styles
+exports.primaryColor = primaryColor;
+exports.body1TextStyle = body1TextStyle;
+exports.body2TextStyle = body2TextStyle;
+exports.subTextStyle = subTextStyle;

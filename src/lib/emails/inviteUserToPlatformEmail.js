@@ -1,4 +1,4 @@
-const { transport, makeANiceEmail } = require("../mail");
+const { transport, makeANiceEmail, body2TextStyle } = require("../mail");
 const { CEO_DETAILS } = require("../../const");
 
 const inviteUserToPlatformEmail = async function({
@@ -8,28 +8,31 @@ const inviteUserToPlatformEmail = async function({
   subUrl,
   message,
 }) {
+  const inviterName = invitor ? invitor.firstName : "";
+  const inviterLastName = invitor ? invitor.lastName : "";
   return transport.sendMail({
     from: process.env.MAIL_USER,
     to: email,
     // subject: "Invitation to Rehouser",
     from: {
-      name: "Rehouser Platform Invite",
+      name: "ReHouser Platform Invite",
       address: process.env.MAIL_USER,
     },
-    subject: `${invitor && invitor.firstName} ${" "} ${invitor &&
-      invitor.lastName} has invited you to the rehouser property platform`,
+    subject: `${inviterName} ${" "} ${inviterLastName} has invited you to the ReHouser property platform`,
     html: makeANiceEmail(
-      `${invitor &&
-        invitor.firstName} has invited you to the rehouser property platform!
-        \n\n
-        <a href="${
-          process.env.FRONTEND_URL
-        }${subUrl}?invite=1">They have invited you to this section</a>
-        <div style="line-height: 18px;">
-            ${message}
-        </div>
-        `,
-      user
+      `
+<p>${inviterName} ${" "} ${inviterLastName} has invited you to the ReHouser property platform!</p>
+<p>
+<a href="${
+        process.env.FRONTEND_URL
+      }${subUrl}?invite=1">They have invited you to this section</a>
+</p>
+<div style="line-height: 18px;">
+  <p> ${message}</p>
+</div>
+`,
+      user,
+      { adminSignature: true }
     ),
   });
 };

@@ -1,4 +1,4 @@
-const { transport, makeANiceEmail } = require("../mail");
+const { transport, makeANiceEmail, body2TextStyle } = require("../mail");
 
 const offerRentalAppraisalEmail = async function({
   toEmail,
@@ -17,49 +17,39 @@ const offerRentalAppraisalEmail = async function({
     rentValueAccepted,
   } = appraisal;
 
+  const addPropertyLink = `process.env.FRONTEND_URL}/landlord/properties/add?appraisal_id=${appraisal.id}`;
+
   return transport.sendMail({
     // from: process.env.MAIL_USER,
     from: {
-      name: "Rehouser Property Appraised",
+      name: "ReHouser Property Appraised",
       address: process.env.MAIL_USER,
     },
     to: toEmail,
     subject: `Property has been appraised for ${location}`,
     html: makeANiceEmail(
       `
-<div style="line-height: 18px;">
+<p ${body2TextStyle}>
     Thank you for giving us the opportunity to provide you with a professional rental appraisal for your property.
-</div>
-<div style="line-height: 18px; margin-top: 16px;">
+</p>
+<p ${body2TextStyle}>
   After considering your property and the current rental market conditions we would be able to secure a weekly
-  rent of $${rent /
-    100}. This amount has been based on similar properties within the vicinity of your property. \n
-  You can begin adding this property to the platform by clicking the below link 
-  <a href="${process.env.FRONTEND_URL}/landlord/properties/add?appraisal_id=${
-        appraisal.id
-      }">add Property</a> \n
-</div>
-
-<div style="line-height: 18px; margin-top: 16px;">
-  We would be grateful for the opportunity to Let and Manage your property with support of our platform <a href="${
-    process.env.FRONTEND_URL
-  }">Rehouser</a>
-</div>
-<div style="line-height: 18px; margin-top: 16px;">
-  You can review our terms and conditions here at the landlord portal.<a href="${
-    process.env.FRONTEND_URL
-  }/landlord/terms-of-engagement">Landlord Portal Terms of engagement</a>
-</div>
-<div style="line-height: 18px; margin-top: 16px;">
-  <a href="${process.env.FRONTEND_URL}/landlord/properties/add?appraisal_id=${
-        appraisal.id
-      }">Begin adding property based on appraisal</a> \n
-</div>
-<div style="line-height: 18px; margin-top: 16px;">
+  rent of $${rent}. This amount has been based on similar properties within the vicinity of your property.
+</p>
+<p ${body2TextStyle}>
+  We would be grateful for the opportunity to Let and Manage your property with support of our platform. You can begin adding this property to the platform by clicking the below link
+</p>
+<p ${body2TextStyle}><a href="${addPropertyLink}">add property to platform</a></p>
+<p ${body2TextStyle}>
+  You can review our terms and conditions here at the landlord portal.
+</p>
+<p ${body2TextStyle}><a href="${process.env.FRONTEND_URL}/landlord/terms-of-engagement">Landlord Portal Terms of engagement</a><p>
+<p ${body2TextStyle}>
   If you have any questions do not hesitate to give me a call.
-</div>
-  \n\n`,
-      user
+</p>
+`,
+      user,
+      { adminSignature: true }
     ),
   });
 };

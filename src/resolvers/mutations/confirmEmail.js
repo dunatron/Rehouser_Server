@@ -115,7 +115,7 @@ async function confirmEmail(parent, args, ctx, info) {
       {
         data: {
           type: "PEER",
-          name: `${CEO_DETAILS.firstname} ${CEO_DETAILS.lastname} (Admin)`,
+          name: `${CEO_DETAILS.firstname}${" "}${CEO_DETAILS.lastname} (Admin)`,
           participants: {
             connect: [
               {

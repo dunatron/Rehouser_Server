@@ -1,10 +1,10 @@
-const { transport, makeANiceEmail } = require("../mail");
+const { transport, makeANiceEmail, body2TextStyle } = require("../mail");
 
 const newRentalApplicationEmail = async function({
   toEmail,
   rentalApplication,
   ctx,
-  user
+  user,
 }) {
   const {
     id,
@@ -13,26 +13,28 @@ const newRentalApplicationEmail = async function({
     finalised,
     owner,
     property,
-    applicants
+    applicants,
   } = rentalApplication;
 
   return transport.sendMail({
     // from: process.env.MAIL_USER,
     from: {
-      name: "Rehouser Rental Application",
-      address: process.env.MAIL_USER
+      name: "ReHouser Rental Application",
+      address: process.env.MAIL_USER,
     },
     to: toEmail,
     subject: `New Rental Application ID:${id}`,
     html: makeANiceEmail(
-      `A new RentalApplication has been created for Property: ${property.location} \n
-      You can complete the application at ${process.env.FRONTEND_URL}/tenant/applications/${id} \n
-      The specific property you have applied for can be found at ${process.env.FRONTEND_URL}/find/property/${property.id} \n
-      The visibility is currently set to ${visibility} \n
-      Good luck with your application
-    \n\n`,
-      user
-    )
+      `
+<p ${body2TextStyle}>A new rental application has been created for: ${property.location}</p>
+<p ${body2TextStyle}>You can complete the application at ${process.env.FRONTEND_URL}/tenant/applications/${id}</p>
+<p ${body2TextStyle}>The specific property you have applied for can be found at ${process.env.FRONTEND_URL}/find/property/${property.id} </p>
+<p ${body2TextStyle}>The visibility is currently set to ${visibility}</p>
+<p ${body2TextStyle}>Good luck with your application</p>
+`,
+      user,
+      { adminSignature: true }
+    ),
   });
 };
 

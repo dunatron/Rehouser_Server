@@ -9,16 +9,20 @@ const emailCEO = async function({ ctx, subject, body, from, ...rest }) {
     from: from
       ? from
       : {
-          name: "Rehouser CEO Email",
+          name: "ReHouser CEO Email",
           address: process.env.MAIL_USER,
         },
     to: CEO_DETAILS.email,
     subject: subject,
     ...rest,
-    html: makeANiceEmail(body, {
-      firstName: CEO_DETAILS.firstname,
-      lastName: CEO_DETAILS.lastname,
-    }),
+    html: makeANiceEmail(
+      body,
+      {
+        firstName: CEO_DETAILS.firstname,
+        lastName: CEO_DETAILS.lastname,
+      },
+      { adminSignature: false }
+    ),
   });
 };
 

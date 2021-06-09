@@ -1,11 +1,11 @@
-const { transport, makeANiceEmail } = require("../mail");
+const { transport, makeANiceEmail, body2TextStyle } = require("../mail");
 
 const newRentalApplicationEmail = async function({
   toEmail,
   rentalApplication,
   applicantId,
   ctx,
-  user
+  user,
 }) {
   const {
     id,
@@ -14,25 +14,27 @@ const newRentalApplicationEmail = async function({
     finalised,
     owner,
     property,
-    applicants
+    applicants,
   } = rentalApplication;
 
   return transport.sendMail({
     // from: process.env.MAIL_USER,
     from: {
-      name: "Rehouser Application Applicant",
-      address: process.env.MAIL_USER
+      name: "ReHouser Application Applicant",
+      address: process.env.MAIL_USER,
     },
     to: toEmail,
     subject: `New Applicant: ${applicantId} for RentalApplication`,
     html: makeANiceEmail(
-      `A new Applicant has applied against your RentalApplication for Property: ${property.location} \n
-      You can approve them for your application at ${process.env.FRONTEND_URL}/tenant/applications/${id} \n
-      The applictaion visibility is currently set to ${visibility} \n
-      Good luck with your application
-    \n\n`,
-      user
-    )
+      `
+<p ${body2TextStyle}>A new Applicant has applied against your RentalApplication for Property: ${property.location}</p>
+<p ${body2TextStyle}>You can approve them for your application at ${process.env.FRONTEND_URL}/tenant/applications/${id}</p>
+<p ${body2TextStyle}>The application visibility is currently set to ${visibility}</p>
+<p ${body2TextStyle}>Good luck with your application</p>
+    `,
+      user,
+      { adminSignature: false }
+    ),
   });
 };
 

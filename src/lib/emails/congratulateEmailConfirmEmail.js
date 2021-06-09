@@ -1,19 +1,20 @@
-const { transport, makeANiceEmail } = require("../mail");
+const { transport, makeANiceEmail, body2TextStyle } = require("../mail");
 const { CEO_DETAILS } = require("../../const");
 
 const congratulateEmailConfirmEmail = async function({ email, user }) {
   return transport.sendMail({
     // from: process.env.MAIL_USER,
     from: {
-      name: "Rehouser Account Validated",
+      name: "ReHouser Account Validated",
       address: process.env.MAIL_USER,
     },
     to: email,
-    subject: "Rehouser account validated",
+    subject: "ReHouser account validated",
     html: makeANiceEmail(
-      `Congratulations on validating your email! You are now able to use the platform.
+      `<p ${body2TextStyle}>Congratulations on validating your email! You are now able to use the platform.</p>
         \n\n`,
-      user
+      user,
+      { adminSignature: true }
     ),
   });
 };
