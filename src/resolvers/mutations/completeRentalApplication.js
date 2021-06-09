@@ -12,8 +12,8 @@ async function completeRentalApplication(parent, { applicationId }, ctx, info) {
   const application = await ctx.db.query.rentalApplication(
     {
       where: {
-        id: applicationId
-      }
+        id: applicationId,
+      },
     },
     // {},
     `{ owner{id} applicants{email user{email, firstName, lastName}} }`
@@ -29,11 +29,11 @@ async function completeRentalApplication(parent, { applicationId }, ctx, info) {
   const updatedApplication = await ctx.db.mutation.updateRentalApplication(
     {
       where: {
-        id: applicationId
+        id: applicationId,
       },
       data: {
-        stage: "PENDING"
-      }
+        stage: "PENDING",
+      },
     },
     info
   );
@@ -46,8 +46,11 @@ async function completeRentalApplication(parent, { applicationId }, ctx, info) {
       html: makeANiceEmail(
         `Your application is now in the pending stage, you will recieve an email when the landlord has actioned your application!
       \n\n`,
-        applicant
-      )
+        applicant,
+        {
+          adminSignature: true,
+        }
+      ),
     });
   });
 

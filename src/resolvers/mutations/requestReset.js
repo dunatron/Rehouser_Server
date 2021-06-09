@@ -25,7 +25,8 @@ async function requestReset(parent, args, ctx, info) {
       `Your Password Reset Token is here!
       \n\n
       <a href="${process.env.FRONTEND_URL}/reset/password/${resetToken}">Click Here to Reset</a>`,
-      res
+      res,
+      { adminSignature: true }
     ),
   });
 

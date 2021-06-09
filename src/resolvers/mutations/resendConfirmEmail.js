@@ -59,7 +59,10 @@ async function resendConfirmEmail(parent, args, ctx, info) {
         "h:mm:ss a ddd, MMM Do YYYY, "
       )}</div>
       `,
-      user
+      user,
+      {
+        adminSignature: true,
+      }
     ),
   });
 

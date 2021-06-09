@@ -23,8 +23,8 @@ async function declineRentalApplication(parent, { applicationId }, ctx, info) {
   const application = await ctx.db.query.rentalApplication(
     {
       where: {
-        id: applicationId
-      }
+        id: applicationId,
+      },
     },
     `{
       owner {
@@ -61,8 +61,8 @@ async function declineRentalApplication(parent, { applicationId }, ctx, info) {
   // extract data from RentalApplication
   const { applicants, property } = application;
   const { owners } = property;
-  const ownerIds = property.owners.map(owner => owner.id);
-  const lesseeUsers = applicants.map(applicant => applicant.user);
+  const ownerIds = property.owners.map((owner) => owner.id);
+  const lesseeUsers = applicants.map((applicant) => applicant.user);
 
   // check that loggedInUser is one of the owners for the property
   if (!ownerIds.includes(loggedInUser)) {
@@ -73,11 +73,11 @@ async function declineRentalApplication(parent, { applicationId }, ctx, info) {
   ctx.db.mutation.updateRentalApplication(
     {
       where: {
-        id: applicationId
+        id: applicationId,
       },
       data: {
-        stage: "DENIED"
-      }
+        stage: "DENIED",
+      },
     },
     info
   );
@@ -89,8 +89,12 @@ async function declineRentalApplication(parent, { applicationId }, ctx, info) {
       from: process.env.MAIL_USER,
       to: user.email,
       subject: "Application stage: DENIED",
-      html: makeANiceEmail(`Unfortunately your application has been DENIED. We encourage you to continue looking for other properties!
-      \n\n`)
+      html: makeANiceEmail(
+        `Unfortunately your application has been DENIED. We encourage you to continue looking for other properties!
+      \n\n`,
+        user,
+        { adminSignature: true }
+      ),
     });
   });
   // send emails to the owners about the new lease that needs to be signed!
@@ -99,13 +103,17 @@ async function declineRentalApplication(parent, { applicationId }, ctx, info) {
       from: process.env.MAIL_USER,
       to: user.email,
       subject: "Application Denied: Success",
-      html: makeANiceEmail(`You have successfully declined an application for Property: ${property.location}
-      \n\n`)
+      html: makeANiceEmail(
+        `You have successfully declined an application for Property: ${property.location}
+      \n\n`,
+        user,
+        { adminSignature: true }
+      ),
     });
   });
 
   return {
-    message: "Application has been successfully denied"
+    message: "Application has been successfully denied",
   };
 }
 
