@@ -15,16 +15,16 @@ const db = require("./db");
 
 const jwt = require("jsonwebtoken");
 
-process.on("uncaughtException", (err) => {
+process.on("uncaughtException", err => {
   logger.log("error", `Uncaught Exception: ${err.message}`, {
-    message: err.message,
+    message: err.message
   });
   return err;
 });
 
 process.on("unhandledRejection", (reason, promise) => {
   logger.log("error", `unhandledRejection`, {
-    reason: reason,
+    reason: reason
   });
   return reason; // return the errors to try not crash express
 });
@@ -51,13 +51,13 @@ const expressLogger = function(req, res, next) {
     url: req.url,
     user: {
       id: req.userId,
-      permissions: req.userPermissions,
+      permissions: req.userPermissions
     },
     method: req.method,
     operationName: req.body.operationName,
     variables: req.body.variables,
     headers: req.headers,
-    userAgent: req.headers["user-agent"],
+    userAgent: req.headers["user-agent"]
     // query: req.body.query
   });
 
@@ -71,7 +71,7 @@ const expressErrorMiddleware = async (err, req, res, next) => {
   logger.log("error", `expressErrorMiddleware`, {
     err: err,
     req: req,
-    res: res,
+    res: res
   });
   next();
 };
@@ -113,8 +113,6 @@ routes(server);
 initialiseTasks();
 
 const allowedClientOrigins = [
-  "http://localhost:7777",
-  "http://localhost:3000",
   "https://rehouser-next-prod.herokuapp.com",
   "http://app.rehouser.co.nz",
   "http://rehouser.co.nz",
@@ -122,7 +120,7 @@ const allowedClientOrigins = [
   "https://rehouser.co.nz",
   "https://yoga.rehouser.co.nz",
   "http://app.uat.rehouser.co.nz",
-  process.env.FRONTEND_URL,
+  process.env.FRONTEND_URL
 ];
 
 const Mib = 1048576;
@@ -133,12 +131,12 @@ const app = server.start(
     port: process.env.PORT || 4444,
     cors: {
       credentials: true,
-      origin: allowedClientOrigins,
+      origin: allowedClientOrigins
     },
     uploads: {
       maxFieldSize: 1000000, // Maximum allowed non-file multipart form field size in bytes; enough for your queries.
       maxFileSize: Mib * 2, // Maximum allowed file size in bytes.
-      maxFiles: 5, // Maximum allowed number of files.
+      maxFiles: 5 // Maximum allowed number of files.
     },
     debug: true,
     playground: "/playground",
@@ -147,33 +145,33 @@ const app = server.start(
       path: "/",
       onConnect: (connectionParams, webSocket, context) => {
         const { isLegacy, socket, request } = context;
-        webSocket.on("error", (error) => {
+        webSocket.on("error", error => {
           logger.log("error", `potential ws err onConnect`, {
-            error: error,
+            error: error
           });
         });
         logger.log("info", `subscriptions on connect`, {
           connectionParams: connectionParams,
-          headers: request.headers,
+          headers: request.headers
         });
       },
       onDisconnect: (webSocket, context) => {
         logger.log("info", `subscriptions on disconnect`, {
-          context: context,
+          context: context
         });
-        webSocket.on("error", (error) => {
+        webSocket.on("error", error => {
           logger.log("error", `potential ws err onDisconnect`, {
-            error: error,
+            error: error
           });
         });
       },
-      keepAlive: 10000, // use 10000 like prisma or false
-    },
+      keepAlive: 10000 // use 10000 like prisma or false
+    }
   },
-  (details) => {
+  details => {
     logger.info("gql yoga/express server is up", {
       ...details,
-      port: details.port,
+      port: details.port
     });
   }
 );

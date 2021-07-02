@@ -2,29 +2,29 @@ const idOne = "1";
 
 const houseImage1 = {
   // id: idOne,
-  filename: "house image 1",
+  filename: "dummy house image 1",
   encoding: "encoding",
   mimetype: "image/jpeg",
   url:
-    "https://res.cloudinary.com/dkhe0hx1r/image/upload/v1596422419/we7nndiaebaag9o0bmbj.jpg",
+    "https://res.cloudinary.com/dkhe0hx1r/image/upload/v1625180476/dummy/Brick_Bay_home_3a.jpg"
 };
 
 const houseImage2 = {
   // id: "2",
-  filename: "house image 1",
+  filename: "dummy house image 2",
   encoding: "encoding",
   mimetype: "image/jpeg",
   url:
-    "https://res.cloudinary.com/dkhe0hx1r/image/upload/v1596421982/e94p9wye1wwjqnjg0ul0.jpg",
+    "https://res.cloudinary.com/dkhe0hx1r/image/upload/v1625180474/dummy/fcee0899b61010f167687b344bf6c8a2.jpg"
 };
 
 const houseImage3 = {
   // id: "3",
-  filename: "house image 1",
+  filename: "dummy house image 3",
   encoding: "encoding",
   mimetype: "image/jpeg",
   url:
-    "https://res.cloudinary.com/dkhe0hx1r/image/upload/v1594107391/k4zya7fozouepdebhtqe.jpg",
+    "https://res.cloudinary.com/dkhe0hx1r/image/upload/v1625180467/dummy/platinum-double-storey-compressed-1024x618.jpg"
 };
 
 // filename: String!
